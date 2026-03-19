@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const cards = [
   { 
@@ -56,11 +55,38 @@ const cards = [
 
 export default function CompetenceWheel() {
   const [rotation, setRotation] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  
   const angle = 360 / cards.length; // 45 degrees for 8 cards
   const radius = 480; // Increased radius to space out the 8 cards and show more
 
   const next = () => setRotation(r => r - angle);
   const prev = () => setRotation(r => r + angle);
+
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe) {
+      next();
+    } else if (isRightSwipe) {
+      prev();
+    }
+  };
 
   const handleCardClick = (index: number) => {
     const targetRotation = -index * angle;
@@ -79,6 +105,9 @@ export default function CompetenceWheel() {
     <div 
       className="relative w-full h-[420px] md:h-[800px] flex flex-col items-center justify-end pb-4 md:pb-0 md:justify-start md:pt-[260px]"
       style={{ perspective: '1600px' }}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
     >
       
       {/* 3D Scene Container */}
@@ -115,38 +144,20 @@ export default function CompetenceWheel() {
               {/* Front Face */}
               <div 
                 className={`absolute inset-0 bg-slate-800 flex flex-col items-center justify-center text-center p-4 md:p-8 transition-colors duration-500 border-2
-                  ${isFront ? 'border-orange-500 shadow-[0_0_40px_rgba(249,115,22,0.3)]' : 'border-slate-600 hover:border-slate-500'}
+                  ${isFront ? 'border-orange-500' : 'border-slate-600 hover:border-slate-500'}
                 `}
                 style={{ transform: 'translateZ(10px)', backfaceVisibility: 'hidden' }}
               >
-                {/* Navigation Buttons on the Card */}
-                <div className={`absolute inset-y-0 -left-5 -right-5 flex items-center justify-between z-30 ${isFront ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); prev(); }}
-                    className="p-2 md:p-3 bg-orange-500 text-white hover:bg-orange-400 rounded-full transition-all shadow-[0_0_15px_rgba(249,115,22,0.4)]"
-                    aria-label="Forrige"
-                  >
-                    <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
-                  </button>
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); next(); }}
-                    className="p-2 md:p-3 bg-orange-500 text-white hover:bg-orange-400 rounded-full transition-all shadow-[0_0_15px_rgba(249,115,22,0.4)]"
-                    aria-label="Næste"
-                  >
-                    <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
-                  </button>
-                </div>
-
                 <div className={`w-12 h-12 md:w-16 md:h-16 rounded-full mb-4 md:mb-6 flex items-center justify-center border transition-colors duration-500
                   ${isFront ? 'bg-orange-500/20 border-orange-500/50 text-orange-400' : 'bg-slate-700/50 border-slate-600 text-slate-400'}
                 `}>
                   <span className="text-xl md:text-2xl font-bold">✓</span>
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold text-white mb-2 md:mb-4">{card.title}</h3>
-                <p className="text-slate-400 text-xs md:text-sm mb-4 md:mb-6 leading-relaxed">{card.desc}</p>
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-4">{card.title}</h3>
+                <p className="text-slate-300 text-sm md:text-base mb-4 md:mb-6 leading-relaxed">{card.desc}</p>
                 
                 {card.bullets && card.bullets.length > 0 && (
-                  <ul className="text-xs md:text-sm text-slate-400 space-y-1 md:space-y-2 mb-4 md:mb-6 text-left w-full">
+                  <ul className="text-sm md:text-base text-slate-300 space-y-1 md:space-y-2 mb-4 md:mb-6 text-left w-full">
                     {card.bullets.map((b, idx) => (
                       <li key={idx} className="flex items-center gap-2">
                         <span className={`w-1.5 h-1.5 rounded-full ${isFront ? 'bg-orange-500' : 'bg-slate-500'}`}></span>
@@ -155,8 +166,6 @@ export default function CompetenceWheel() {
                     ))}
                   </ul>
                 )}
-
-
               </div>
 
               {/* Back Face */}
