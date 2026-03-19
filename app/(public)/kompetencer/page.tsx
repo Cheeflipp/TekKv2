@@ -3,7 +3,7 @@ import CompetenceWheel from '../../components/competence-wheel';
 
 export default function KompetencerPage() {
   return (
-    <div className="bg-slate-900 min-h-screen">
+    <div className="bg-slate-900 min-h-screen overflow-x-hidden">
       <section className="py-12 md:py-24 bg-slate-900">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-end mb-4 md:mb-16 gap-4 relative z-10">

@@ -57,6 +57,7 @@ export default function CompetenceWheel() {
   const [rotation, setRotation] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [dragOffset, setDragOffset] = useState(0);
   
   const angle = 360 / cards.length; // 45 degrees for 8 cards
   const radius = 480; // Increased radius to space out the 8 cards and show more
@@ -69,14 +70,24 @@ export default function CompetenceWheel() {
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
+    setDragOffset(0);
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
+    if (touchStart === null) return;
+    const currentX = e.targetTouches[0].clientX;
+    setTouchEnd(currentX);
+    const diff = currentX - touchStart;
+    setDragOffset(diff * 0.2); // Visual feedback during drag
   };
 
   const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
+    if (touchStart === null || touchEnd === null) {
+      setDragOffset(0);
+      setTouchStart(null);
+      setTouchEnd(null);
+      return;
+    }
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
@@ -86,6 +97,10 @@ export default function CompetenceWheel() {
     } else if (isRightSwipe) {
       prev();
     }
+    
+    setDragOffset(0);
+    setTouchStart(null);
+    setTouchEnd(null);
   };
 
   const handleCardClick = (index: number) => {
@@ -103,7 +118,7 @@ export default function CompetenceWheel() {
 
   return (
     <div 
-      className="relative w-full h-[420px] md:h-[800px] flex flex-col items-center justify-end pb-4 md:pb-0 md:justify-start md:pt-[260px]"
+      className="relative w-full h-[420px] md:h-[800px] flex flex-col items-center justify-end pb-4 md:pb-0 md:justify-start md:pt-[260px] touch-pan-y select-none"
       style={{ perspective: '1600px' }}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
@@ -112,15 +127,16 @@ export default function CompetenceWheel() {
       
       {/* 3D Scene Container */}
       <div 
-        className="relative w-[260px] md:w-[320px] h-[360px] md:h-[420px] transition-transform duration-1000 ease-out origin-center md:origin-top scale-[0.75] sm:scale-[0.85] md:scale-100"
+        className={`relative w-[260px] md:w-[320px] h-[360px] md:h-[420px] ease-out origin-center md:origin-top scale-[0.75] sm:scale-[0.85] md:scale-100 ${touchStart !== null ? 'transition-none' : 'transition-transform duration-1000'}`}
         style={{ 
           transformStyle: 'preserve-3d',
-          transform: `translateZ(-${radius}px) rotateY(${rotation}deg)` 
+          transform: `translateZ(-${radius}px) rotateY(${rotation + dragOffset}deg)` 
         }}
       >
         {cards.map((card, i) => {
           const cardAngle = angle * i;
-          let effectiveRotation = (rotation + cardAngle) % 360;
+          const currentRotation = rotation + dragOffset;
+          let effectiveRotation = (currentRotation + cardAngle) % 360;
           if (effectiveRotation < 0) effectiveRotation += 360;
           
           // Calculate steps from front (0 to 4)
