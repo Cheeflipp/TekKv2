@@ -6,17 +6,18 @@ import { useAuth } from '../lib/auth-context';
 import Link from 'next/link';
 
 export default function LoginPage() {
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { login } = useAuth();
   const router = useRouter();
 
   const attemptLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await login();
-    if (success) {
+    setError(null);
+    const result = await login();
+    if (result.success) {
       router.push('/admin/dashboard');
     } else {
-      setError(true);
+      setError(result.error || "Login fejlede. Du har muligvis ikke adgang.");
     }
   };
 
@@ -52,7 +53,7 @@ export default function LoginPage() {
         <form onSubmit={attemptLogin} className="space-y-6">
           {error && (
             <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded text-sm text-center font-bold animate-in fade-in">
-              Login fejlede. Du har muligvis ikke adgang.
+              {error}
             </div>
           )}
 

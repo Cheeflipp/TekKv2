@@ -8,7 +8,7 @@ import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut, User 
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
-  login: () => Promise<boolean>;
+  login: () => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
 }
 
@@ -34,17 +34,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => unsubscribe();
   }, []);
 
-  const login = async (): Promise<boolean> => {
+  const login = async (): Promise<{ success: boolean; error?: string }> => {
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       if (result.user) {
-        return true;
+        return { success: true };
       }
-      return false;
-    } catch (error) {
+      return { success: false, error: "No user returned" };
+    } catch (error: any) {
       console.error("Login failed", error);
-      return false;
+      return { success: false, error: error.message || "Unknown error" };
     }
   };
 
