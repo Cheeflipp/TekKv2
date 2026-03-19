@@ -1,0 +1,69 @@
+{
+  "entities": {
+    "DateEntry": {
+      "title": "Date Entry",
+      "description": "Availability and configuration for a specific date",
+      "type": "object",
+      "properties": {
+        "status": { "type": "string" },
+        "config": { "type": "string", "description": "JSON stringified DayConfiguration" }
+      },
+      "required": ["status"]
+    },
+    "VirtualFile": {
+      "title": "Virtual File",
+      "description": "A file representing a booking, expense, or draft",
+      "type": "object",
+      "properties": {
+        "filename": { "type": "string" },
+        "content": { "type": "string", "description": "JSON stringified content" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["filename", "content", "createdAt"]
+    },
+    "BackupRecord": {
+      "title": "Backup Record",
+      "description": "A log entry for a finalized action",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "action": { "type": "string" },
+        "orderId": { "type": "string" },
+        "details": { "type": "string" }
+      },
+      "required": ["id", "timestamp", "action"]
+    },
+    "SystemState": {
+      "title": "System State",
+      "description": "Global system state like the master CSV",
+      "type": "object",
+      "properties": {
+        "masterCsv": { "type": "string" }
+      },
+      "required": ["masterCsv"]
+    }
+  },
+  "firestore": {
+    "/dates/{dateIso}": {
+      "schema": { "$ref": "#/entities/DateEntry" },
+      "description": "Stores availability and config for each date"
+    },
+    "/floatFiles/{filename}": {
+      "schema": { "$ref": "#/entities/VirtualFile" },
+      "description": "Pending requests and drafts"
+    },
+    "/lagerFiles/{filename}": {
+      "schema": { "$ref": "#/entities/VirtualFile" },
+      "description": "Approved and finalized files"
+    },
+    "/backupLog/{logId}": {
+      "schema": { "$ref": "#/entities/BackupRecord" },
+      "description": "Legacy backup log"
+    },
+    "/system/{docId}": {
+      "schema": { "$ref": "#/entities/SystemState" },
+      "description": "System singletons"
+    }
+  }
+}

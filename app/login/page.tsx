@@ -6,19 +6,17 @@ import { useAuth } from '../lib/auth-context';
 import Link from 'next/link';
 
 export default function LoginPage() {
-  const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
 
   const attemptLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await login(password);
+    const success = await login();
     if (success) {
       router.push('/admin/dashboard');
     } else {
       setError(true);
-      setPassword('');
     }
   };
 
@@ -48,33 +46,20 @@ export default function LoginPage() {
              </div>
           </div>
           <h2 className="text-2xl font-bold text-white">Admin Login</h2>
-          <p className="text-slate-400 text-sm">Indtast adgangskode for at fortsætte</p>
+          <p className="text-slate-400 text-sm">Log ind med din Google konto</p>
         </div>
 
         <form onSubmit={attemptLogin} className="space-y-6">
-          <div>
-            <label className="block text-xs uppercase font-bold text-slate-500 mb-2">Adgangskode</label>
-            <input 
-              type="password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              name="password"
-              autoFocus
-              placeholder="••••••••"
-              className="w-full bg-slate-900 border border-slate-600 text-white p-4 rounded-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 transition-colors"
-            />
-          </div>
-
           {error && (
             <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded text-sm text-center font-bold animate-in fade-in">
-              Forkert adgangskode
+              Login fejlede. Du har muligvis ikke adgang.
             </div>
           )}
 
           <button 
             type="submit"
             className="w-full bg-orange-600 hover:bg-orange-500 text-white font-bold uppercase tracking-widest py-4 rounded-sm transition-colors shadow-lg shadow-orange-900/50">
-            Log Ind
+            Log Ind Med Google
           </button>
         </form>
 

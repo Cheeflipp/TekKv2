@@ -13,6 +13,9 @@ import {
 } from './types';
 import { DataProcessor } from './data-processor';
 import { sendBookingEmails } from '../actions/email';
+import { db } from '../../firebase';
+import { collection, doc, setDoc, deleteDoc, onSnapshot, getDocs, writeBatch, getDoc } from 'firebase/firestore';
+import { useAuth } from './auth-context';
 
 export * from './types';
 
@@ -76,77 +79,10 @@ export function BookingProvider({ children }: { children: ReactNode }) {
     LOG_LEGACY: 'tekk_v2_log'
   };
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    loadLocal();
-  }, []);
+  const { user } = useAuth();
+  const isAdmin = user?.email === 'Christianwkchristensen@gmail.com';
 
-  // Save to localStorage whenever state changes
-  useEffect(() => {
-    saveLocal();
-  }, [availableDates, dayConfigurations, floatFiles, lagerFiles, masterListCsv, backupLog]);
-
-  const saveLocal = () => {
-    if (typeof window === 'undefined') return;
-    try {
-      const storage = window.localStorage;
-      storage.setItem(STORAGE_KEYS.STATUS, JSON.stringify(Array.from(availableDates.entries())));
-      storage.setItem(STORAGE_KEYS.CONFIG, JSON.stringify(Array.from(dayConfigurations.entries())));
-      
-      storage.setItem(STORAGE_KEYS.FILES_FLOAT, JSON.stringify(floatFiles));
-      storage.setItem(STORAGE_KEYS.FILES_LAGER, JSON.stringify(lagerFiles));
-      storage.setItem(STORAGE_KEYS.MASTER_CSV, masterListCsv);
-      storage.setItem(STORAGE_KEYS.LOG_LEGACY, JSON.stringify(backupLog));
-    } catch (e) {
-      console.warn('LocalStorage save failed', e);
-    }
-  };
-
-  const loadLocal = () => {
-    if (typeof window === 'undefined') return;
-    try {
-      const storage = window.localStorage;
-      const statusRaw = storage.getItem(STORAGE_KEYS.STATUS);
-      const configRaw = storage.getItem(STORAGE_KEYS.CONFIG);
-      const floatRaw = storage.getItem(STORAGE_KEYS.FILES_FLOAT);
-      const lagerRaw = storage.getItem(STORAGE_KEYS.FILES_LAGER);
-      const csvRaw = storage.getItem(STORAGE_KEYS.MASTER_CSV);
-      const logRaw = storage.getItem(STORAGE_KEYS.LOG_LEGACY);
-
-      if (statusRaw) setAvailableDates(new Map(JSON.parse(statusRaw)));
-      if (configRaw) setDayConfigurations(new Map(JSON.parse(configRaw)));
-      
-      if (floatRaw) setFloatFiles(JSON.parse(floatRaw));
-      if (lagerRaw) setLagerFiles(JSON.parse(lagerRaw));
-      if (csvRaw) setMasterListCsv(csvRaw);
-      
-      // Rehydrate Notifications from Files
-      if (floatRaw) {
-         const files: VirtualFile[] = JSON.parse(floatRaw);
-         const notifs = files.map(f => ({
-            id: (f.content as any).id || 'unknown',
-            type: (f.content as any).type || ((f.content as any).note?.startsWith('Kladde') ? 'DRAFT' : 'REQUEST'),
-            dateIso: (f.content as any).date || '',
-            timestamp: f.createdAt,
-            data: f.content,
-            fileRef: f
-         } as SystemNotification));
-         setNotifications(notifs);
-      }
-
-      if (logRaw) setBackupLog(JSON.parse(logRaw));
-
-      // Check expiry after load
-      checkAndProcessExpiry(
-        statusRaw ? new Map(JSON.parse(statusRaw)) : new Map(),
-        configRaw ? new Map(JSON.parse(configRaw)) : new Map()
-      );
-
-    } catch (e) {
-      console.warn('LocalStorage load failed', e);
-    }
-  };
-
+  // Load from Firestore on mount
   const checkAndProcessExpiry = useCallback((currentAvailableDates: Map<string, string>, currentDayConfigurations: Map<string, DayConfiguration>) => {
     const today = new Date().toISOString().split('T')[0];
     const result = DataProcessor.checkExpiry(today, currentAvailableDates, currentDayConfigurations);
@@ -161,6 +97,8 @@ export function BookingProvider({ children }: { children: ReactNode }) {
          newNotifications.push(notification);
       });
 
+      // Note: Ideally this should write to Firestore, but for now we keep local state update
+      // to avoid infinite loops in onSnapshot. A cloud function or admin-only trigger is better.
       setFloatFiles(prev => [...prev, ...newFiles]);
       setNotifications(prev => [...prev, ...newNotifications]);
       
@@ -176,6 +114,107 @@ export function BookingProvider({ children }: { children: ReactNode }) {
       });
     }
   }, []);
+
+  useEffect(() => {
+    let unsubDates: () => void;
+    let unsubFloat: () => void;
+    let unsubLager: () => void;
+    let unsubBackup: () => void;
+    let unsubSystem: () => void;
+
+    const setupListeners = async () => {
+      // 1. Listen to Dates (Everyone can read)
+      unsubDates = onSnapshot(collection(db, 'dates'), (snapshot) => {
+        const newAvailable = new Map<string, string>();
+        const newConfigs = new Map<string, DayConfiguration>();
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          newAvailable.set(doc.id, data.status);
+          if (data.config) {
+            newConfigs.set(doc.id, JSON.parse(data.config));
+          }
+        });
+        setAvailableDates(newAvailable);
+        setDayConfigurations(newConfigs);
+        checkAndProcessExpiry(newAvailable, newConfigs);
+      }, (error) => console.error("Firestore error (dates):", error));
+
+      // 2. Listen to Float Files (Admin only)
+      if (isAdmin) {
+        unsubFloat = onSnapshot(collection(db, 'floatFiles'), (snapshot) => {
+          const files: VirtualFile[] = [];
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            files.push({
+              filename: data.filename,
+              content: JSON.parse(data.content),
+              createdAt: data.createdAt,
+              path: data.path || 'pending/',
+              status: data.status || 'FLOAT'
+            });
+          });
+          // Sort by createdAt descending
+          files.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+          setFloatFiles(files);
+
+          // Rehydrate Notifications
+          const notifs = files.map(f => ({
+            id: (f.content as any).id || 'unknown',
+            type: (f.content as any).type || ((f.content as any).note?.startsWith('Kladde') ? 'DRAFT' : 'REQUEST'),
+            dateIso: (f.content as any).date || '',
+            timestamp: f.createdAt,
+            data: f.content,
+            fileRef: f
+          } as SystemNotification));
+          setNotifications(notifs);
+        }, (error) => console.error("Firestore error (floatFiles):", error));
+
+        // 3. Listen to Lager Files (Admin only)
+        unsubLager = onSnapshot(collection(db, 'lagerFiles'), (snapshot) => {
+          const files: VirtualFile[] = [];
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            files.push({
+              filename: data.filename,
+              content: JSON.parse(data.content),
+              createdAt: data.createdAt,
+              path: data.path || 'active/',
+              status: data.status || 'ACTIVE'
+            });
+          });
+          files.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+          setLagerFiles(files);
+        }, (error) => console.error("Firestore error (lagerFiles):", error));
+
+        // 4. Listen to Backup Log (Admin only)
+        unsubBackup = onSnapshot(collection(db, 'backupLog'), (snapshot) => {
+          const logs: BackupRecord[] = [];
+          snapshot.forEach(doc => {
+            logs.push(doc.data() as BackupRecord);
+          });
+          logs.sort((a, b) => new Date(b.archivedAt).getTime() - new Date(a.archivedAt).getTime());
+          setBackupLog(logs);
+        }, (error) => console.error("Firestore error (backupLog):", error));
+
+        // 5. Listen to System State (Master CSV) (Admin only)
+        unsubSystem = onSnapshot(doc(db, 'system', 'masterCsv'), (docSnap) => {
+          if (docSnap.exists()) {
+            setMasterListCsv(docSnap.data().masterCsv);
+          }
+        }, (error) => console.error("Firestore error (system):", error));
+      }
+    };
+
+    setupListeners();
+
+    return () => {
+      if (unsubDates) unsubDates();
+      if (unsubFloat) unsubFloat();
+      if (unsubLager) unsubLager();
+      if (unsubBackup) unsubBackup();
+      if (unsubSystem) unsubSystem();
+    };
+  }, [checkAndProcessExpiry, isAdmin]);
 
   // --- Public Methods ---
 
@@ -201,128 +240,230 @@ export function BookingProvider({ children }: { children: ReactNode }) {
   }, [availableDates, dayConfigurations, checkAndProcessExpiry]);
 
   const setDayConfig = useCallback(async (dateIso: string, config: DayConfiguration) => {
-    setAvailableDates(prev => new Map(prev).set(dateIso, 'Ledig'));
-    setDayConfigurations(prev => new Map(prev).set(dateIso, config));
-    return { status: 'success' as const };
+    try {
+      await setDoc(doc(db, 'dates', dateIso), { 
+        status: 'Ledig', 
+        config: JSON.stringify(config) 
+      });
+      return { status: 'success' as const };
+    } catch (e) {
+      console.error("Error setting day config", e);
+      return { status: 'error' as const };
+    }
   }, []);
 
   const closeDate = useCallback(async (dateIso: string) => {
-    const previousStatus = availableDates.get(dateIso);
-    const previousConfig = dayConfigurations.get(dateIso);
+    try {
+      const previousStatus = availableDates.get(dateIso);
+      const previousConfig = dayConfigurations.get(dateIso);
 
-    if (previousConfig || previousStatus === 'Anmodet') {
-       const { file, notification } = DataProcessor.createSystemFloat('MANUAL_CLOSE', dateIso, { closedConfig: previousConfig, wasStatus: previousStatus });
-       setFloatFiles(prev => [...prev, file]);
-       setNotifications(prev => [...prev, notification]);
+      const batch = writeBatch(db);
+      batch.delete(doc(db, 'dates', dateIso));
+
+      if (previousConfig || previousStatus === 'Anmodet') {
+         const { file } = DataProcessor.createSystemFloat('MANUAL_CLOSE', dateIso, { closedConfig: previousConfig, wasStatus: previousStatus });
+         batch.set(doc(db, 'floatFiles', file.filename), {
+           filename: file.filename,
+           content: JSON.stringify(file.content),
+           createdAt: file.createdAt,
+           path: file.path,
+           status: file.status
+         });
+      }
+
+      await batch.commit();
+      return { status: 'success' as const };
+    } catch (e) {
+      console.error("Error closing date", e);
+      return { status: 'error' as const };
     }
-
-    setAvailableDates(prev => {
-      const newMap = new Map(prev);
-      newMap.delete(dateIso);
-      return newMap;
-    });
-    setDayConfigurations(prev => {
-      const newMap = new Map(prev);
-      newMap.delete(dateIso);
-      return newMap;
-    });
-
-    return { status: 'success' as const };
   }, [availableDates, dayConfigurations]);
 
   const requestBooking = useCallback(async (data: BookingRequest) => {
-    // Optimistic UI update
-    setAvailableDates(prev => new Map(prev).set(data.date, 'Anmodet'));
-
-    // Generate File
-    const { file, notification } = DataProcessor.createFloatFile(data);
-    setFloatFiles(prev => [file, ...prev]);
-    setNotifications(prev => [notification, ...prev]);
-    
-    // Send emails
     try {
-      await sendBookingEmails(data);
-    } catch (e) {
-      console.error("Failed to send booking emails:", e);
-    }
+      const batch = writeBatch(db);
+      
+      // Update date status
+      const currentConfig = dayConfigurations.get(data.date);
+      batch.set(doc(db, 'dates', data.date), {
+        status: 'Anmodet',
+        config: currentConfig ? JSON.stringify(currentConfig) : null
+      }, { merge: true });
 
-    return { status: 'success' as const };
-  }, []);
+      // Generate File
+      const { file } = DataProcessor.createFloatFile(data);
+      batch.set(doc(db, 'floatFiles', file.filename), {
+        filename: file.filename,
+        content: JSON.stringify(file.content),
+        createdAt: file.createdAt,
+        path: file.path,
+        status: file.status
+      });
+      
+      await batch.commit();
+
+      // Send emails
+      try {
+        await sendBookingEmails(data);
+      } catch (e) {
+        console.error("Failed to send booking emails:", e);
+      }
+
+      return { status: 'success' as const };
+    } catch (e) {
+      console.error("Error requesting booking", e);
+      return { status: 'error' as const };
+    }
+  }, [dayConfigurations]);
 
   const saveExpenseDraft = useCallback(async (data: ExpenseRequest) => {
-    const { file, notification } = DataProcessor.createDraftExpense(data);
-    setFloatFiles(prev => [file, ...prev]);
-    setNotifications(prev => [notification, ...prev]);
-    return { status: 'success' as const };
+    try {
+      const { file } = DataProcessor.createDraftExpense(data);
+      await setDoc(doc(db, 'floatFiles', file.filename), {
+        filename: file.filename,
+        content: JSON.stringify(file.content),
+        createdAt: file.createdAt,
+        path: file.path,
+        status: file.status
+      });
+      return { status: 'success' as const };
+    } catch (e) {
+      console.error("Error saving expense draft", e);
+      return { status: 'error' as const };
+    }
   }, []);
 
   const finalizeNotification = useCallback(async (notif: SystemNotification) => {
     if (!notif.fileRef) return { status: 'error' as const, message: 'Legacy notification cannot be filed.' };
 
-    // Logic: Float -> Lager
-    const { activeFile, csvRow, logEntry } = DataProcessor.approveToLager(notif.fileRef);
+    try {
+      const batch = writeBatch(db);
 
-    // Update State
-    setFloatFiles(prev => prev.filter(f => f.filename !== notif.fileRef!.filename));
-    setLagerFiles(prev => [activeFile, ...prev]);
-    setMasterListCsv(prev => prev + '\n' + csvRow);
-    setBackupLog(prev => [logEntry, ...prev]);
-    setNotifications(prev => prev.filter(n => n.id !== notif.id));
+      // Logic: Float -> Lager
+      const { activeFile, csvRow, logEntry } = DataProcessor.approveToLager(notif.fileRef);
 
-    // Update Calendar if booking
-    if (notif.type === 'REQUEST') {
-       setAvailableDates(prev => {
-         const newMap = new Map(prev);
-         if (newMap.get(notif.dateIso) === 'Anmodet') newMap.set(notif.dateIso, 'Booket');
-         return newMap;
-       });
+      // Delete from floatFiles
+      batch.delete(doc(db, 'floatFiles', notif.fileRef.filename));
+      
+      // Add to lagerFiles
+      batch.set(doc(db, 'lagerFiles', activeFile.filename), {
+        filename: activeFile.filename,
+        content: JSON.stringify(activeFile.content),
+        createdAt: activeFile.createdAt,
+        path: activeFile.path,
+        status: activeFile.status
+      });
+
+      // Add to backupLog
+      batch.set(doc(db, 'backupLog', logEntry.orderId), logEntry);
+
+      // Update masterCsv
+      const newCsv = masterListCsv + '\n' + csvRow;
+      batch.set(doc(db, 'system', 'masterCsv'), { masterCsv: newCsv });
+
+      // Update Calendar if booking
+      if (notif.type === 'REQUEST') {
+         const currentConfig = dayConfigurations.get(notif.dateIso);
+         batch.set(doc(db, 'dates', notif.dateIso), {
+           status: 'Booket',
+           config: currentConfig ? JSON.stringify(currentConfig) : null
+         }, { merge: true });
+      }
+
+      await batch.commit();
+      return { status: 'success' as const, orderId: logEntry.orderId };
+    } catch (e) {
+      console.error("Error finalizing notification", e);
+      return { status: 'error' as const };
     }
+  }, [masterListCsv, dayConfigurations]);
 
-    return { status: 'success' as const, orderId: logEntry.orderId };
-  }, []);
-
-  const deleteNotification = useCallback((id: string) => {
+  const deleteNotification = useCallback(async (id: string) => {
     const notif = notifications.find(n => n.id === id);
-    if (!notif || !notif.fileRef) {
-       setNotifications(prev => prev.filter(n => n.id !== id));
-       return;
+    if (!notif || !notif.fileRef) return;
+
+    try {
+      const batch = writeBatch(db);
+      const { logEntry } = DataProcessor.rejectToArchive(notif.fileRef);
+
+      batch.delete(doc(db, 'floatFiles', notif.fileRef.filename));
+      batch.set(doc(db, 'backupLog', logEntry.orderId), logEntry);
+
+      if (notif.type === 'REQUEST') {
+         const currentConfig = dayConfigurations.get(notif.dateIso);
+         batch.set(doc(db, 'dates', notif.dateIso), {
+           status: 'Ledig',
+           config: currentConfig ? JSON.stringify(currentConfig) : null
+         }, { merge: true });
+      }
+
+      await batch.commit();
+    } catch (e) {
+      console.error("Error deleting notification", e);
     }
+  }, [notifications, dayConfigurations]);
 
-    const { archivedFile, logEntry } = DataProcessor.rejectToArchive(notif.fileRef);
-
-    setFloatFiles(prev => prev.filter(f => f.filename !== notif.fileRef!.filename));
-    setBackupLog(prev => [logEntry, ...prev]);
-    setNotifications(prev => prev.filter(n => n.id !== id));
-
-    if (notif.type === 'REQUEST') {
-       setAvailableDates(prev => {
-         const newMap = new Map(prev);
-         if (newMap.get(notif.dateIso) === 'Anmodet') newMap.set(notif.dateIso, 'Ledig'); 
-         return newMap;
-       });
+  const deleteAllNotifications = useCallback(async () => {
+    try {
+      const batch = writeBatch(db);
+      floatFiles.forEach(f => {
+        batch.delete(doc(db, 'floatFiles', f.filename));
+      });
+      await batch.commit();
+    } catch (e) {
+      console.error("Error deleting all notifications", e);
     }
-  }, [notifications]);
-
-  const deleteAllNotifications = useCallback(() => {
-    setFloatFiles([]);
-    setNotifications([]);
-  }, []);
+  }, [floatFiles]);
 
   const logExpense = useCallback(async (data: ExpenseRequest) => {
-    const { activeFile, csvRow, logEntry } = DataProcessor.createDirectExpense(data);
-    setLagerFiles(prev => [activeFile, ...prev]);
-    setMasterListCsv(prev => prev + '\n' + csvRow);
-    setBackupLog(prev => [logEntry, ...prev]);
-    return { status: 'success' as const };
-  }, []);
+    try {
+      const batch = writeBatch(db);
+      const { activeFile, csvRow, logEntry } = DataProcessor.createDirectExpense(data);
+      
+      batch.set(doc(db, 'lagerFiles', activeFile.filename), {
+        filename: activeFile.filename,
+        content: JSON.stringify(activeFile.content),
+        createdAt: activeFile.createdAt,
+        path: activeFile.path,
+        status: activeFile.status
+      });
+      batch.set(doc(db, 'backupLog', logEntry.orderId), logEntry);
+      
+      const newCsv = masterListCsv + '\n' + csvRow;
+      batch.set(doc(db, 'system', 'masterCsv'), { masterCsv: newCsv });
+
+      await batch.commit();
+      return { status: 'success' as const };
+    } catch (e) {
+      console.error("Error logging expense", e);
+      return { status: 'error' as const };
+    }
+  }, [masterListCsv]);
 
   const logMileage = useCallback(async (data: MileageEntry) => {
-    const { activeFile, csvRow, logEntry } = DataProcessor.createDirectMileage(data);
-    setLagerFiles(prev => [activeFile, ...prev]);
-    setMasterListCsv(prev => prev + '\n' + csvRow);
-    setBackupLog(prev => [logEntry, ...prev]);
-    return { status: 'success' as const };
-  }, []);
+    try {
+      const batch = writeBatch(db);
+      const { activeFile, csvRow, logEntry } = DataProcessor.createDirectMileage(data);
+      
+      batch.set(doc(db, 'lagerFiles', activeFile.filename), {
+        filename: activeFile.filename,
+        content: JSON.stringify(activeFile.content),
+        createdAt: activeFile.createdAt,
+        path: activeFile.path,
+        status: activeFile.status
+      });
+      batch.set(doc(db, 'backupLog', logEntry.orderId), logEntry);
+      
+      const newCsv = masterListCsv + '\n' + csvRow;
+      batch.set(doc(db, 'system', 'masterCsv'), { masterCsv: newCsv });
+
+      await batch.commit();
+      return { status: 'success' as const };
+    } catch (e) {
+      console.error("Error logging mileage", e);
+      return { status: 'error' as const };
+    }
+  }, [masterListCsv]);
 
   const value = useMemo(() => ({
       availableDates,

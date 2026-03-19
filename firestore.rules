@@ -1,0 +1,62 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        (request.auth.token.email == "Christianwkchristensen@gmail.com" && request.auth.token.email_verified == true);
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /dates/{dateIso} {
+      // Anyone can read availability
+      allow read: if true;
+      
+      // Admin can do anything
+      allow create, update, delete: if isAdmin();
+      
+      // Clients can request a booking (change status from 'Ledig' to 'Anmodet')
+      allow update: if !isAdmin() 
+        && resource.data.status == 'Ledig' 
+        && request.resource.data.status == 'Anmodet'
+        && request.resource.data.config == resource.data.config; // Config must not change
+    }
+
+    match /floatFiles/{filename} {
+      // Admin can do anything
+      allow read, write: if isAdmin();
+      
+      // Clients can create booking requests
+      allow create: if !isAdmin()
+        && request.resource.data.filename is string
+        && request.resource.data.content is string
+        && request.resource.data.createdAt is string;
+    }
+
+    match /lagerFiles/{filename} {
+      // Only Admin
+      allow read, write: if isAdmin();
+    }
+
+    match /backupLog/{logId} {
+      // Only Admin
+      allow read, write: if isAdmin();
+    }
+
+    match /system/{docId} {
+      // Only Admin
+      allow read, write: if isAdmin();
+    }
+  }
+}

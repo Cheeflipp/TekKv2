@@ -164,11 +164,6 @@ export default function CompetenceWheel() {
                 `}
                 style={{ transform: 'translateZ(10px)', backfaceVisibility: 'hidden' }}
               >
-                <div className={`w-12 h-12 md:w-16 md:h-16 rounded-full mb-4 md:mb-6 flex items-center justify-center border transition-colors duration-500
-                  ${isFront ? 'bg-orange-500/20 border-orange-500/50 text-orange-400' : 'bg-slate-700/50 border-slate-600 text-slate-400'}
-                `}>
-                  <span className="text-xl md:text-2xl font-bold">✓</span>
-                </div>
                 <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-4">{card.title}</h3>
                 <p className="text-slate-300 text-sm md:text-base mb-4 md:mb-6 leading-relaxed">{card.desc}</p>
                 

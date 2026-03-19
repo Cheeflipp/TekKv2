@@ -2,65 +2,67 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-
-import { verifyPassword } from '../actions/auth';
+import { auth } from '../../firebase';
+import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut, User } from 'firebase/auth';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (password: string) => Promise<boolean>;
-  logout: () => void;
+  user: User | null;
+  login: () => Promise<boolean>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    // Check session storage on mount
-    if (typeof window !== 'undefined') {
-      try {
-        const stored = sessionStorage.getItem('tekk_auth_session');
-        if (stored === 'true') {
-          setIsAuthenticated(true);
-        }
-      } catch (e) {
-        console.warn('SessionStorage access denied', e);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        setIsAuthenticated(true);
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
       }
-    }
+      setLoading(false);
+    });
+    return () => unsubscribe();
   }, []);
 
-  const login = async (password: string): Promise<boolean> => {
-    const isValid = await verifyPassword(password);
-    if (isValid) {
-      setIsAuthenticated(true);
-      if (typeof window !== 'undefined') {
-        try {
-          sessionStorage.setItem('tekk_auth_session', 'true');
-        } catch (e) {
-          console.warn('SessionStorage write failed', e);
-        }
+  const login = async (): Promise<boolean> => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      if (result.user) {
+        return true;
       }
-      return true;
+      return false;
+    } catch (error) {
+      console.error("Login failed", error);
+      return false;
     }
-    return false;
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    if (typeof window !== 'undefined') {
-      try {
-        sessionStorage.removeItem('tekk_auth_session');
-      } catch (e) {
-        console.warn('SessionStorage remove failed', e);
-      }
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      router.push('/login');
+    } catch (error) {
+      console.error("Logout failed", error);
     }
-    router.push('/login');
   };
+
+  if (loading) {
+    return null; // Or a loading spinner
+  }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
