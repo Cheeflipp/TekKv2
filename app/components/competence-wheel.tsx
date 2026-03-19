@@ -225,10 +225,6 @@ export default function CompetenceWheel() {
           );
         })}
       </div>
-      
-      {/* Subtle fade edges for the container to blend the outer cards */}
-      <div className="absolute inset-y-0 left-0 w-[15%] bg-gradient-to-r from-slate-900 to-transparent pointer-events-none"></div>
-      <div className="absolute inset-y-0 right-0 w-[15%] bg-gradient-to-l from-slate-900 to-transparent pointer-events-none"></div>
     </div>
   );
 }
