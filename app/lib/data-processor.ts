@@ -121,7 +121,7 @@ export class DataProcessor {
     return { file, notification };
   }
 
-  // --- 2. LAGER & MASTER LIST (GODKENDELSE) ---
+  // --- 2. LAGER OG MASTER LIST (GODKENDELSE) ---
 
   static approveToLager(file: VirtualFile): { activeFile: VirtualFile, csvRow: string, logEntry: BackupRecord } {
     const content = file.content;

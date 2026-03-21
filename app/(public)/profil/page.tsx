@@ -58,7 +58,7 @@ export default function AboutPage() {
                 <h3 className={cn(
                   "text-4xl font-bold mb-6",
                   theme === 'classic' ? "text-slate-900 font-serif" : "text-white"
-                )}>Glad, Karismatisk & <span className={theme === 'classic' ? "text-slate-500" : "text-slate-400"}>Ansvarlig</span></h3>
+                )}>Glad, Karismatisk og <span className={theme === 'classic' ? "text-slate-500" : "text-slate-400"}>Ansvarlig</span></h3>
                 <div className={cn(
                   "prose prose-lg leading-relaxed",
                   theme === 'classic' ? "prose-slate text-slate-600" : "prose-invert text-slate-400"
@@ -86,7 +86,7 @@ export default function AboutPage() {
                 )}>Styrker</h4>
                 <div className="grid md:grid-cols-2 gap-4">
                   <ul className={cn("space-y-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
-                    <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Ansvarsbevidst & Mødestabil</li>
+                    <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Ansvarsbevidst og Mødestabil</li>
                     <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Lærenem</li>
                   </ul>
                   <ul className={cn("space-y-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
@@ -136,7 +136,7 @@ export default function AboutPage() {
                     "border p-2 rounded text-xs",
                     theme === 'classic' ? "bg-slate-50 border-slate-200 text-slate-600" : "bg-slate-900 border-slate-700 text-slate-400"
                   )}>
-                    <span className={cn("font-bold block mb-1", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>Certificeringer & Standarder:</span>
+                    <span className={cn("font-bold block mb-1", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>Certificeringer og Standarder:</span>
                     Arbejdet udført jf. <strong>DS/EN ISO 3834-2</strong> (Kvalitetskrav til svejsning) og <strong>DS/EN 1090-3</strong> (Udførelse af aluminium- og stålkonstruktioner).
                   </p>
                 </div>
@@ -149,7 +149,7 @@ export default function AboutPage() {
                   theme === 'classic' ? "border-slate-300 bg-white" : "border-slate-700 bg-slate-900"
                 )}></div>
                 <div className="text-sm text-slate-500 font-mono mb-1">Mar. 2023 — Jul. 2024</div>
-                <h4 className={cn("text-xl font-bold", theme === 'classic' ? "text-slate-900" : "text-slate-200")}>Ekstern Konsulent & Arbejdsmiljø Koordinator</h4>
+                <h4 className={cn("text-xl font-bold", theme === 'classic' ? "text-slate-900" : "text-slate-200")}>Ekstern Konsulent og Arbejdsmiljø Koordinator</h4>
                 <p className={cn("text-sm", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>DELPRO A/S</p>
                 <p className={cn("text-sm mt-2", theme === 'classic' ? "text-slate-600" : "text-slate-500")}>
                   Gennemførte AMR-uddannelsen (Arbejdsmiljørepræsentant) ved ansættelsens start.
@@ -222,7 +222,7 @@ export default function AboutPage() {
                      <li className="flex gap-3">
                         <span className={cn("font-bold mt-0.5", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>•</span>
                         <div>
-                          <strong className={cn("block", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Butiksassistent (2015 — 2016 & 2019 — 2020)</strong>
+                          <strong className={cn("block", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Butiksassistent (2015 — 2016 og 2019 — 2020)</strong>
                           <span className={theme === 'classic' ? "text-slate-600" : "text-slate-500"}>Montage af dæk og reparation af cykler. Salg, lagerstyring og lukkeansvarlig.</span>
                         </div>
                      </li>
@@ -248,7 +248,7 @@ export default function AboutPage() {
               "text-2xl font-bold mb-8 flex items-center gap-3",
               theme === 'classic' ? "text-slate-900 font-serif" : "text-white"
             )}>
-              <span className={cn("w-8 h-1", theme === 'classic' ? "bg-[#c29b62]" : "bg-orange-500")}></span> Uddannelse & Kurser
+              <span className={cn("w-8 h-1", theme === 'classic' ? "bg-[#c29b62]" : "bg-orange-500")}></span> Uddannelse og Kurser
             </h3>
             
             <div className="space-y-6">
@@ -300,15 +300,15 @@ export default function AboutPage() {
                    <span className={cn(
                      "px-3 py-1 text-xs rounded-full border",
                      theme === 'classic' ? "bg-slate-100 text-slate-600 border-slate-200" : "bg-slate-800 text-slate-300 border-slate-700"
-                   )}>EU-Stem: 3D Print & Konstruktion</span>
+                   )}>EU-Stem: 3D Print og Konstruktion</span>
                    <span className={cn(
                      "px-3 py-1 text-xs rounded-full border",
                      theme === 'classic' ? "bg-slate-100 text-slate-600 border-slate-200" : "bg-slate-800 text-slate-300 border-slate-700"
-                   )}>Dækmontage & Reklamation</span>
+                   )}>Dækmontage og Reklamation</span>
                    <span className={cn(
                      "px-3 py-1 text-xs rounded-full border",
                      theme === 'classic' ? "bg-slate-100 text-slate-600 border-slate-200" : "bg-slate-800 text-slate-300 border-slate-700"
-                   )}>Salg & Service</span>
+                   )}>Salg og Service</span>
                    <span className={cn(
                      "px-3 py-1 text-xs rounded-full border",
                      theme === 'classic' ? "bg-slate-100 text-slate-600 border-slate-200" : "bg-slate-800 text-slate-300 border-slate-700"

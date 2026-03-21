@@ -308,7 +308,7 @@ export default function AdminDashboard() {
 
   const getViewCategory = (tab: ViewTab) => {
     if (tab === 'CALENDAR') return 'Planlægning';
-    if (['BOOKINGS', 'ORDERS'].includes(tab)) return 'Drift & Ordrer';
+    if (['BOOKINGS', 'ORDERS'].includes(tab)) return 'Drift og Ordrer';
     return 'Regnskab';
   };
 
@@ -347,9 +347,9 @@ export default function AdminDashboard() {
                   </button>
                 </div>
 
-                {/* Drift & Ordrer */}
+                {/* Drift og Ordrer */}
                 <div className="mb-2">
-                  <div className="px-3 py-2 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 mb-1">Drift & Ordrer</div>
+                  <div className="px-3 py-2 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 mb-1">Drift og Ordrer</div>
                   <button onClick={() => { setActiveTab('BOOKINGS'); setShowViewMenu(false); }} className="w-full text-left px-3 py-2 rounded hover:bg-slate-50 flex items-center gap-3 group">
                     <div className="p-1.5 rounded bg-amber-50 text-amber-600 group-hover:bg-amber-100 transition-colors relative">
                       <Inbox className="w-4 h-4" />
@@ -624,7 +624,7 @@ export default function AdminDashboard() {
              <section className="animate-in fade-in duration-300">
                 <div className="flex justify-between items-end mb-6 border-b border-slate-300 pb-4">
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-800">Bilagsoversigt & Hændelser</h2>
+                    <h2 className="text-2xl font-bold text-slate-800">Bilagsoversigt og Hændelser</h2>
                     <p className="text-slate-500">Udgifter, kørebog og system logs. (Ordrer findes i Ordre Kartoteket).</p>
                   </div>
                 </div>

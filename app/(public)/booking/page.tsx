@@ -414,27 +414,39 @@ export default function BookingPage() {
                        <div className="grid grid-cols-2 gap-4">
                          <div>
                            <label className={cn("block text-[10px] uppercase tracking-wider mb-1", theme === 'classic' ? "text-slate-400" : "text-slate-500")}>Starttidspunkt</label>
-                           <input 
-                             type="time" 
+                           <select 
                              value={startTime}
                              onChange={(e) => setStartTime(e.target.value)}
                              className={cn(
                                "w-full border rounded-sm p-3 focus:outline-none",
                                theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 text-white border-slate-600 focus:border-orange-500"
                              )}
-                           />
+                           >
+                             {Array.from({ length: 24 * 4 }).map((_, i) => {
+                               const h = Math.floor(i / 4).toString().padStart(2, '0');
+                               const m = ((i % 4) * 15).toString().padStart(2, '0');
+                               const time = `${h}:${m}`;
+                               return <option key={`start-${time}`} value={time}>{time}</option>;
+                             })}
+                           </select>
                          </div>
                          <div>
                            <label className={cn("block text-[10px] uppercase tracking-wider mb-1", theme === 'classic' ? "text-slate-400" : "text-slate-500")}>Sluttidspunkt</label>
-                           <input 
-                             type="time" 
+                           <select 
                              value={endTime}
                              onChange={(e) => setEndTime(e.target.value)}
                              className={cn(
                                "w-full border rounded-sm p-3 focus:outline-none",
                                theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 text-white border-slate-600 focus:border-orange-500"
                              )}
-                           />
+                           >
+                             {Array.from({ length: 24 * 4 }).map((_, i) => {
+                               const h = Math.floor(i / 4).toString().padStart(2, '0');
+                               const m = ((i % 4) * 15).toString().padStart(2, '0');
+                               const time = `${h}:${m}`;
+                               return <option key={`end-${time}`} value={time}>{time}</option>;
+                             })}
+                           </select>
                          </div>
                        </div>
                     )}
