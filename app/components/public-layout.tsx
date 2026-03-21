@@ -4,10 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "../lib/utils";
+import { useTheme } from "../lib/theme-context";
 
 export function PublicLayout({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { theme, setTheme } = useTheme();
 
   const navItems = [
     { label: 'Hjem', path: '/' },
@@ -18,9 +20,17 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col font-sans">
+    <div className={cn(
+      "min-h-screen flex flex-col font-sans transition-colors duration-300",
+      theme === 'classic' 
+        ? "theme-classic bg-white text-slate-900 selection:bg-[#c29b62] selection:text-white" 
+        : "theme-modern bg-slate-900 text-slate-200 selection:bg-orange-500 selection:text-white"
+    )}>
       {/* Header / Navigation */}
-      <header className="bg-slate-950/80 backdrop-blur-md text-white border-b border-slate-800 sticky top-0 z-50">
+      <header className={cn(
+        "backdrop-blur-md border-b sticky top-0 z-50 transition-colors duration-300",
+        theme === 'classic' ? "bg-white/95 border-slate-200 text-slate-900" : "bg-slate-950/80 text-white border-slate-800"
+      )}>
         <div className="container mx-auto px-6 py-4 flex justify-between items-center relative">
           
           {/* Logo Section */}
@@ -30,7 +40,10 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
             <div className="relative flex items-center justify-center w-[72px] h-[72px]">
               {/* Gear Icon */}
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
-                   className="absolute w-[72px] h-[72px] text-orange-500 animate-[spin_20s_linear_infinite] z-0">
+                   className={cn(
+                     "absolute w-[72px] h-[72px] animate-[spin_20s_linear_infinite] z-0",
+                     theme === 'classic' ? "text-[#c29b62]" : "text-orange-500"
+                   )}>
                 <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1" />
                 <g fill="currentColor">
                   <rect x="10.5" y="1" width="3" height="2" />
@@ -46,12 +59,21 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
               </svg>
 
               {/* Square [T] */}
-              <div className="relative z-30 h-8 w-8 bg-orange-500 rounded-sm flex items-center justify-center font-black text-slate-900 text-2xl leading-none shadow-lg shadow-orange-900/50">T</div>
+              <div className={cn(
+                "relative z-30 h-8 w-8 rounded-sm flex items-center justify-center font-black text-2xl leading-none shadow-lg",
+                theme === 'classic' ? "bg-[#c29b62] text-white shadow-[#c29b62]/30" : "bg-orange-500 text-slate-900 shadow-orange-900/50"
+              )}>T</div>
             </div>
 
             {/* Text ekK Box */}
-            <div className="relative z-20 h-6 px-1 bg-slate-950 border border-slate-800 rounded-sm flex items-center justify-center -ml-[25px] shadow-lg translate-y-1">
-              <span className="text-lg font-bold text-white tracking-tight leading-none">ek<span className="text-orange-500">K</span></span>
+            <div className={cn(
+              "relative z-20 h-6 px-1 border rounded-sm flex items-center justify-center -ml-[25px] shadow-lg translate-y-1",
+              theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-950 border-slate-800"
+            )}>
+              <span className={cn(
+                "text-lg font-bold tracking-tight leading-none",
+                theme === 'classic' ? "text-slate-900" : "text-white"
+              )}>ek<span className={theme === 'classic' ? "text-[#c29b62]" : "text-orange-500"}>K</span></span>
             </div>
           </Link>
 
@@ -62,8 +84,11 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
                 key={item.path}
                 href={item.path}
                 className={cn(
-                  "hover:text-orange-500 transition-all duration-200 text-sm font-bold uppercase tracking-widest text-slate-400 transform",
-                  pathname === item.path && "text-orange-500 scale-105"
+                  "transition-all duration-200 text-sm font-bold uppercase tracking-widest transform",
+                  theme === 'classic' 
+                    ? "text-slate-600 hover:text-[#c29b62]" 
+                    : "text-slate-400 hover:text-orange-500",
+                  pathname === item.path && (theme === 'classic' ? "text-[#c29b62] scale-105" : "text-orange-500 scale-105")
                 )}
               >
                 {item.label}
@@ -74,14 +99,22 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
           {/* Desktop Login Button */}
           <Link 
             href="/login"
-            className="hidden md:block bg-slate-800 hover:bg-orange-600 hover:text-white text-slate-300 px-6 py-2 rounded-sm border border-slate-700 hover:border-orange-500 transition-all duration-300 font-bold text-xs uppercase tracking-widest">
+            className={cn(
+              "hidden md:block px-6 py-2 rounded-sm border transition-all duration-300 font-bold text-xs uppercase tracking-widest",
+              theme === 'classic'
+                ? "bg-slate-900 text-white border-slate-900 hover:bg-[#c29b62] hover:border-[#c29b62]"
+                : "bg-slate-800 hover:bg-orange-600 hover:text-white text-slate-300 border-slate-700 hover:border-orange-500"
+            )}>
             Log ind
           </Link>
 
           {/* Mobile Menu Button */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-slate-300 hover:text-white focus:outline-none p-2"
+            className={cn(
+              "md:hidden focus:outline-none p-2",
+              theme === 'classic' ? "text-slate-900 hover:text-[#c29b62]" : "text-slate-300 hover:text-white"
+            )}
             aria-label="Toggle Menu">
             {!mobileMenuOpen ? (
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
@@ -97,7 +130,10 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-slate-900 border-b border-slate-800 shadow-2xl animate-in slide-in-from-top-2 duration-200">
+          <div className={cn(
+            "md:hidden absolute top-full left-0 w-full border-b shadow-2xl animate-in slide-in-from-top-2 duration-200",
+            theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-900 border-slate-800"
+          )}>
             <div className="flex flex-col p-4 space-y-2">
               {navItems.map((item) => (
                 <Link 
@@ -105,8 +141,11 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
                   href={item.path}
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
-                    "text-left w-full py-3 px-4 text-slate-300 hover:text-orange-500 hover:bg-slate-800 rounded-sm font-bold uppercase tracking-widest transition-colors",
-                    pathname === item.path && "text-orange-500 bg-slate-800"
+                    "text-left w-full py-3 px-4 rounded-sm font-bold uppercase tracking-widest transition-colors",
+                    theme === 'classic'
+                      ? "text-slate-600 hover:text-[#c29b62] hover:bg-slate-50"
+                      : "text-slate-300 hover:text-orange-500 hover:bg-slate-800",
+                    pathname === item.path && (theme === 'classic' ? "text-[#c29b62] bg-slate-50" : "text-orange-500 bg-slate-800")
                   )}
                 >
                   {item.label}
@@ -123,47 +162,103 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-950 py-8 border-t border-slate-900 text-center">
+      <footer className={cn(
+        "py-8 border-t text-center relative",
+        theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-950 border-slate-900"
+      )}>
         <div className="container mx-auto px-6">
-          {/* Footer Logo: Consistent with Header */}
-          <div className="inline-flex items-center justify-center gap-0 mb-4 opacity-50 hover:opacity-100 transition-opacity group">
-             {/* Logo Mark Wrapper */}
-             <div className="relative flex items-center justify-center w-[72px] h-[72px]">
-                {/* Gear Icon */}
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
-                     className="absolute w-[72px] h-[72px] text-orange-500 animate-[spin_20s_linear_infinite] z-0">
-                  <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1" />
-                  <g fill="currentColor">
-                    <rect x="10.5" y="1" width="3" height="2" />
-                    <rect x="10.5" y="1" width="3" height="2" transform="rotate(40 12 12)" />
-                    <rect x="10.5" y="1" width="3" height="2" transform="rotate(80 12 12)" />
-                    <rect x="10.5" y="1" width="3" height="2" transform="rotate(120 12 12)" />
-                    <rect x="10.5" y="1" width="3" height="2" transform="rotate(160 12 12)" />
-                    <rect x="10.5" y="1" width="3" height="2" transform="rotate(200 12 12)" />
-                    <rect x="10.5" y="1" width="3" height="2" transform="rotate(240 12 12)" />
-                    <rect x="10.5" y="1" width="3" height="2" transform="rotate(280 12 12)" />
-                    <rect x="10.5" y="1" width="3" height="2" transform="rotate(320 12 12)" />
-                  </g>
-                </svg>
-                {/* Square [T] */}
-                <div className="relative z-30 h-8 w-8 bg-orange-500 rounded-sm flex items-center justify-center font-black text-slate-900 text-2xl leading-none shadow-lg">T</div>
-             </div>
-             
-             {/* Text ekK Box */}
-             <div className="relative z-20 h-6 px-1 bg-slate-900 border border-slate-800 rounded-sm flex items-center justify-center -ml-[25px] shadow-lg translate-y-1">
-                <span className="text-lg font-bold text-slate-400 tracking-tight leading-none">ek<span className="text-slate-600">K</span></span>
-             </div>
-          </div>
-          <div className="flex flex-col gap-1 text-slate-600 text-xs uppercase tracking-wider">
-            <p>&copy; 2026 TekK</p>
-            <p className="font-bold text-slate-700">CVR: 46022432</p>
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            {/* Theme Switcher (Left) */}
+            <div className="mb-8 md:mb-0 w-full md:w-auto flex justify-center md:justify-start">
+              <div className="flex items-center gap-2">
+                <label htmlFor="theme-select" className={cn(
+                  "text-xs font-bold uppercase tracking-widest",
+                  theme === 'classic' ? "text-slate-500" : "text-slate-400"
+                )}>Tema:</label>
+                <select 
+                  id="theme-select"
+                  value={theme}
+                  onChange={(e) => setTheme(e.target.value as 'modern' | 'classic')}
+                  className={cn(
+                    "text-xs font-bold uppercase tracking-widest rounded-sm px-2 py-1 border outline-none cursor-pointer",
+                    theme === 'classic' 
+                      ? "bg-slate-50 border-slate-200 text-slate-700 focus:border-[#c29b62]" 
+                      : "bg-slate-900 border-slate-700 text-slate-300 focus:border-orange-500"
+                  )}
+                >
+                  <option value="modern">Moderne (Mørk)</option>
+                  <option value="classic">Klassisk (Lys/Navy)</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Footer Content (Center) */}
+            <div className="flex-1 flex flex-col items-center">
+              {/* Footer Logo: Consistent with Header */}
+              <div className="inline-flex items-center justify-center gap-0 mb-4 opacity-50 hover:opacity-100 transition-opacity group">
+                 {/* Logo Mark Wrapper */}
+                 <div className="relative flex items-center justify-center w-[72px] h-[72px]">
+                    {/* Gear Icon */}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
+                         className={cn(
+                           "absolute w-[72px] h-[72px] animate-[spin_20s_linear_infinite] z-0",
+                           theme === 'classic' ? "text-[#c29b62]" : "text-orange-500"
+                         )}>
+                      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1" />
+                      <g fill="currentColor">
+                        <rect x="10.5" y="1" width="3" height="2" />
+                        <rect x="10.5" y="1" width="3" height="2" transform="rotate(40 12 12)" />
+                        <rect x="10.5" y="1" width="3" height="2" transform="rotate(80 12 12)" />
+                        <rect x="10.5" y="1" width="3" height="2" transform="rotate(120 12 12)" />
+                        <rect x="10.5" y="1" width="3" height="2" transform="rotate(160 12 12)" />
+                        <rect x="10.5" y="1" width="3" height="2" transform="rotate(200 12 12)" />
+                        <rect x="10.5" y="1" width="3" height="2" transform="rotate(240 12 12)" />
+                        <rect x="10.5" y="1" width="3" height="2" transform="rotate(280 12 12)" />
+                        <rect x="10.5" y="1" width="3" height="2" transform="rotate(320 12 12)" />
+                      </g>
+                    </svg>
+                    {/* Square [T] */}
+                    <div className={cn(
+                      "relative z-30 h-8 w-8 rounded-sm flex items-center justify-center font-black text-2xl leading-none shadow-lg",
+                      theme === 'classic' ? "bg-[#c29b62] text-white" : "bg-orange-500 text-slate-900"
+                    )}>T</div>
+                 </div>
+                 
+                 {/* Text ekK Box */}
+                 <div className={cn(
+                   "relative z-20 h-6 px-1 border rounded-sm flex items-center justify-center -ml-[25px] shadow-lg translate-y-1",
+                   theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-900 border-slate-800"
+                 )}>
+                    <span className={cn(
+                      "text-lg font-bold tracking-tight leading-none",
+                      theme === 'classic' ? "text-slate-500" : "text-slate-400"
+                    )}>ek<span className={theme === 'classic' ? "text-[#c29b62]" : "text-slate-600"}>K</span></span>
+                 </div>
+              </div>
+              <div className={cn(
+                "flex flex-col gap-1 text-xs uppercase tracking-wider",
+                theme === 'classic' ? "text-slate-500" : "text-slate-600"
+              )}>
+                <p>&copy; 2026 TekK</p>
+                <p className={theme === 'classic' ? "font-bold text-slate-700" : "font-bold text-slate-700"}>CVR: 46022432</p>
+              </div>
+            </div>
+
+            {/* Empty right side to balance flex-between */}
+            <div className="hidden md:block w-[200px]"></div>
           </div>
           
           {/* Mobile Login Link (Visible only on mobile) */}
-          <div className="md:hidden mt-8 pt-6 border-t border-slate-900">
+          <div className={cn(
+            "md:hidden mt-8 pt-6 border-t",
+            theme === 'classic' ? "border-slate-200" : "border-slate-900"
+          )}>
              <Link 
                href="/login" 
-               className="text-slate-700 hover:text-orange-500 text-[10px] font-bold uppercase tracking-widest transition-colors">
+               className={cn(
+                 "text-[10px] font-bold uppercase tracking-widest transition-colors",
+                 theme === 'classic' ? "text-slate-500 hover:text-[#c29b62]" : "text-slate-700 hover:text-orange-500"
+               )}>
                Admin Log ind
              </Link>
           </div>

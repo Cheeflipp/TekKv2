@@ -527,7 +527,7 @@ export default function AdminDashboard() {
                                  <h4 className="font-bold text-slate-800 text-lg">{notif.data.name}</h4>
                                  <div className="text-sm text-slate-500 flex gap-4 mt-1">
                                     <span>{notif.data.phone}</span>
-                                    <span>{notif.data.hours} timer</span>
+                                    <span>{notif.data.hours} timer {notif.data.startTime && notif.data.endTime ? `(${notif.data.startTime} - ${notif.data.endTime})` : ''}</span>
                                  </div>
                                  <div className="mt-2 bg-blue-50 text-blue-800 p-2 rounded text-sm font-bold text-right border border-blue-100">
                                    Tilbud: {notif.data.price} kr.
@@ -585,7 +585,14 @@ export default function AdminDashboard() {
                    <tbody className="divide-y divide-slate-100">
                       {bookingOrders.map(order => (
                         <tr key={order.orderId} className="hover:bg-slate-50 transition-colors">
-                           <td className="px-6 py-4 font-mono font-bold text-slate-700">{order.date}</td>
+                           <td className="px-6 py-4 font-mono font-bold text-slate-700">
+                             {order.date}
+                             {order.fullJson.startTime && order.fullJson.endTime && (
+                               <div className="text-xs text-slate-400 font-normal mt-1">
+                                 {order.fullJson.startTime} - {order.fullJson.endTime}
+                               </div>
+                             )}
+                           </td>
                            <td className="px-6 py-4 font-bold text-slate-900">{order.fullJson.name || 'Ukendt'}</td>
                            <td className="px-6 py-4 text-xs">
                              <div className="font-bold">{order.fullJson.phone}</div>

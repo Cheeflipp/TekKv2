@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
+import { useTheme } from '../lib/theme-context';
+import { cn } from '../lib/utils';
 
 const cards = [
   { 
@@ -54,6 +56,7 @@ const cards = [
 ];
 
 export default function CompetenceWheel() {
+  const { theme } = useTheme();
   const [rotation, setRotation] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -157,21 +160,49 @@ export default function CompetenceWheel() {
                 transform: `rotateY(${cardAngle}deg) translateZ(${radius}px) translateY(${yOffset}px) ${isFront ? 'scale(1.05)' : 'scale(1)'}`,
               }}
             >
+              {/* Shadow for classic theme */}
+              {theme === 'classic' && (
+                <div 
+                  className={cn(
+                    "absolute -bottom-8 left-1/2 -translate-x-1/2 w-[80%] h-8 bg-black/20 blur-xl rounded-[100%] transition-opacity duration-500",
+                    isFront ? "opacity-100" : "opacity-30"
+                  )}
+                  style={{ transform: 'translateZ(-20px)' }}
+                />
+              )}
+
               {/* Front Face */}
               <div 
-                className={`absolute inset-0 bg-slate-800 flex flex-col items-center justify-center text-center p-4 md:p-8 transition-colors duration-500 border-2
-                  ${isFront ? 'border-orange-500' : 'border-slate-600 hover:border-slate-500'}
-                `}
+                className={cn(
+                  "absolute inset-0 flex flex-col items-center justify-center text-center p-4 md:p-8 transition-colors duration-500 border-2",
+                  theme === 'classic' 
+                    ? (isFront ? 'bg-white border-[#c29b62] shadow-xl shadow-[#c29b62]/10' : 'bg-slate-50 border-slate-200 hover:border-slate-300')
+                    : (isFront ? 'bg-slate-800 border-orange-500' : 'bg-slate-800 border-slate-600 hover:border-slate-500')
+                )}
                 style={{ transform: 'translateZ(10px)', backfaceVisibility: 'hidden' }}
               >
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-4">{card.title}</h3>
-                <p className="text-slate-300 text-sm md:text-base mb-4 md:mb-6 leading-relaxed">{card.desc}</p>
+                <h3 className={cn(
+                  "text-2xl md:text-3xl font-bold mb-2 md:mb-4",
+                  theme === 'classic' ? "text-slate-900 font-serif" : "text-white"
+                )}>{card.title}</h3>
+                <p className={cn(
+                  "text-sm md:text-base mb-4 md:mb-6 leading-relaxed",
+                  theme === 'classic' ? "text-slate-600" : "text-slate-300"
+                )}>{card.desc}</p>
                 
                 {card.bullets && card.bullets.length > 0 && (
-                  <ul className="text-sm md:text-base text-slate-300 space-y-1 md:space-y-2 mb-4 md:mb-6 text-left w-full">
+                  <ul className={cn(
+                    "text-sm md:text-base space-y-1 md:space-y-2 mb-4 md:mb-6 text-left w-full",
+                    theme === 'classic' ? "text-slate-600" : "text-slate-300"
+                  )}>
                     {card.bullets.map((b, idx) => (
                       <li key={idx} className="flex items-center gap-2">
-                        <span className={`w-1.5 h-1.5 rounded-full ${isFront ? 'bg-orange-500' : 'bg-slate-500'}`}></span>
+                        <span className={cn(
+                          "w-1.5 h-1.5 rounded-full",
+                          theme === 'classic' 
+                            ? (isFront ? 'bg-[#c29b62]' : 'bg-slate-300')
+                            : (isFront ? 'bg-orange-500' : 'bg-slate-500')
+                        )}></span>
                         {b}
                       </li>
                     ))}
@@ -181,39 +212,54 @@ export default function CompetenceWheel() {
 
               {/* Back Face */}
               <div 
-                className="absolute inset-0 bg-slate-900 border-2 border-slate-700"
+                className={cn(
+                  "absolute inset-0 border-2",
+                  theme === 'classic' ? "bg-slate-100 border-slate-200" : "bg-slate-900 border-slate-700"
+                )}
                 style={{ transform: 'translateZ(-10px) rotateY(180deg)', backfaceVisibility: 'hidden' }}
               ></div>
 
               {/* Left Face (Thickness) */}
               <div 
-                className={`absolute top-0 bottom-0 left-0 w-[20px] transition-colors duration-500
-                  ${isFront ? 'bg-orange-900/80' : 'bg-slate-600'}
-                `}
+                className={cn(
+                  "absolute top-0 bottom-0 left-0 w-[20px] transition-colors duration-500",
+                  theme === 'classic'
+                    ? (isFront ? 'bg-[#c29b62]/20' : 'bg-slate-200')
+                    : (isFront ? 'bg-orange-900/80' : 'bg-slate-600')
+                )}
                 style={{ transform: 'translateX(-10px) rotateY(-90deg)' }}
               ></div>
 
               {/* Right Face (Thickness) */}
               <div 
-                className={`absolute top-0 bottom-0 right-0 w-[20px] transition-colors duration-500
-                  ${isFront ? 'bg-orange-950/80' : 'bg-slate-700'}
-                `}
+                className={cn(
+                  "absolute top-0 bottom-0 right-0 w-[20px] transition-colors duration-500",
+                  theme === 'classic'
+                    ? (isFront ? 'bg-[#c29b62]/30' : 'bg-slate-300')
+                    : (isFront ? 'bg-orange-950/80' : 'bg-slate-700')
+                )}
                 style={{ transform: 'translateX(10px) rotateY(90deg)' }}
               ></div>
 
               {/* Top Face (Thickness) */}
               <div 
-                className={`absolute top-0 left-0 right-0 h-[20px] transition-colors duration-500
-                  ${isFront ? 'bg-orange-800/80' : 'bg-slate-700'}
-                `}
+                className={cn(
+                  "absolute top-0 left-0 right-0 h-[20px] transition-colors duration-500",
+                  theme === 'classic'
+                    ? (isFront ? 'bg-[#c29b62]/10' : 'bg-slate-200')
+                    : (isFront ? 'bg-orange-800/80' : 'bg-slate-700')
+                )}
                 style={{ transform: 'translateY(-10px) rotateX(90deg)' }}
               ></div>
 
               {/* Bottom Face (Thickness) */}
               <div 
-                className={`absolute bottom-0 left-0 right-0 h-[20px] transition-colors duration-500
-                  ${isFront ? 'bg-orange-950/80' : 'bg-slate-900'}
-                `}
+                className={cn(
+                  "absolute bottom-0 left-0 right-0 h-[20px] transition-colors duration-500",
+                  theme === 'classic'
+                    ? (isFront ? 'bg-[#c29b62]/40' : 'bg-slate-300')
+                    : (isFront ? 'bg-orange-950/80' : 'bg-slate-900')
+                )}
                 style={{ transform: 'translateY(10px) rotateX(-90deg)' }}
               ></div>
             </div>

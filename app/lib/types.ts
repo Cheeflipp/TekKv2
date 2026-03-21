@@ -11,6 +11,8 @@ export interface BookingRequest {
   email: string;
   phone: string;
   hours: number;
+  startTime?: string;
+  endTime?: string;
   price: string;
   description: string;
 }

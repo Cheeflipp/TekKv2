@@ -5,10 +5,12 @@ import { useBooking } from '../../lib/booking-context';
 import { DayConfiguration } from '../../lib/types';
 import { cn } from '../../lib/utils';
 import { useToast } from '../../lib/toast-context';
+import { useTheme } from '../../lib/theme-context';
 
 export default function BookingPage() {
   const { fetchAvailability, isDateAvailable, getConfig, getHourlyRate, requestBooking } = useBooking();
   const { toast } = useToast();
+  const { theme } = useTheme();
 
   // Calendar State
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -16,8 +18,8 @@ export default function BookingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form State
-  const [selectedHours, setSelectedHours] = useState<number | 'more'>(6);
-  const [selectedExtraHours, setSelectedExtraHours] = useState<number>(9);
+  const [startTime, setStartTime] = useState('07:00');
+  const [endTime, setEndTime] = useState('15:00');
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -89,7 +91,17 @@ export default function BookingPage() {
 
   const selectDate = (date: Date) => {
     if (isAvailable(date)) {
-      setSelectedDateIso(toIsoDate(date));
+      const iso = toIsoDate(date);
+      setSelectedDateIso(iso);
+      
+      const config = getConfig(iso);
+      if (config) {
+        setStartTime(config.startTime);
+        setEndTime(config.endTime);
+      } else {
+        setStartTime('07:00');
+        setEndTime('15:00');
+      }
     }
   };
 
@@ -135,7 +147,15 @@ export default function BookingPage() {
       return getMaxHours(selectedDateIso);
     }
 
-    return selectedHours === 'more' ? selectedExtraHours : (selectedHours as number);
+    if (!startTime || !endTime) return 0;
+
+    const [startH, startM] = startTime.split(':').map(Number);
+    const [endH, endM] = endTime.split(':').map(Number);
+    
+    if (isNaN(startH) || isNaN(endH)) return 0;
+
+    let hours = (endH + endM / 60) - (startH + startM / 60);
+    return hours > 0 ? Number(hours.toFixed(2)) : 0;
   };
 
   const calculatePrice = (): string => {
@@ -163,6 +183,8 @@ export default function BookingPage() {
       email: formData.email,
       phone: formData.phone,
       hours: calculateTotalHours(),
+      startTime: isPartial(selectedDateIso!) ? getConfig(selectedDateIso!)?.startTime : startTime,
+      endTime: isPartial(selectedDateIso!) ? getConfig(selectedDateIso!)?.endTime : endTime,
       price: calculatePrice(),
       description: formData.description
     });
@@ -179,32 +201,62 @@ export default function BookingPage() {
   };
 
   return (
-    <section className="py-12 md:py-24 bg-slate-900 min-h-screen">
+    <section className={cn(
+      "py-12 md:py-24 min-h-screen transition-colors duration-300",
+      theme === 'classic' ? "bg-white" : "bg-slate-900"
+    )}>
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="flex flex-col items-center text-center mb-12">
-          <h2 className="text-orange-500 font-bold tracking-widest uppercase text-sm mb-2">Book Arbejdskraft</h2>
-          <h3 className="text-4xl md:text-5xl font-bold text-white mb-4">Vælg en dato</h3>
-          <p className="text-slate-400 max-w-xl">
+          <h2 className={cn(
+            "font-bold tracking-widest uppercase text-sm mb-2",
+            theme === 'classic' ? "text-[#c29b62]" : "text-orange-500"
+          )}>Book Arbejdskraft</h2>
+          <h3 className={cn(
+            "text-4xl md:text-5xl font-bold mb-4",
+            theme === 'classic' ? "text-slate-900 font-serif" : "text-white"
+          )}>Vælg en dato</h3>
+          <p className={cn(
+            "max-w-xl",
+            theme === 'classic' ? "text-slate-600" : "text-slate-400"
+          )}>
             Vælg en ledig dato i kalenderen herunder. Prisen afhænger af den valgte dag.
             <br/>
             <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-1"></span> Ledig (Hel)
             <span className="inline-block w-2 h-2 bg-amber-400 rounded-full ml-3 mr-1"></span> Delvis
-            <span className="inline-block w-2 h-2 bg-slate-900 border border-slate-700 rounded-full ml-3 mr-1"></span> <span className="line-through decoration-slate-600 text-slate-500">Optaget</span>
+            <span className={cn(
+              "inline-block w-2 h-2 border rounded-full ml-3 mr-1",
+              theme === 'classic' ? "bg-white border-slate-300" : "bg-slate-900 border-slate-700"
+            )}></span> <span className={cn(
+              "line-through",
+              theme === 'classic' ? "decoration-slate-400 text-slate-400" : "decoration-slate-600 text-slate-500"
+            )}>Optaget</span>
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           
           {/* Calendar Section */}
-          <div className="bg-slate-800 p-6 rounded-sm border border-slate-700 shadow-xl">
+          <div className={cn(
+            "p-6 rounded-sm border shadow-xl transition-colors duration-300",
+            theme === 'classic' ? "bg-slate-50 border-slate-200" : "bg-slate-800 border-slate-700"
+          )}>
              <div className="flex justify-between items-center mb-6">
-               <button onClick={() => changeMonth(-1)} className="text-slate-400 hover:text-white p-2">
+               <button onClick={() => changeMonth(-1)} className={cn(
+                 "p-2 transition-colors",
+                 theme === 'classic' ? "text-slate-500 hover:text-slate-900" : "text-slate-400 hover:text-white"
+               )}>
                  &larr; Forrige
                </button>
-               <h4 className="text-xl font-bold text-white uppercase tracking-wider">
+               <h4 className={cn(
+                 "text-xl font-bold uppercase tracking-wider",
+                 theme === 'classic' ? "text-slate-900" : "text-white"
+               )}>
                  {currentMonthName} {currentYear}
                </h4>
-               <button onClick={() => changeMonth(1)} className="text-slate-400 hover:text-white p-2">
+               <button onClick={() => changeMonth(1)} className={cn(
+                 "p-2 transition-colors",
+                 theme === 'classic' ? "text-slate-500 hover:text-slate-900" : "text-slate-400 hover:text-white"
+               )}>
                  Næste &rarr;
                </button>
              </div>
@@ -235,16 +287,20 @@ export default function BookingPage() {
                      disabled={!available}
                      className={cn(
                        "h-12 w-full rounded-sm font-bold transition-all flex flex-col items-center justify-center relative",
-                       !available && "bg-slate-900 text-slate-600 border-slate-800 border line-through decoration-slate-600 cursor-not-allowed",
+                       !available && (theme === 'classic' ? "bg-white text-slate-400 border-slate-200 border line-through decoration-slate-300 cursor-not-allowed" : "bg-slate-900 text-slate-600 border-slate-800 border line-through decoration-slate-600 cursor-not-allowed"),
                        available && !selected && full && "bg-green-600 text-white hover:bg-green-500",
                        available && !selected && partial && "bg-amber-500 text-slate-900 font-bold hover:bg-amber-400",
-                       selected && "bg-orange-500 text-white ring-2 ring-orange-300"
+                       selected && (theme === 'classic' ? "bg-[#c29b62] text-white ring-2 ring-[#c29b62]/50" : "bg-orange-500 text-white ring-2 ring-orange-300"),
+                       available && !selected && theme === 'classic' && "text-slate-700 hover:text-white"
                      )}
                    >
                      <span>{day.getDate()}</span>
                      
                      {partial && !selected && (
-                       <span className="absolute bottom-1 right-1 w-1.5 h-1.5 bg-slate-900 rounded-full"></span>
+                       <span className={cn(
+                         "absolute bottom-1 right-1 w-1.5 h-1.5 rounded-full",
+                         theme === 'classic' ? "bg-white" : "bg-slate-900"
+                       )}></span>
                      )}
                    </button>
                  );
@@ -255,16 +311,34 @@ export default function BookingPage() {
           {/* Booking Options Section */}
           <div className="space-y-6">
             {selectedDateIso ? (
-              <div className="bg-slate-800 p-8 rounded-sm border border-orange-500/30 shadow-2xl animate-in slide-in-from-right duration-300">
-                <div className="border-b border-slate-700 pb-4 mb-6">
+              <div className={cn(
+                "p-8 rounded-sm border shadow-2xl animate-in slide-in-from-right duration-300",
+                theme === 'classic' ? "bg-slate-50 border-[#c29b62]/30" : "bg-slate-800 border-orange-500/30"
+              )}>
+                <div className={cn(
+                  "border-b pb-4 mb-6",
+                  theme === 'classic' ? "border-slate-200" : "border-slate-700"
+                )}>
                   <div className="flex justify-between items-start">
                      <div>
-                        <div className="text-xs text-orange-500 uppercase font-bold tracking-widest mb-1">Valgt Dato</div>
-                        <h3 className="text-3xl font-bold text-white">{formatDateDisplay(selectedDateIso)}</h3>
+                        <div className={cn(
+                          "text-xs uppercase font-bold tracking-widest mb-1",
+                          theme === 'classic' ? "text-[#c29b62]" : "text-orange-500"
+                        )}>Valgt Dato</div>
+                        <h3 className={cn(
+                          "text-3xl font-bold",
+                          theme === 'classic' ? "text-slate-900 font-serif" : "text-white"
+                        )}>{formatDateDisplay(selectedDateIso)}</h3>
                      </div>
                      <div className="text-right">
-                       <div className="text-xs text-slate-500 uppercase font-bold tracking-widest mb-1">Tidsrum</div>
-                       <div className="text-white font-mono bg-slate-700 px-2 py-1 rounded">{getDayHours(selectedDateIso)}</div>
+                       <div className={cn(
+                         "text-xs uppercase font-bold tracking-widest mb-1",
+                         theme === 'classic' ? "text-slate-500" : "text-slate-500"
+                       )}>Tidsrum</div>
+                       <div className={cn(
+                         "font-mono px-2 py-1 rounded",
+                         theme === 'classic' ? "bg-slate-200 text-slate-800" : "bg-slate-700 text-white"
+                       )}>{getDayHours(selectedDateIso)}</div>
                      </div>
                   </div>
                   
@@ -282,114 +356,144 @@ export default function BookingPage() {
                   {/* Contact Info */}
                   <div className="grid grid-cols-1 gap-4">
                      <div>
-                       <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Navn / Firma</label>
+                       <label className={cn("block text-xs font-bold uppercase tracking-wider mb-1", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Navn / Firma</label>
                        <input 
                         type="text" 
                         name="name" 
                         value={formData.name} 
                         onChange={handleInputChange} 
                         required 
-                        className="w-full bg-slate-900 border border-slate-600 rounded-sm p-3 text-white focus:border-orange-500 focus:outline-none" 
+                        className={cn(
+                          "w-full border rounded-sm p-3 focus:outline-none",
+                          theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 border-slate-600 text-white focus:border-orange-500"
+                        )} 
                        />
                      </div>
                      <div>
-                       <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Telefon</label>
+                       <label className={cn("block text-xs font-bold uppercase tracking-wider mb-1", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Telefon</label>
                        <input 
                         type="tel" 
                         name="phone" 
                         value={formData.phone} 
                         onChange={handleInputChange} 
                         required 
-                        className="w-full bg-slate-900 border border-slate-600 rounded-sm p-3 text-white focus:border-orange-500 focus:outline-none" 
+                        className={cn(
+                          "w-full border rounded-sm p-3 focus:outline-none",
+                          theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 border-slate-600 text-white focus:border-orange-500"
+                        )} 
                        />
                      </div>
                      <div>
-                       <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Email</label>
+                       <label className={cn("block text-xs font-bold uppercase tracking-wider mb-1", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Email</label>
                        <input 
                         type="email" 
                         name="email" 
                         value={formData.email} 
                         onChange={handleInputChange} 
                         required 
-                        className="w-full bg-slate-900 border border-slate-600 rounded-sm p-3 text-white focus:border-orange-500 focus:outline-none" 
+                        className={cn(
+                          "w-full border rounded-sm p-3 focus:outline-none",
+                          theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 border-slate-600 text-white focus:border-orange-500"
+                        )} 
                        />
                      </div>
                   </div>
 
-                  {/* Hours Selection */}
+                  {/* Time Selection */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Antal Timer</label>
+                    <label className={cn("block text-xs font-bold uppercase tracking-wider mb-1", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Tidsrum</label>
                     
                     {isPartial(selectedDateIso) ? (
-                       <div className="p-3 bg-slate-900 border border-slate-600 rounded-sm text-slate-300 text-sm">
+                       <div className={cn(
+                         "p-3 border rounded-sm text-sm",
+                         theme === 'classic' ? "bg-white border-slate-300 text-slate-600" : "bg-slate-900 border-slate-600 text-slate-300"
+                       )}>
                          Fastsat tid: <strong>{getMaxHours(selectedDateIso)} timer</strong> ({getDayHours(selectedDateIso)})
                        </div>
                     ) : (
-                       <select 
-                         value={selectedHours} 
-                         onChange={(e) => setSelectedHours(e.target.value === 'more' ? 'more' : Number(e.target.value))}
-                         name="hours"
-                         className="w-full bg-slate-900 text-white border border-slate-600 rounded-sm p-3 focus:border-orange-500 focus:outline-none">
-                         <option value={6}>6 Timer</option>
-                         <option value={7}>7 Timer</option>
-                         <option value={8}>8 Timer</option>
-                         <option value="more">Flere (9-12)</option>
-                       </select>
+                       <div className="grid grid-cols-2 gap-4">
+                         <div>
+                           <label className={cn("block text-[10px] uppercase tracking-wider mb-1", theme === 'classic' ? "text-slate-400" : "text-slate-500")}>Starttidspunkt</label>
+                           <input 
+                             type="time" 
+                             value={startTime}
+                             onChange={(e) => setStartTime(e.target.value)}
+                             className={cn(
+                               "w-full border rounded-sm p-3 focus:outline-none",
+                               theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 text-white border-slate-600 focus:border-orange-500"
+                             )}
+                           />
+                         </div>
+                         <div>
+                           <label className={cn("block text-[10px] uppercase tracking-wider mb-1", theme === 'classic' ? "text-slate-400" : "text-slate-500")}>Sluttidspunkt</label>
+                           <input 
+                             type="time" 
+                             value={endTime}
+                             onChange={(e) => setEndTime(e.target.value)}
+                             className={cn(
+                               "w-full border rounded-sm p-3 focus:outline-none",
+                               theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 text-white border-slate-600 focus:border-orange-500"
+                             )}
+                           />
+                         </div>
+                       </div>
                     )}
                   </div>
-
-                  {!isPartial(selectedDateIso) && selectedHours === 'more' && (
-                    <div className="animate-in fade-in slide-in-from-top-2">
-                      <label className="block text-xs font-bold text-orange-500 uppercase tracking-wider mb-1">Vælg Lang Dag</label>
-                      <select 
-                        value={selectedExtraHours} 
-                        onChange={(e) => setSelectedExtraHours(Number(e.target.value))}
-                        name="extraHours"
-                        className="w-full bg-slate-900 text-white border border-orange-500 rounded-sm p-3 focus:outline-none">
-                        <option value={9}>9 Timer</option>
-                        <option value={10}>10 Timer</option>
-                        <option value={11}>11 Timer</option>
-                        <option value={12}>12 Timer</option>
-                      </select>
-                    </div>
-                  )}
                   
                   <div>
-                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Kort Beskrivelse</label>
+                     <label className={cn("block text-xs font-bold uppercase tracking-wider mb-1", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Kort Beskrivelse</label>
                      <textarea 
                       name="description" 
                       value={formData.description} 
                       onChange={handleInputChange} 
                       rows={2} 
-                      className="w-full bg-slate-900 border border-slate-600 rounded-sm p-3 text-white focus:border-orange-500 focus:outline-none"
+                      className={cn(
+                        "w-full border rounded-sm p-3 focus:outline-none",
+                        theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 border-slate-600 text-white focus:border-orange-500"
+                      )}
                      ></textarea>
                   </div>
 
                   {/* Price Display */}
-                  <div className="bg-slate-900 p-4 rounded-sm border border-slate-700">
+                  <div className={cn(
+                    "p-4 rounded-sm border",
+                    theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-900 border-slate-700"
+                  )}>
                     <div className="flex justify-between items-end">
                       <div>
-                         <div className="text-slate-400 text-xs">Timepris</div>
-                         <div className="text-slate-300 text-sm">{getCurrentHourlyRate()} kr.</div>
+                         <div className={cn("text-xs", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Timepris</div>
+                         <div className={cn("text-sm", theme === 'classic' ? "text-slate-700" : "text-slate-300")}>{getCurrentHourlyRate()} kr.</div>
+                      </div>
+                      <div className="text-center">
+                         <div className={cn("text-xs", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Antal Timer</div>
+                         <div className={cn("text-sm font-bold", theme === 'classic' ? "text-slate-700" : "text-slate-300")}>{calculateTotalHours()} timer</div>
                       </div>
                       <div className="text-right">
-                         <div className="text-slate-400 text-xs">Total (ekskl. moms)</div>
-                         <div className="text-2xl font-bold text-white">{calculatePrice()} kr.</div>
+                         <div className={cn("text-xs", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Total (ekskl. moms)</div>
+                         <div className={cn("text-2xl font-bold", theme === 'classic' ? "text-slate-900" : "text-white")}>{calculatePrice()} kr.</div>
                       </div>
                     </div>
                   </div>
 
                   <button 
                     type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-orange-600 hover:bg-orange-500 disabled:bg-slate-600 text-white font-bold uppercase tracking-widest py-4 rounded-sm shadow-lg shadow-orange-900/50 transition-all">
+                    disabled={isSubmitting || calculateTotalHours() <= 0}
+                    className={cn(
+                      "w-full text-white font-bold uppercase tracking-widest py-4 rounded-sm shadow-lg transition-all",
+                      theme === 'classic' 
+                        ? "bg-[#c29b62] hover:bg-[#a07d4b] disabled:bg-slate-400 shadow-[#c29b62]/30" 
+                        : "bg-orange-600 hover:bg-orange-500 disabled:bg-slate-600 shadow-orange-900/50"
+                    )}>
                     {isSubmitting ? 'Sender...' : 'Bekræft Booking'}
                   </button>
                 </form>
               </div>
             ) : (
               /* Empty State */
-              <div className="h-full flex flex-col items-center justify-center p-12 text-slate-600 border-2 border-dashed border-slate-700 rounded-sm">
+              <div className={cn(
+                "h-full flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-sm",
+                theme === 'classic' ? "border-slate-300 text-slate-500" : "border-slate-700 text-slate-600"
+              )}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-16 h-16 mb-4">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0h18M5.25 12h13.5" />
                 </svg>
