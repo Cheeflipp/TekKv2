@@ -186,8 +186,8 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
                       : "bg-slate-900 border-slate-700 text-slate-300 focus:border-orange-500"
                   )}
                 >
-                  <option value="modern">Moderne (Mørk)</option>
-                  <option value="classic">Klassisk (Lys/Navy)</option>
+                  <option value="classic">Lys</option>
+                  <option value="modern">Mørk</option>
                 </select>
               </div>
             </div>
