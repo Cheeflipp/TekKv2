@@ -30,7 +30,7 @@ export default function AboutPage() {
               )}>
                  {/* Using standard img tag to bypass Next.js image optimization and domain restrictions for external links */}
                  <img 
-                   src="https://i.imgur.com/0kfupJM.jpg"
+                   src="https://i.imgur.com/Zf3ge6E.jpeg"
                    alt="Christian Wessel K. Christensen" 
                    className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                  />
