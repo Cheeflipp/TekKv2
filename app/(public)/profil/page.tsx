@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../lib/theme-context';
+import profilePic from '../../../public/profilbillede.jpg';
 
 export default function AboutPage() {
   const { theme } = useTheme();
@@ -30,9 +31,10 @@ export default function AboutPage() {
               )}>
                  {/* Using a seed that looks somewhat professional/male based on context */}
                  <Image 
-                   src="/profilbillede.jpg" 
+                   src={profilePic}
                    alt="Christian Wessel K. Christensen" 
                    fill
+                   placeholder="blur"
                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                  />
                  <div className={cn(
