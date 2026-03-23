@@ -33,6 +33,7 @@ export default function AboutPage() {
                    src="/profilbillede.jpg"
                    alt="Christian Wessel K. Christensen" 
                    fill
+                   unoptimized
                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                  />
                  <div className={cn(
