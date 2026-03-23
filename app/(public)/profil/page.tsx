@@ -30,10 +30,9 @@ export default function AboutPage() {
               )}>
                  {/* Using a seed that looks somewhat professional/male based on context */}
                  <Image 
-                   src="/profilbillede.jpg"
+                   src="/profilbillede.webp"
                    alt="Christian Wessel K. Christensen" 
                    fill
-                   unoptimized
                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                  />
                  <div className={cn(
