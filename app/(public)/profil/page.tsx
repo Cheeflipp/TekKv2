@@ -30,11 +30,10 @@ export default function AboutPage() {
               )}>
                  {/* Using a seed that looks somewhat professional/male based on context */}
                  <Image 
-                   src="https://picsum.photos/seed/christian_wessel/600/800" 
+                   src="/profilbillede.jpg" 
                    alt="Christian Wessel K. Christensen" 
                    fill
                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                   referrerPolicy="no-referrer"
                  />
                  <div className={cn(
                    "absolute inset-0 bg-gradient-to-t opacity-80",
