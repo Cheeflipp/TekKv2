@@ -28,12 +28,11 @@ export default function AboutPage() {
                 "relative aspect-[3/4] w-full rounded-sm overflow-hidden border shadow-2xl group",
                 theme === 'classic' ? "bg-slate-100 border-slate-200" : "bg-slate-800 border-slate-700"
               )}>
-                 {/* Using a seed that looks somewhat professional/male based on context */}
-                 <Image 
-                   src="/profilbillede.webp"
+                 {/* Using standard img tag to bypass Next.js image optimization and domain restrictions for external links */}
+                 <img 
+                   src="https://i.imgur.com/0kfupJM.jpg"
                    alt="Christian Wessel K. Christensen" 
-                   fill
-                   className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                   className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                  />
                  <div className={cn(
                    "absolute inset-0 bg-gradient-to-t opacity-80",
