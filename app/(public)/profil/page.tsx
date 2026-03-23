@@ -22,8 +22,8 @@ export default function AboutPage() {
         <div className="container mx-auto px-6 relative z-10">
           <div className="flex flex-col md:flex-row gap-12 items-start">
             
-            {/* Profile Image Placeholder */}
-            <div className="w-full md:w-1/3 flex-shrink-0">
+            {/* Profile Image */}
+            <div className="w-full max-w-sm mx-auto md:max-w-none md:w-1/3 flex-shrink-0">
               <div className={cn(
                 "relative aspect-[3/4] w-full rounded-sm overflow-hidden border shadow-2xl group",
                 theme === 'classic' ? "bg-slate-100 border-slate-200" : "bg-slate-800 border-slate-700"
@@ -32,7 +32,7 @@ export default function AboutPage() {
                  <img 
                    src="https://i.imgur.com/Zf3ge6E.jpeg"
                    alt="Christian Wessel K. Christensen" 
-                   className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                   className="absolute inset-0 w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-700"
                  />
                  <div className={cn(
                    "absolute inset-0 bg-gradient-to-t opacity-80",
