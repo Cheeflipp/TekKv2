@@ -157,7 +157,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Main Content Outlet */}
-      <main className="flex-grow">
+      <main className="flex-grow flex flex-col">
         {children}
       </main>
 

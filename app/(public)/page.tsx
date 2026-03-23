@@ -24,7 +24,7 @@ export default function HomePage() {
 
   return (
     <section className={cn(
-      "relative min-h-[85vh] flex items-center justify-center overflow-hidden transition-colors duration-300",
+      "relative flex-grow min-h-[85vh] flex items-center justify-center overflow-hidden transition-colors duration-300",
       theme === 'classic' ? "bg-white" : "bg-slate-900"
     )}>
       {/* Dark Overlay & Background */}

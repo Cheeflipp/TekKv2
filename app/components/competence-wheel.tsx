@@ -121,7 +121,7 @@ export default function CompetenceWheel() {
 
   return (
     <div 
-      className="relative w-full h-[420px] md:h-[500px] flex flex-col items-center justify-end pb-4 md:pb-0 md:justify-start md:pt-[40px] touch-pan-y select-none"
+      className="relative w-full h-[420px] sm:h-[480px] md:h-[620px] flex flex-col items-center justify-start pt-[150px] sm:pt-[170px] md:pt-[200px] touch-pan-y select-none"
       style={{ perspective: '1600px' }}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
@@ -130,7 +130,7 @@ export default function CompetenceWheel() {
       
       {/* 3D Scene Container */}
       <div 
-        className={`relative w-[260px] md:w-[320px] h-[360px] md:h-[420px] ease-out origin-center md:origin-top scale-[0.75] sm:scale-[0.85] md:scale-100 ${touchStart !== null ? 'transition-none' : 'transition-transform duration-1000'}`}
+        className={`relative w-[260px] md:w-[320px] h-[360px] md:h-[420px] ease-out origin-top scale-[0.75] sm:scale-[0.85] md:scale-100 ${touchStart !== null ? 'transition-none' : 'transition-transform duration-1000'}`}
         style={{ 
           transformStyle: 'preserve-3d',
           transform: `translateZ(-${radius}px) rotateY(${rotation + dragOffset}deg)` 
