@@ -121,7 +121,7 @@ export default function CompetenceWheel() {
 
   return (
     <div 
-      className="relative w-full h-[420px] md:h-[800px] flex flex-col items-center justify-end pb-4 md:pb-0 md:justify-start md:pt-[260px] touch-pan-y select-none"
+      className="relative w-full h-[420px] md:h-[500px] flex flex-col items-center justify-end pb-4 md:pb-0 md:justify-start md:pt-[40px] touch-pan-y select-none"
       style={{ perspective: '1600px' }}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
