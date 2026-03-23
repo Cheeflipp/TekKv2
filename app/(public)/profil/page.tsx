@@ -32,7 +32,7 @@ export default function AboutPage() {
                  <img 
                    src="https://i.imgur.com/Zf3ge6E.jpeg"
                    alt="Christian Wessel K. Christensen" 
-                   className="absolute inset-0 w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-700"
+                   className="absolute inset-0 w-full h-full object-cover object-[50%_30%] grayscale group-hover:grayscale-0 transition-all duration-700"
                  />
                  <div className={cn(
                    "absolute inset-0 bg-gradient-to-t opacity-80",
