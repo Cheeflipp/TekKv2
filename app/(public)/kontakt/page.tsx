@@ -24,13 +24,18 @@ export default function KontaktPage() {
           <h3 className={cn(
             "text-4xl md:text-5xl font-bold mb-6",
             theme === 'classic' ? "text-slate-900 font-serif" : "text-white"
-          )}>Klar til at tage fat?</h3>
-          <p className={cn(
-            "max-w-2xl mx-auto mb-12 text-lg",
+          )}>Bare spørg</h3>
+          <div className={cn(
+            "max-w-2xl mx-auto mb-12 text-lg leading-relaxed",
             theme === 'classic' ? "text-slate-600" : "text-slate-400"
           )}>
-            Har du spørgsmål, som du ikke fandt svar på her på siden? Send en besked via formularen herunder, eller ring direkte på tlf. 12 34 56 78.
-          </p>
+            <p className="mb-4">
+              Fik du ikke svar på alt her på siden? Måske har du en større opgave og vil forhøre dig om mængderabat, eller også har du brug for hjælp på en dag, der ellers står som lukket i kalenderen.
+            </p>
+            <p>
+              Uanset hvad det drejer sig om, er du altid velkommen til at tage fat i mig. Send en besked via formularen herunder, eller ring direkte på <strong className={theme === 'classic' ? "text-slate-800" : "text-slate-200"}>tlf. 12 34 56 78</strong>.
+            </p>
+          </div>
           
           <div className={cn(
             "p-8 md:p-12 rounded-sm shadow-xl border",
