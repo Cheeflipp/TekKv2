@@ -62,13 +62,13 @@ export default function AboutPage() {
                   theme === 'classic' ? "prose-slate text-slate-600" : "prose-invert text-slate-400"
                 )}>
                   <p>
-                    Jeg har arbejdet siden jeg var 12 år, hvor jeg startede som akkordlønnet purløgsplukker. Siden da har jeg haft mange forskellige jobs – blandt andet som vicevært, med bundmaling af både samt inden for service og detailhandel.
+                    Min karriere startede som purløgsplukker i 2008, og siden har jeg bygget en solid praktisk erfaring op gennem arbejde med alt fra kalendersamling til viceværtsopgaver og detailhandel.
                   </p>
                   <p>
-                    Jeg bor i <strong>Bække</strong> og har to børn. Til daglig læser jeg til <strong>maskinmester</strong> i Fredericia, hvilket giver mig en solid teknisk forståelse for mekanik, el og tekniske systemer.
+                    I dag læser jeg til maskinmester i Fredericia, hvor jeg får en bred teknisk forståelse for el, mekanik og komplekse systemer.
                   </p>
                   <p>
-                    Jeg går op i at levere ordentligt arbejde og tage ansvar for de opgaver, jeg påtager mig. For mig handler det om at være pålidelig – både fagligt og i samarbejdet med andre.
+                    Jeg motiveres af at tage ansvar, levere et ordentligt stykke arbejde og være en pålidelig kollega.
                   </p>
                 </div>
               </div>
