@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Sun, Moon } from "lucide-react";
 import { cn } from "../lib/utils";
 import { useTheme } from "../lib/theme-context";
 
@@ -96,36 +97,54 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
             ))}
           </nav>
 
-          {/* Desktop Login Button */}
-          <Link 
-            href="/login"
-            className={cn(
-              "hidden md:block px-6 py-2 rounded-sm border transition-all duration-300 font-bold text-xs uppercase tracking-widest",
-              theme === 'classic'
-                ? "bg-slate-900 text-white border-slate-900 hover:bg-[#c29b62] hover:border-[#c29b62]"
-                : "bg-slate-800 hover:bg-orange-600 hover:text-white text-slate-300 border-slate-700 hover:border-orange-500"
-            )}>
-            Log ind
-          </Link>
+          {/* Right Section: Theme Toggle + Login + Mobile Menu */}
+          <div className="flex items-center gap-2 md:gap-4">
+            {/* Theme Toggle */}
+            <button
+              onClick={() => setTheme(theme === 'classic' ? 'modern' : 'classic')}
+              className={cn(
+                "p-2 rounded-full transition-colors duration-200 flex items-center justify-center",
+                theme === 'classic' 
+                  ? "text-slate-500 hover:bg-slate-100 hover:text-slate-900" 
+                  : "text-slate-400 hover:bg-slate-800 hover:text-white"
+              )}
+              aria-label="Skift tema"
+              title={theme === 'classic' ? "Skift til mørkt tema" : "Skift til lyst tema"}
+            >
+              {theme === 'classic' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+            </button>
 
-          {/* Mobile Menu Button */}
-          <button 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={cn(
-              "md:hidden focus:outline-none p-2",
-              theme === 'classic' ? "text-slate-900 hover:text-[#c29b62]" : "text-slate-300 hover:text-white"
-            )}
-            aria-label="Toggle Menu">
-            {!mobileMenuOpen ? (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-              </svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            )}
-          </button>
+            {/* Desktop Login Button */}
+            <Link 
+              href="/login"
+              className={cn(
+                "hidden md:block px-6 py-2 rounded-sm border transition-all duration-300 font-bold text-xs uppercase tracking-widest",
+                theme === 'classic'
+                  ? "bg-slate-900 text-white border-slate-900 hover:bg-[#c29b62] hover:border-[#c29b62]"
+                  : "bg-slate-800 hover:bg-orange-600 hover:text-white text-slate-300 border-slate-700 hover:border-orange-500"
+              )}>
+              Log ind
+            </Link>
+
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className={cn(
+                "md:hidden focus:outline-none p-2",
+                theme === 'classic' ? "text-slate-900 hover:text-[#c29b62]" : "text-slate-300 hover:text-white"
+              )}
+              aria-label="Toggle Menu">
+              {!mobileMenuOpen ? (
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Dropdown Menu */}
@@ -167,33 +186,9 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
         theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-950 border-slate-900"
       )}>
         <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            {/* Theme Switcher (Left) */}
-            <div className="mb-8 md:mb-0 w-full md:w-auto flex justify-center md:justify-start">
-              <div className="flex items-center gap-2">
-                <label htmlFor="theme-select" className={cn(
-                  "text-xs font-bold uppercase tracking-widest",
-                  theme === 'classic' ? "text-slate-500" : "text-slate-400"
-                )}>Tema:</label>
-                <select 
-                  id="theme-select"
-                  value={theme}
-                  onChange={(e) => setTheme(e.target.value as 'modern' | 'classic')}
-                  className={cn(
-                    "text-xs font-bold uppercase tracking-widest rounded-sm px-2 py-1 border outline-none cursor-pointer",
-                    theme === 'classic' 
-                      ? "bg-slate-50 border-slate-200 text-slate-700 focus:border-[#c29b62]" 
-                      : "bg-slate-900 border-slate-700 text-slate-300 focus:border-orange-500"
-                  )}
-                >
-                  <option value="classic">Lys</option>
-                  <option value="modern">Mørk</option>
-                </select>
-              </div>
-            </div>
-
+          <div className="flex flex-col items-center justify-center">
             {/* Footer Content (Center) */}
-            <div className="flex-1 flex flex-col items-center">
+            <div className="flex flex-col items-center">
               {/* Footer Logo: Consistent with Header */}
               <div className="inline-flex items-center justify-center gap-0 mb-4 opacity-50 hover:opacity-100 transition-opacity group">
                  {/* Logo Mark Wrapper */}
@@ -243,9 +238,6 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
                 <p className={theme === 'classic' ? "font-bold text-slate-700" : "font-bold text-slate-700"}>CVR: 46022432</p>
               </div>
             </div>
-
-            {/* Empty right side to balance flex-between */}
-            <div className="hidden md:block w-[200px]"></div>
           </div>
           
           {/* Mobile Login Link (Visible only on mobile) */}
