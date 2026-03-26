@@ -54,7 +54,7 @@ export default function AdminDashboard() {
   // Calendar State
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showConfigModal, setShowConfigModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [tempConfig, setTempConfig] = useState({
     startTime: '07:00',
     endTime: '15:00',
@@ -203,45 +203,67 @@ export default function AdminDashboard() {
   const isBookedOrRequested = (date: Date) => isBooked(date) || isRequested(date);
 
   const handleDayClick = (date: Date) => {
-    setSelectedDate(date);
     const iso = toIsoDate(date);
-    const config = dayConfigurations.get(iso);
+    const isSelected = selectedDates.some(d => toIsoDate(d) === iso);
     
-    if (config) {
-      setTempConfig({
-        startTime: config.startTime,
-        endTime: config.endTime,
-        hourlyRate: config.hourlyRate || 550
-      });
+    if (isSelected) {
+      setSelectedDates(prev => prev.filter(d => toIsoDate(d) !== iso));
     } else {
-      // Default or last used? Angular used lastUsedConfig.
-      setTempConfig({
-        startTime: '07:00',
-        endTime: '15:00',
-        hourlyRate: 550
-      });
+      setSelectedDates(prev => [...prev, date]);
+    }
+  };
+
+  const openConfigModal = () => {
+    if (selectedDates.length === 0) return;
+    
+    if (selectedDates.length === 1) {
+      const iso = toIsoDate(selectedDates[0]);
+      const config = dayConfigurations.get(iso);
+      if (config) {
+        setTempConfig({
+          startTime: config.startTime,
+          endTime: config.endTime,
+          hourlyRate: config.hourlyRate || 550
+        });
+      } else {
+        setTempConfig({ startTime: '07:00', endTime: '15:00', hourlyRate: 550 });
+      }
+    } else {
+      setTempConfig({ startTime: '07:00', endTime: '15:00', hourlyRate: 550 });
     }
     setShowConfigModal(true);
   };
 
   const saveConfiguration = async () => {
-    if (!selectedDate) return;
-    const iso = toIsoDate(selectedDate);
+    if (selectedDates.length === 0) return;
     
-    await setDayConfig(iso, {
-      startTime: tempConfig.startTime,
-      endTime: tempConfig.endTime,
-      hourlyRate: tempConfig.hourlyRate
+    const promises = selectedDates.map(date => {
+      const iso = toIsoDate(date);
+      return setDayConfig(iso, {
+        startTime: tempConfig.startTime,
+        endTime: tempConfig.endTime,
+        hourlyRate: tempConfig.hourlyRate
+      });
     });
     
+    await Promise.all(promises);
+    
     setShowConfigModal(false);
+    setSelectedDates([]);
   };
 
   const handleDeleteAvailability = async () => {
-    if (!selectedDate) return;
-    const iso = toIsoDate(selectedDate);
-    await closeDate(iso);
+    if (selectedDates.length === 0) return;
+    
+    const promises = selectedDates.map(date => {
+      const iso = toIsoDate(date);
+      return closeDate(iso);
+    });
+    
+    await Promise.all(promises);
+    
     setShowConfigModal(false);
+    setSelectedDates([]);
   };
 
   const setPreset = (start: string, end: string) => {
@@ -443,12 +465,15 @@ export default function AdminDashboard() {
                   <div className="grid grid-cols-7 gap-2">
                     {emptyDaysStart.map((_, i) => <div key={`spacer-${i}`}></div>)}
                     
-                    {daysInMonth.map(day => (
+                    {daysInMonth.map(day => {
+                      const isSelected = selectedDates.some(d => toIsoDate(d) === toIsoDate(day));
+                      return (
                       <button
                         key={day.toISOString()}
                         onClick={() => handleDayClick(day)}
                         className={cn(
                           "h-14 md:h-20 w-full rounded border border-slate-200 flex flex-col items-center justify-center transition-all relative",
+                          isSelected && "ring-4 ring-orange-500 ring-offset-2 z-10",
                           isPast(day) && "opacity-50",
                           isFullDay(day) && !isBookedOrRequested(day) && "bg-green-500 text-white",
                           isPartialDay(day) && !isBookedOrRequested(day) && "bg-amber-400 text-slate-900",
@@ -466,8 +491,18 @@ export default function AdminDashboard() {
                            isFullDay(day) ? 'Ledig' : '-'}
                         </span>
                       </button>
-                    ))}
+                    )})}
                   </div>
+
+                  {selectedDates.length > 0 && (
+                    <div className="mt-6 flex justify-between items-center bg-slate-800 p-4 rounded-lg shadow-lg animate-in slide-in-from-bottom-4 sticky bottom-0 z-20">
+                      <span className="text-white font-bold">{selectedDates.length} {selectedDates.length === 1 ? 'dag' : 'dage'} valgt</span>
+                      <div className="flex gap-2">
+                        <button onClick={() => setSelectedDates([])} className="px-4 py-2 text-slate-300 hover:text-white font-bold text-sm">Ryd</button>
+                        <button onClick={openConfigModal} className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded font-bold shadow-lg">Konfigurer</button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -909,11 +944,13 @@ export default function AdminDashboard() {
       </div>
 
       {/* CONFIG MODAL */}
-      {showConfigModal && selectedDate && (
+      {showConfigModal && selectedDates.length > 0 && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
           <div className="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
             <div className="bg-slate-800 p-4 flex justify-between items-center">
-              <h3 className="text-white font-bold text-lg">Konfigurer {toIsoDate(selectedDate)}</h3>
+              <h3 className="text-white font-bold text-lg">
+                Konfigurer {selectedDates.length === 1 ? toIsoDate(selectedDates[0]) : `${selectedDates.length} dage`}
+              </h3>
               <button onClick={() => setShowConfigModal(false)} className="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
             </div>
             
@@ -943,17 +980,17 @@ export default function AdminDashboard() {
               </div>
 
               <div className="pt-4 flex gap-3 border-t border-slate-100 mt-2">
-                {isAvailable(selectedDate) && (
+                {selectedDates.some(d => isAvailable(d)) && (
                   <button 
                     onClick={handleDeleteAvailability} 
                     className="flex-1 bg-red-100 hover:bg-red-200 text-red-700 font-bold py-3 rounded text-sm uppercase tracking-wider">
-                    Luk Dag
+                    {selectedDates.length === 1 ? 'Luk Dag' : 'Luk Dage'}
                   </button>
                 )}
                 <button 
                   onClick={saveConfiguration} 
                   className="flex-1 bg-orange-600 hover:bg-orange-500 text-white font-bold py-3 rounded text-sm uppercase tracking-wider shadow-lg">
-                  {isAvailable(selectedDate) ? 'Opdater' : 'Opret Produkt'}
+                  {selectedDates.length === 1 && isAvailable(selectedDates[0]) ? 'Opdater' : 'Opret Produkt'}
                 </button>
               </div>
             </div>
