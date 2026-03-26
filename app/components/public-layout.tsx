@@ -16,7 +16,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
     { label: 'Hjem', path: '/' },
     { label: 'Booking', path: '/booking' },
     { label: 'Kompetencer', path: '/kompetencer' },
-    { label: 'Om Profilen', path: '/profil' },
+    { label: 'Om mig', path: '/profil' },
     { label: 'Kontakt', path: '/kontakt' }
   ];
 
@@ -99,20 +99,27 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
 
           {/* Right Section: Theme Toggle + Login + Mobile Menu */}
           <div className="flex items-center gap-2 md:gap-4">
-            {/* Theme Toggle */}
-            <button
-              onClick={() => setTheme(theme === 'classic' ? 'modern' : 'classic')}
-              className={cn(
-                "p-2 rounded-full transition-colors duration-200 flex items-center justify-center",
-                theme === 'classic' 
-                  ? "text-slate-500 hover:bg-slate-100 hover:text-slate-900" 
-                  : "text-slate-400 hover:bg-slate-800 hover:text-white"
-              )}
-              aria-label="Skift tema"
-              title={theme === 'classic' ? "Skift til mørkt tema" : "Skift til lyst tema"}
-            >
-              {theme === 'classic' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-            </button>
+            {/* Theme Toggle Slider */}
+            <div className="flex items-center gap-1.5 md:gap-2 mr-1 md:mr-0">
+              <Sun className={cn("w-4 h-4 transition-colors", theme === 'classic' ? "text-amber-500" : "text-slate-500")} />
+              <button
+                onClick={() => setTheme(theme === 'classic' ? 'modern' : 'classic')}
+                className={cn(
+                  "relative inline-flex h-5 w-10 items-center rounded-full transition-colors duration-300 focus:outline-none",
+                  theme === 'classic' ? "bg-slate-300" : "bg-slate-600"
+                )}
+                aria-label="Skift tema"
+                title={theme === 'classic' ? "Skift til mørkt tema" : "Skift til lyst tema"}
+              >
+                <span
+                  className={cn(
+                    "inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 shadow-sm",
+                    theme === 'classic' ? "translate-x-0.5" : "translate-x-[22px]"
+                  )}
+                />
+              </button>
+              <Moon className={cn("w-4 h-4 transition-colors", theme === 'classic' ? "text-slate-400" : "text-blue-400")} />
+            </div>
 
             {/* Desktop Login Button */}
             <Link 
