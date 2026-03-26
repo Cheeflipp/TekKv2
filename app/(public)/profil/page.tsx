@@ -195,42 +195,45 @@ export default function AboutPage() {
                 <div className={cn(
                   "text-sm font-bold font-mono mb-1",
                   theme === 'classic' ? "text-[#c29b62]" : "text-orange-500"
-                )}>2015 — 2022</div>
-                <h4 className={cn("text-xl font-bold", theme === 'classic' ? "text-slate-900" : "text-white")}>Thansen</h4>
-                <p className={cn("text-sm", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Glostrup, Rødovre, Valby</p>
+                )}>Maj 2015 — Aug. 2022</div>
+                <h4 className={cn("text-xl font-bold", theme === 'classic' ? "text-slate-900" : "text-white")}>Souschef & Deltid</h4>
+                <p className={cn("text-sm", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Thansen.dk · Fuldtid · Region Hovedstaden, Danmark</p>
                 
                 <div className={cn(
                   "mt-3 p-4 rounded border text-sm leading-relaxed",
                   theme === 'classic' ? "bg-slate-50 border-slate-200 text-slate-600" : "bg-slate-900/50 border-slate-800 text-slate-400"
                 )}>
-                  <p className="mb-4">
-                    En længerevarende ansættelse med flere roller, fra gulvmedarbejder til leder og tilbage som specialist under uddannelse.
-                  </p>
                   <ul className="space-y-4">
+                     {/* Fuldtid */}
+                     <li className="flex gap-3">
+                        <span className={cn("font-bold mt-0.5", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>•</span>
+                        <div>
+                          <strong className={cn("block", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Fuldtid (2015 — 2016)</strong>
+                          <span className={theme === 'classic' ? "text-slate-600" : "text-slate-500"}>
+                            Salg, kundeservice, dækmontage og cykelreparation.
+                          </span>
+                        </div>
+                     </li>
+
                      {/* Souschef */}
                      <li className="flex gap-3">
                         <span className={cn("font-bold mt-0.5", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>•</span>
                         <div>
-                          <strong className={cn("block", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Souschef (2016 — 2018)</strong>
-                          <span className={theme === 'classic' ? "text-slate-600" : "text-slate-500"}>Ansvarlig for reklamationsafdelingen for dæk og fælge på Sjælland. Ansvarlig for butiksombygning og oplæring af nye medarbejdere.</span>
+                          <strong className={cn("block", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Souschef (2016 — 2019)</strong>
+                          <span className={theme === 'classic' ? "text-slate-600" : "text-slate-500"}>
+                            Ansvarlig for daglig drift og periodisk ansvarlig for reklamationsafdelingen for Sjællands Dæk og Fælge.
+                          </span>
                         </div>
                      </li>
                      
-                     {/* Butiksassistent (Full Time) */}
-                     <li className="flex gap-3">
-                        <span className={cn("font-bold mt-0.5", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>•</span>
-                        <div>
-                          <strong className={cn("block", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Butiksassistent (2015 — 2016 og 2019 — 2020)</strong>
-                          <span className={theme === 'classic' ? "text-slate-600" : "text-slate-500"}>Montage af dæk og reparation af cykler. Salg, lagerstyring og lukkeansvarlig.</span>
-                        </div>
-                     </li>
-
                      {/* Deltid */}
                      <li className="flex gap-3">
                         <span className={cn("font-bold mt-0.5", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>•</span>
                         <div>
-                          <strong className={cn("block", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Deltid / Studiejob (2020 — 2022)</strong>
-                          <span className={theme === 'classic' ? "text-slate-600" : "text-slate-500"}>Fastholdt tilknytning under studie med fokus på salg og kundeservice.</span>
+                          <strong className={cn("block", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Deltid (2020 — 2022)</strong>
+                          <span className={theme === 'classic' ? "text-slate-600" : "text-slate-500"}>
+                            Salg (B2C og B2B), reklamationsbehandling, dækmontage, cykelreparation, lager og ad-hoc opgaver.
+                          </span>
                         </div>
                      </li>
                   </ul>
