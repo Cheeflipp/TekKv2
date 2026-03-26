@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '../lib/theme-context';
 import { cn } from '../lib/utils';
 
@@ -61,9 +61,25 @@ export default function CompetenceWheel() {
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [dragOffset, setDragOffset] = useState(0);
+  const [radius, setRadius] = useState(480);
   
   const angle = 360 / cards.length; // 45 degrees for 8 cards
-  const radius = 480; // Increased radius to space out the 8 cards and show more
+
+  useEffect(() => {
+    const updateRadius = () => {
+      if (window.innerWidth < 640) {
+        setRadius(380);
+      } else if (window.innerWidth < 768) {
+        setRadius(420);
+      } else {
+        setRadius(480);
+      }
+    };
+    
+    updateRadius();
+    window.addEventListener('resize', updateRadius);
+    return () => window.removeEventListener('resize', updateRadius);
+  }, []);
 
   const next = () => setRotation(r => r - angle);
   const prev = () => setRotation(r => r + angle);
@@ -121,7 +137,7 @@ export default function CompetenceWheel() {
 
   return (
     <div 
-      className="relative w-full h-[420px] sm:h-[480px] md:h-[620px] flex flex-col items-center justify-start pt-[150px] sm:pt-[170px] md:pt-[200px] touch-pan-y select-none"
+      className="relative w-full h-[480px] sm:h-[520px] md:h-[620px] flex flex-col items-center justify-start pt-[40px] sm:pt-[80px] md:pt-[120px] touch-pan-y select-none"
       style={{ perspective: '1600px' }}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
@@ -130,7 +146,7 @@ export default function CompetenceWheel() {
       
       {/* 3D Scene Container */}
       <div 
-        className={`relative w-[260px] md:w-[320px] h-[360px] md:h-[420px] ease-out origin-top scale-[0.75] sm:scale-[0.85] md:scale-100 ${touchStart !== null ? 'transition-none' : 'transition-transform duration-1000'}`}
+        className={`relative w-[280px] sm:w-[300px] md:w-[320px] h-[380px] sm:h-[400px] md:h-[420px] ease-out origin-top scale-[0.85] sm:scale-[0.9] md:scale-100 ${touchStart !== null ? 'transition-none' : 'transition-transform duration-1000'}`}
         style={{ 
           transformStyle: 'preserve-3d',
           transform: `translateZ(-${radius}px) rotateY(${rotation + dragOffset}deg)` 

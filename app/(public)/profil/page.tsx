@@ -184,12 +184,9 @@ export default function AboutPage() {
               </div>
               
               {/* Job 5 (Thansen - Detailed Breakdown) */}
-              <div className={cn(
-                "relative mt-8 pt-4 border-t",
-                theme === 'classic' ? "border-slate-200" : "border-slate-800/50"
-              )}>
+              <div className="relative">
                 <div className={cn(
-                  "absolute -left-[37px] top-6 h-4 w-4 rounded-full border-2",
+                  "absolute -left-[37px] top-1.5 h-4 w-4 rounded-full border-2",
                   theme === 'classic' ? "border-[#c29b62] bg-white" : "border-orange-500 bg-slate-900"
                 )}></div>
                 <div className={cn(
