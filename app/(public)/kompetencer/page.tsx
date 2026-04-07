@@ -8,7 +8,7 @@ import { useTheme } from '../../lib/theme-context';
 
 export default function KompetencerPage() {
   const { theme } = useTheme();
-  const [viewMode, setViewMode] = useState<'wheel' | 'grid'>('wheel');
+  const [viewMode, setViewMode] = useState<'wheel' | 'grid'>('grid');
 
   return (
     <div className={cn(
