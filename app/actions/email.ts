@@ -17,7 +17,7 @@ export async function sendBookingEmails(booking: BookingRequest) {
   try {
     // 1. Send email to Admin
     await resend.emails.send({
-      from: 'TekK Booking <booking@dit-domæne.dk>', // Update this when domain is ready
+      from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
       to: adminEmail,
       subject: `Ny Booking Forespørgsel: ${booking.date} - ${booking.name}`,
       html: `
@@ -37,7 +37,7 @@ export async function sendBookingEmails(booking: BookingRequest) {
     // 2. Send confirmation email to Customer (if they provided an email)
     if (booking.email) {
       await resend.emails.send({
-        from: 'TekK <booking@dit-domæne.dk>', // Update this when domain is ready
+        from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
         to: booking.email,
         subject: `Bekræftelse på booking forespørgsel hos TekK`,
         html: `
