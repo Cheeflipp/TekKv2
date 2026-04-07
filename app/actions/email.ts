@@ -26,6 +26,7 @@ export async function sendBookingEmails(booking: BookingRequest) {
         <p><strong>Navn:</strong> ${booking.name}</p>
         <p><strong>Email:</strong> ${booking.email || 'Ikke oplyst'}</p>
         <p><strong>Telefon:</strong> ${booking.phone}</p>
+        <p><strong>Adresse:</strong> ${booking.address || 'Ikke oplyst'}</p>
         <p><strong>Timer:</strong> ${booking.hours}</p>
         <p><strong>Estimeret Pris:</strong> ${booking.price} kr.</p>
         <p><strong>Beskrivelse:</strong><br/> ${booking.description || 'Ingen beskrivelse'}</p>

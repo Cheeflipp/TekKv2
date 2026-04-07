@@ -10,6 +10,7 @@ export interface BookingRequest {
   name: string;
   email: string;
   phone: string;
+  address: string;
   hours: number;
   startTime?: string;
   endTime?: string;

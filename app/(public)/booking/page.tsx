@@ -1,16 +1,26 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { useLoadScript, Autocomplete } from '@react-google-maps/api';
 import { useBooking } from '../../lib/booking-context';
 import { DayConfiguration } from '../../lib/types';
 import { cn } from '../../lib/utils';
 import { useToast } from '../../lib/toast-context';
 import { useTheme } from '../../lib/theme-context';
 
+const libraries: ("places")[] = ["places"];
+
 export default function BookingPage() {
   const { fetchAvailability, isDateAvailable, getConfig, getHourlyRate, requestBooking } = useBooking();
   const { toast } = useToast();
   const { theme } = useTheme();
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+    libraries,
+  });
+
+  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
 
   // Calendar State
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -24,8 +34,24 @@ export default function BookingPage() {
     name: '',
     phone: '',
     email: '',
+    address: '',
     description: ''
   });
+
+  const onLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
+    setAutocomplete(autocompleteInstance);
+  };
+
+  const onPlaceChanged = () => {
+    if (autocomplete !== null) {
+      const place = autocomplete.getPlace();
+      if (place.formatted_address) {
+        setFormData(prev => ({ ...prev, address: place.formatted_address! }));
+      } else if (place.name) {
+        setFormData(prev => ({ ...prev, address: place.name! }));
+      }
+    }
+  };
 
   useEffect(() => {
     fetchAvailability();
@@ -182,6 +208,7 @@ export default function BookingPage() {
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
+      address: formData.address,
       hours: calculateTotalHours(),
       startTime: isPartial(selectedDateIso!) ? getConfig(selectedDateIso!)?.startTime : startTime,
       endTime: isPartial(selectedDateIso!) ? getConfig(selectedDateIso!)?.endTime : endTime,
@@ -396,6 +423,42 @@ export default function BookingPage() {
                           theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 border-slate-600 text-white focus:border-orange-500"
                         )} 
                        />
+                     </div>
+                     <div>
+                       <label className={cn("block text-xs font-bold uppercase tracking-wider mb-1", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Adresse</label>
+                       {isLoaded ? (
+                         <Autocomplete
+                           onLoad={onLoad}
+                           onPlaceChanged={onPlaceChanged}
+                           options={{ types: ['address'], componentRestrictions: { country: 'dk' } }}
+                         >
+                           <input 
+                            type="text" 
+                            name="address" 
+                            value={formData.address} 
+                            onChange={handleInputChange} 
+                            placeholder="Søg efter din adresse..."
+                            required 
+                            className={cn(
+                              "w-full border rounded-sm p-3 focus:outline-none",
+                              theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 border-slate-600 text-white focus:border-orange-500"
+                            )} 
+                           />
+                         </Autocomplete>
+                       ) : (
+                         <input 
+                          type="text" 
+                          name="address" 
+                          value={formData.address} 
+                          onChange={handleInputChange} 
+                          placeholder="Indtast din adresse..."
+                          required 
+                          className={cn(
+                            "w-full border rounded-sm p-3 focus:outline-none",
+                            theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 border-slate-600 text-white focus:border-orange-500"
+                          )} 
+                         />
+                       )}
                      </div>
                   </div>
 
