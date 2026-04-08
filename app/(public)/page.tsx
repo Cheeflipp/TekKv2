@@ -95,11 +95,11 @@ export default function HomePage() {
           "text-xl md:text-2xl max-w-2xl mx-auto font-light leading-relaxed",
           theme === 'classic' ? "text-slate-600" : "text-slate-300"
         )}>
-          Tjek kalenderen for en ledig tid, <br/>
+          Lej mig ind som maskinmester, konsulent eller ekstra arbejdskraft. <br/>
           <span className={cn(
             "font-medium",
             theme === 'classic' ? "text-slate-900" : "text-white"
-          )}>lad os komme i mål sammen.</span>
+          )}>Tjek min ledighed og book tid direkte i kalenderen.</span>
         </p>
         
         <div className="flex flex-col md:flex-row gap-4 justify-center pt-8">

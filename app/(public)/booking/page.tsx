@@ -439,6 +439,7 @@ export default function BookingPage() {
                             onChange={handleInputChange} 
                             placeholder="Søg efter din adresse..."
                             required 
+                            autoComplete="off"
                             className={cn(
                               "w-full border rounded-sm p-3 focus:outline-none",
                               theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 border-slate-600 text-white focus:border-orange-500"
@@ -453,6 +454,7 @@ export default function BookingPage() {
                           onChange={handleInputChange} 
                           placeholder="Indtast din adresse..."
                           required 
+                          autoComplete="off"
                           className={cn(
                             "w-full border rounded-sm p-3 focus:outline-none",
                             theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 border-slate-600 text-white focus:border-orange-500"

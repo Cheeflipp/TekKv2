@@ -39,7 +39,7 @@ export default function KompetencerPage() {
               
               {/* View Toggle */}
               <div className={cn(
-                "flex p-1 rounded-sm border",
+                "hidden p-1 rounded-sm border",
                 theme === 'classic' ? "bg-slate-100 border-slate-200" : "bg-slate-800 border-slate-700"
               )}>
                 <button

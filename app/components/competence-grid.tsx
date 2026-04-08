@@ -14,10 +14,10 @@ export default function CompetenceGrid() {
         <div 
           key={card.id}
           className={cn(
-            "group relative overflow-hidden rounded-sm border-2 p-6 md:p-8 transition-all duration-300",
+            "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-6 md:p-8 transition-all duration-300",
             theme === 'classic' 
-              ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-sm hover:shadow-xl" 
-              : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700"
+              ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl" 
+              : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
           )}
         >
           {/* Decorative background element */}
