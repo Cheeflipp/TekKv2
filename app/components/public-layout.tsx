@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Sun, Moon } from "lucide-react";
 import { cn } from "../lib/utils";
@@ -10,7 +11,10 @@ import { useTheme } from "../lib/theme-context";
 export function PublicLayout({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { theme, setTheme, bgVersion, setBgVersion } = useTheme();
+  const { theme, setTheme, bgVersion, setBgVersion, bgIntensity, setBgIntensity } = useTheme();
+
+  // Helper to calculate opacity based on intensity (1-5)
+  const getOpacity = (base: number) => Math.min(1, base * (1 + (bgIntensity - 1) * 0.5));
 
   const navItems = [
     { label: 'Hjem', path: '/' },
@@ -22,11 +26,148 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className={cn(
-      "min-h-screen flex flex-col font-sans transition-colors duration-300",
+      "min-h-screen flex flex-col font-sans transition-colors duration-300 relative",
       theme === 'classic' 
-        ? "theme-classic bg-white text-slate-900 selection:bg-[#c29b62] selection:text-white" 
+        ? "theme-classic bg-slate-50 text-slate-900 selection:bg-[#c29b62] selection:text-white" 
         : "theme-modern bg-slate-900 text-slate-200 selection:bg-orange-500 selection:text-white"
     )}>
+      {/* Global Backgrounds */}
+      {theme === 'modern' && (
+        <>
+          <div className="fixed inset-0 z-0 opacity-40 pointer-events-none">
+            <Image 
+              src="https://picsum.photos/seed/industrial_dark/1600/900" 
+              alt="Industrial Background" 
+              fill
+              priority
+              className="object-cover grayscale"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+          <div className="fixed inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-slate-900/60 z-0 pointer-events-none"></div>
+        </>
+      )}
+
+      {theme === 'classic' && (
+        <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+          {bgVersion === 1 && (
+            /* Version 1: Soft flowing waves (like img 1) */
+            <div className="absolute inset-0 transition-opacity duration-500" style={{ opacity: getOpacity(0.3) }}>
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full">
+                <path d="M0,30 C30,60 70,10 100,40 L100,100 L0,100 Z" fill="url(#grad1)" />
+                <path d="M0,60 C40,30 60,80 100,50 L100,100 L0,100 Z" fill="url(#grad2)" opacity="0.6" />
+                <path d="M0,80 C30,50 80,90 100,70 L100,100 L0,100 Z" fill="url(#grad3)" opacity="0.4" />
+                <defs>
+                  <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#c29b62" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="grad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#a07d4b" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="grad3" x1="50%" y1="0%" x2="50%" y2="100%">
+                    <stop offset="0%" stopColor="#e5d5b5" stopOpacity="0.6" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+          )}
+
+          {bgVersion === 2 && (
+            /* Version 2: Top and bottom framing waves (slightly darker) */
+            <div className="absolute inset-0 transition-opacity duration-500" style={{ opacity: getOpacity(0.4) }}>
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full">
+                <path d="M0,0 L100,0 L100,25 C70,45 30,5 0,30 Z" fill="url(#grad1_v2)" />
+                <path d="M0,100 L100,100 L100,75 C60,55 40,95 0,70 Z" fill="url(#grad2_v2)" />
+                <defs>
+                  <linearGradient id="grad1_v2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#c29b62" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="grad2_v2" x1="100%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stopColor="#a07d4b" stopOpacity="0.6" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+          )}
+
+          {bgVersion === 3 && (
+            /* Version 3: Diagonal sweeping waves */
+            <div className="absolute inset-0 transition-opacity duration-500" style={{ opacity: getOpacity(0.35) }}>
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full">
+                <path d="M0,0 L40,0 C60,40 30,70 100,90 L100,100 L0,100 Z" fill="url(#grad1_v3)" />
+                <path d="M0,30 C40,60 50,40 100,100 L0,100 Z" fill="url(#grad2_v3)" opacity="0.7" />
+                <path d="M0,60 C30,80 60,70 80,100 L0,100 Z" fill="url(#grad3_v3)" opacity="0.5" />
+                <defs>
+                  <linearGradient id="grad1_v3" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#c29b62" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="grad2_v3" x1="0%" y1="50%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#a07d4b" stopOpacity="0.6" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="grad3_v3" x1="0%" y1="100%" x2="100%" y2="50%">
+                    <stop offset="0%" stopColor="#e5d5b5" stopOpacity="0.7" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+          )}
+
+          {bgVersion === 4 && (
+            /* Version 4: Multiple layered bottom waves (darker, more waves) */
+            <div className="absolute inset-0 transition-opacity duration-500" style={{ opacity: getOpacity(0.45) }}>
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full">
+                <path d="M0,40 C30,70 50,30 100,50 L100,100 L0,100 Z" fill="url(#grad1_v4)" />
+                <path d="M0,55 C25,45 60,80 100,65 L100,100 L0,100 Z" fill="url(#grad2_v4)" opacity="0.8" />
+                <path d="M0,70 C40,60 70,90 100,75 L100,100 L0,100 Z" fill="url(#grad3_v4)" opacity="0.6" />
+                <path d="M0,85 C50,75 80,95 100,85 L100,100 L0,100 Z" fill="url(#grad1_v4)" opacity="0.4" />
+                <defs>
+                  <linearGradient id="grad1_v4" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#c29b62" stopOpacity="0.6" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="grad2_v4" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#a07d4b" stopOpacity="0.7" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="grad3_v4" x1="50%" y1="0%" x2="50%" y2="100%">
+                    <stop offset="0%" stopColor="#8b6b40" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+          )}
+
+          {bgVersion === 5 && (
+            /* Version 5: Massive, wide, dramatic waves */
+            <div className="absolute inset-0 transition-opacity duration-500" style={{ opacity: getOpacity(0.35) }}>
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full">
+                <path d="M0,10 C50,90 80,-10 100,50 L100,100 L0,100 Z" fill="url(#grad1_v5)" />
+                <path d="M0,40 C40,100 90,10 100,70 L100,100 L0,100 Z" fill="url(#grad2_v5)" opacity="0.7" />
+                <defs>
+                  <linearGradient id="grad1_v5" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#a07d4b" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="grad2_v5" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#c29b62" stopOpacity="0.6" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Header / Navigation */}
       <header className={cn(
         "backdrop-blur-md border-b sticky top-0 z-50 transition-colors duration-300",
@@ -104,24 +245,45 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
 
           {/* Right Section: Theme Toggle + Login + Mobile Menu */}
           <div className="flex items-center gap-2 md:gap-4">
-            {/* Background Version Selector (Classic Theme Only) */}
+            {/* Background Version & Intensity Selectors (Classic Theme Only) */}
             {theme === 'classic' && (
-              <div className="hidden md:flex items-center gap-1 mr-2 bg-slate-100 p-1 rounded-sm border border-slate-200">
-                {[1, 2, 3, 4, 5].map((v) => (
-                  <button
-                    key={v}
-                    onClick={() => setBgVersion(v as any)}
-                    className={cn(
-                      "w-6 h-6 rounded-sm text-xs font-bold transition-colors",
-                      bgVersion === v 
-                        ? "bg-[#c29b62] text-white shadow-sm" 
-                        : "text-slate-500 hover:bg-slate-200 hover:text-slate-700"
-                    )}
-                    title={`Baggrund ${v}`}
-                  >
-                    {v}
-                  </button>
-                ))}
+              <div className="hidden md:flex flex-col gap-1 mr-2">
+                {/* Version Selector */}
+                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-sm border border-slate-200" title="Mønster type">
+                  <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold px-1">Type</span>
+                  {[1, 2, 3, 4, 5].map((v) => (
+                    <button
+                      key={v}
+                      onClick={() => setBgVersion(v as any)}
+                      className={cn(
+                        "w-5 h-5 rounded-sm text-[10px] font-bold transition-colors flex items-center justify-center",
+                        bgVersion === v 
+                          ? "bg-[#c29b62] text-white shadow-sm" 
+                          : "text-slate-500 hover:bg-slate-200 hover:text-slate-700"
+                      )}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
+                {/* Intensity Selector */}
+                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-sm border border-slate-200" title="Mønster styrke">
+                  <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold px-1">Styrke</span>
+                  {[1, 2, 3, 4, 5].map((v) => (
+                    <button
+                      key={v}
+                      onClick={() => setBgIntensity(v as any)}
+                      className={cn(
+                        "w-5 h-5 rounded-sm text-[10px] font-bold transition-colors flex items-center justify-center",
+                        bgIntensity === v 
+                          ? "bg-[#c29b62] text-white shadow-sm" 
+                          : "text-slate-500 hover:bg-slate-200 hover:text-slate-700"
+                      )}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
 
