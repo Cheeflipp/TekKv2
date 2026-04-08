@@ -10,7 +10,7 @@ import { useTheme } from "../lib/theme-context";
 export function PublicLayout({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, bgVersion, setBgVersion } = useTheme();
 
   const navItems = [
     { label: 'Hjem', path: '/' },
@@ -104,6 +104,27 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
 
           {/* Right Section: Theme Toggle + Login + Mobile Menu */}
           <div className="flex items-center gap-2 md:gap-4">
+            {/* Background Version Selector (Classic Theme Only) */}
+            {theme === 'classic' && (
+              <div className="hidden md:flex items-center gap-1 mr-2 bg-slate-100 p-1 rounded-sm border border-slate-200">
+                {[1, 2, 3, 4, 5].map((v) => (
+                  <button
+                    key={v}
+                    onClick={() => setBgVersion(v as any)}
+                    className={cn(
+                      "w-6 h-6 rounded-sm text-xs font-bold transition-colors",
+                      bgVersion === v 
+                        ? "bg-[#c29b62] text-white shadow-sm" 
+                        : "text-slate-500 hover:bg-slate-200 hover:text-slate-700"
+                    )}
+                    title={`Baggrund ${v}`}
+                  >
+                    {v}
+                  </button>
+                ))}
+              </div>
+            )}
+
             {/* Theme Toggle Slider */}
             <div className="flex items-center gap-1.5 md:gap-2 mr-1 md:mr-0">
               <Sun className={cn("w-4 h-4 transition-colors", theme === 'classic' ? "text-amber-500" : "text-slate-500")} />
