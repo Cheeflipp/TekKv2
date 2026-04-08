@@ -11,7 +11,7 @@ export default function AboutPage() {
   return (
     <div className={cn(
       "min-h-screen pb-24 transition-colors duration-300",
-      theme === 'classic' ? "bg-white" : "bg-slate-950"
+      "bg-transparent"
     )}>
       {/* Hero / Intro Section */}
       <section className={cn(

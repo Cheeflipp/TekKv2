@@ -10,11 +10,11 @@ export default function KontaktPage() {
   return (
     <div className={cn(
       "min-h-screen transition-colors duration-300",
-      theme === 'classic' ? "bg-white" : "bg-slate-900"
+      "bg-transparent"
     )}>
       <section className={cn(
         "py-24",
-        theme === 'classic' ? "bg-slate-50" : "bg-slate-900"
+        "bg-transparent"
       )}>
         <div className="container mx-auto px-6 max-w-4xl text-center">
           <h2 className={cn(

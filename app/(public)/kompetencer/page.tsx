@@ -13,7 +13,7 @@ export default function KompetencerPage() {
   return (
     <div className={cn(
       "flex-grow flex flex-col justify-start overflow-x-hidden transition-colors duration-300",
-      theme === 'classic' ? "bg-white" : "bg-slate-900"
+      "bg-transparent"
     )}>
       <section className="pt-12 pb-8 md:pt-16 md:pb-12">
         <div className="container mx-auto px-6">

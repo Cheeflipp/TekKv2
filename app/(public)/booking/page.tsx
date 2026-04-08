@@ -230,7 +230,7 @@ export default function BookingPage() {
   return (
     <section className={cn(
       "py-12 md:py-24 min-h-screen transition-colors duration-300",
-      theme === 'classic' ? "bg-white" : "bg-slate-900"
+      "bg-transparent"
     )}>
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="flex flex-col items-center text-center mb-12">

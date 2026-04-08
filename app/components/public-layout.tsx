@@ -371,13 +371,13 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Main Content Outlet */}
-      <main className="flex-grow flex flex-col">
+      <main className="flex-grow flex flex-col relative z-10">
         {children}
       </main>
 
       {/* Footer */}
       <footer className={cn(
-        "py-8 border-t text-center relative",
+        "py-8 border-t text-center relative z-10",
         theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-950 border-slate-900"
       )}>
         <div className="container mx-auto px-6">
