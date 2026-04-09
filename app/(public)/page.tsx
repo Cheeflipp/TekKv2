@@ -78,7 +78,7 @@ export default function HomePage() {
           "text-xl md:text-2xl max-w-2xl mx-auto font-light leading-relaxed",
           theme === 'classic' ? "text-slate-600" : "text-slate-300"
         )}>
-          Lej mig ind som maskinmester, konsulent eller ekstra arbejdskraft. <br/>
+          Lej mig ind som tekniker, konsulent eller ekstra arbejdskraft. <br/>
           <span className={cn(
             "font-medium",
             theme === 'classic' ? "text-slate-900" : "text-white"
