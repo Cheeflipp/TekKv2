@@ -245,48 +245,6 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
 
           {/* Right Section: Theme Toggle + Login + Mobile Menu */}
           <div className="flex items-center gap-2 md:gap-4">
-            {/* Background Version & Intensity Selectors (Classic Theme Only) */}
-            {theme === 'classic' && (
-              <div className="hidden md:flex flex-col gap-1 mr-2">
-                {/* Version Selector */}
-                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-sm border border-slate-200" title="Mønster type">
-                  <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold px-1">Type</span>
-                  {[1, 2, 3, 4, 5].map((v) => (
-                    <button
-                      key={v}
-                      onClick={() => setBgVersion(v as any)}
-                      className={cn(
-                        "w-5 h-5 rounded-sm text-[10px] font-bold transition-colors flex items-center justify-center",
-                        bgVersion === v 
-                          ? "bg-[#c29b62] text-white shadow-sm" 
-                          : "text-slate-500 hover:bg-slate-200 hover:text-slate-700"
-                      )}
-                    >
-                      {v}
-                    </button>
-                  ))}
-                </div>
-                {/* Intensity Selector */}
-                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-sm border border-slate-200" title="Mønster styrke">
-                  <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold px-1">Styrke</span>
-                  {[1, 2, 3, 4, 5].map((v) => (
-                    <button
-                      key={v}
-                      onClick={() => setBgIntensity(v as any)}
-                      className={cn(
-                        "w-5 h-5 rounded-sm text-[10px] font-bold transition-colors flex items-center justify-center",
-                        bgIntensity === v 
-                          ? "bg-[#c29b62] text-white shadow-sm" 
-                          : "text-slate-500 hover:bg-slate-200 hover:text-slate-700"
-                      )}
-                    >
-                      {v}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {/* Theme Toggle Slider */}
             <div className="flex items-center gap-1.5 md:gap-2 mr-1 md:mr-0">
               <Sun className={cn("w-4 h-4 transition-colors", theme === 'classic' ? "text-amber-500" : "text-slate-500")} />
@@ -377,79 +335,30 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
 
       {/* Footer */}
       <footer className={cn(
-        "py-8 border-t text-center relative z-10",
+        "py-4 border-t text-center relative z-10",
         theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-950 border-slate-900"
       )}>
         <div className="container mx-auto px-6">
           <div className="flex flex-col items-center justify-center">
-            {/* Footer Content (Center) */}
-            <div className="flex flex-col items-center">
-              {/* Footer Logo: Consistent with Header */}
-              <div className="inline-flex items-center justify-center gap-0 mb-4 opacity-50 hover:opacity-100 transition-opacity group">
-                 <>
-                   {/* Logo Mark Wrapper */}
-                   <div className="relative flex items-center justify-center w-[72px] h-[72px]">
-                      {/* Gear Icon */}
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
-                           className={cn(
-                             "absolute w-[72px] h-[72px] animate-[spin_20s_linear_infinite] z-0",
-                             theme === 'classic' ? "text-[#c29b62]" : "text-orange-500"
-                           )}>
-                        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1" />
-                        <g fill="currentColor">
-                          <rect x="10.5" y="1" width="3" height="2" />
-                          <rect x="10.5" y="1" width="3" height="2" transform="rotate(40 12 12)" />
-                          <rect x="10.5" y="1" width="3" height="2" transform="rotate(80 12 12)" />
-                          <rect x="10.5" y="1" width="3" height="2" transform="rotate(120 12 12)" />
-                          <rect x="10.5" y="1" width="3" height="2" transform="rotate(160 12 12)" />
-                          <rect x="10.5" y="1" width="3" height="2" transform="rotate(200 12 12)" />
-                          <rect x="10.5" y="1" width="3" height="2" transform="rotate(240 12 12)" />
-                          <rect x="10.5" y="1" width="3" height="2" transform="rotate(280 12 12)" />
-                          <rect x="10.5" y="1" width="3" height="2" transform="rotate(320 12 12)" />
-                        </g>
-                      </svg>
-                      {/* Square [T] */}
-                      <div className={cn(
-                        "relative z-30 h-8 w-8 rounded-sm flex items-center justify-center font-black text-2xl leading-none shadow-lg",
-                        theme === 'classic' ? "bg-[#c29b62] text-white" : "bg-orange-500 text-slate-900"
-                      )}>T</div>
-                   </div>
-                   
-                   {/* Text ekK Box */}
-                   <div className={cn(
-                     "relative z-20 h-6 px-1 border rounded-sm flex items-center justify-center -ml-[25px] shadow-lg translate-y-1",
-                     theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-900 border-slate-800"
-                   )}>
-                      <span className={cn(
-                        "text-lg font-bold tracking-tight leading-none",
-                        theme === 'classic' ? "text-slate-500" : "text-slate-400"
-                      )}>ek<span className={theme === 'classic' ? "text-[#c29b62]" : "text-slate-600"}>K</span></span>
-                   </div>
-                 </>
-              </div>
-              <div className={cn(
-                "flex flex-col gap-1 text-xs uppercase tracking-wider",
-                theme === 'classic' ? "text-slate-500" : "text-slate-600"
-              )}>
-                <p>&copy; 2026 TekK</p>
-                <p className={theme === 'classic' ? "font-bold text-slate-700" : "font-bold text-slate-700"}>CVR: 46022432</p>
-              </div>
+            <div className={cn(
+              "flex flex-wrap items-center justify-center gap-2 md:gap-4 text-[10px] sm:text-xs uppercase tracking-wider",
+              theme === 'classic' ? "text-slate-500" : "text-slate-600"
+            )}>
+              <p>&copy; 2025 TekK</p>
+              <span className="hidden sm:inline text-slate-300">|</span>
+              <p className={theme === 'classic' ? "font-bold text-slate-700" : "font-bold text-slate-400"}>CVR: 46022432</p>
+              
+              {/* Mobile Login Link - Now inline on mobile vs desktop */}
+              <span className="hidden sm:inline text-slate-300">|</span>
+              <Link 
+                href="/login" 
+                className={cn(
+                  "font-bold transition-colors md:hidden",
+                  theme === 'classic' ? "hover:text-[#c29b62]" : "hover:text-orange-500"
+                )}>
+                Admin Log ind
+              </Link>
             </div>
-          </div>
-          
-          {/* Mobile Login Link (Visible only on mobile) */}
-          <div className={cn(
-            "md:hidden mt-8 pt-6 border-t",
-            theme === 'classic' ? "border-slate-200" : "border-slate-900"
-          )}>
-             <Link 
-               href="/login" 
-               className={cn(
-                 "text-[10px] font-bold uppercase tracking-widest transition-colors",
-                 theme === 'classic' ? "text-slate-500 hover:text-[#c29b62]" : "text-slate-700 hover:text-orange-500"
-               )}>
-               Admin Log ind
-             </Link>
           </div>
         </div>
       </footer>

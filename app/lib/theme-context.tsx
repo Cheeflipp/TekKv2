@@ -19,8 +19,8 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('classic');
-  const [bgVersion, setBgVersionState] = useState<BgVersion>(1);
-  const [bgIntensity, setBgIntensityState] = useState<BgIntensity>(1);
+  const [bgVersion, setBgVersionState] = useState<BgVersion>(4);
+  const [bgIntensity, setBgIntensityState] = useState<BgIntensity>(3);
 
   useEffect(() => {
     // Load theme from localStorage on mount
