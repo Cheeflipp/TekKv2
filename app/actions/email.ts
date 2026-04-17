@@ -12,10 +12,14 @@ export async function sendBookingEmails(booking: BookingRequest) {
     return { success: true, message: "Email skipped (missing config)" };
   }
 
+  const emailFrom = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+  // Tilføj afsender-navn, hvis der bruges eget domæne
+  const formattedFrom = emailFrom.includes('@tekk.dk') ? `Christian Wessel Knaack <${emailFrom}>` : emailFrom;
+
   try {
     // 1. Send email to Admin
     await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
+      from: formattedFrom,
       to: adminEmail,
       subject: `Ny Booking Forespørgsel: ${booking.date} - ${booking.name}`,
       html: `
@@ -36,21 +40,28 @@ export async function sendBookingEmails(booking: BookingRequest) {
     // 2. Send confirmation email to Customer (if they provided an email)
     if (booking.email) {
       await resend.emails.send({
-        from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
+        from: formattedFrom,
         to: booking.email,
         subject: `Bekræftelse på booking forespørgsel hos TekK`,
         html: `
-          <h2>Hej ${booking.name}</h2>
-          <p>Tak for din forespørgsel på fleksibel arbejdskraft hos TekK.</p>
-          <p>Vi har modtaget din anmodning for datoen <strong>${booking.date}</strong>.</p>
-          <p><strong>Detaljer:</strong></p>
-          <ul>
-            <li>Timer: ${booking.hours}</li>
-            <li>Estimeret pris: ${booking.price} kr.</li>
-          </ul>
-          <p>Vi vender tilbage til dig hurtigst muligt med en endelig bekræftelse.</p>
-          <br/>
-          <p>Med venlig hilsen,<br/>TekK</p>
+          <div style="font-family: sans-serif; max-width: 600px; line-height: 1.5; color: #333;">
+            <h2>Hej ${booking.name}</h2>
+            <p>Tak for din forespørgsel hos TekK.</p>
+            <p>Jeg har modtaget din anmodning for datoen <strong>${booking.date}</strong>.</p>
+            
+            <p><strong>Detaljer:</strong></p>
+            <ul style="background: #f8f9fa; padding: 15px 15px 15px 35px; border-radius: 5px;">
+              <li>Timer: ${booking.hours}</li>
+              <li>Estimeret pris: ${booking.price} kr.</li>
+            </ul>
+            
+            <p>Jeg vender tilbage til dig hurtigst muligt med en endelig bekræftelse.</p>
+            
+            <br/>
+            <p>Med venlig hilsen,<br/>
+            <strong>Christian Wessel Knaack</strong><br/>
+            TekK</p>
+          </div>
         `
       });
     }
@@ -70,9 +81,12 @@ export async function sendContactEmail(data: { name: string, phone: string, emai
     return { success: true, message: "Email skipped (missing config)" };
   }
 
+  const emailFrom = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+  const formattedFrom = emailFrom.includes('@tekk.dk') ? `TekK Hjemmeside <${emailFrom}>` : emailFrom;
+
   try {
     await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
+      from: formattedFrom,
       to: adminEmail,
       subject: `Ny Kontakthenvendelse fra: ${data.name}`,
       html: `
@@ -81,7 +95,7 @@ export async function sendContactEmail(data: { name: string, phone: string, emai
         <p><strong>Email:</strong> ${data.email || 'Ikke oplyst'}</p>
         <p><strong>Telefon:</strong> ${data.phone}</p>
         <p><strong>Besked:</strong></p>
-        <p>${data.message.replace(/\n/g, '<br/>') || 'Ingen besked'}</p>
+        <p style="background: #f8f9fa; padding: 15px; border-radius: 5px;">${data.message.replace(/\n/g, '<br/>') || 'Ingen besked'}</p>
       `
     });
     return { success: true };
