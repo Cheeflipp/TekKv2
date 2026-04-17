@@ -1,11 +1,30 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../lib/theme-context';
+import { sendContactEmail } from '../../actions/email';
 
 export default function KontaktPage() {
   const { theme } = useTheme();
+  
+  const [formData, setFormData] = useState({ name: '', phone: '', email: '', message: '' });
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.phone || !formData.message) return;
+    
+    setStatus('loading');
+    const res = await sendContactEmail(formData);
+    
+    if (res.success) {
+      setStatus('success');
+      setFormData({ name: '', phone: '', email: '', message: '' });
+    } else {
+      setStatus('error');
+    }
+  };
 
   return (
     <div className={cn(
@@ -41,52 +60,122 @@ export default function KontaktPage() {
             "p-8 md:p-12 rounded-sm shadow-xl border",
             theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-800 border-slate-700"
           )}>
-            <form className="space-y-6 text-left" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className={cn(
-                    "block text-xs uppercase font-bold mb-2",
-                    theme === 'classic' ? "text-slate-600" : "text-slate-500"
-                  )}>Dit Navn / Firma</label>
-                  <input type="text" className={cn(
-                    "w-full p-4 rounded-sm focus:outline-none focus:ring-1 transition-colors",
-                    theme === 'classic' 
-                      ? "bg-slate-50 border border-slate-200 text-slate-900 focus:border-[#c29b62] focus:ring-[#c29b62]" 
-                      : "bg-slate-900 border border-slate-700 text-white focus:border-orange-500 focus:ring-orange-500"
-                  )} placeholder="Indtast navn" />
+            {status === 'success' ? (
+              <div className="py-12 text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-600 mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                </div>
+                <h4 className={cn("text-2xl font-bold mb-2", theme === 'classic' ? "text-slate-900" : "text-white")}>
+                  Tak for din besked!
+                </h4>
+                <p className={theme === 'classic' ? "text-slate-600" : "text-slate-400"}>
+                  Jeg vender tilbage til dig hurtigst muligt.
+                </p>
+                <button 
+                  onClick={() => setStatus('idle')}
+                  className={cn(
+                    "mt-8 px-6 py-2 rounded-sm font-bold uppercase tracking-widest transition-colors",
+                    theme === 'classic' ? "hover:bg-slate-100 text-slate-600" : "hover:bg-slate-700 text-slate-300"
+                  )}
+                >
+                  Send en ny besked
+                </button>
+              </div>
+            ) : (
+              <form className="space-y-6 text-left" onSubmit={handleSubmit}>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className={cn(
+                      "block text-xs uppercase font-bold mb-2",
+                      theme === 'classic' ? "text-slate-600" : "text-slate-500"
+                    )}>Dit Navn / Firma *</label>
+                    <input 
+                      type="text" 
+                      required
+                      value={formData.name}
+                      onChange={e => setFormData({...formData, name: e.target.value})}
+                      className={cn(
+                        "w-full p-4 rounded-sm focus:outline-none focus:ring-1 transition-colors",
+                        theme === 'classic' 
+                          ? "bg-slate-50 border border-slate-200 text-slate-900 focus:border-[#c29b62] focus:ring-[#c29b62]" 
+                          : "bg-slate-900 border border-slate-700 text-white focus:border-orange-500 focus:ring-orange-500"
+                      )} placeholder="Indtast navn" 
+                    />
+                  </div>
+                  <div>
+                    <label className={cn(
+                      "block text-xs uppercase font-bold mb-2",
+                      theme === 'classic' ? "text-slate-600" : "text-slate-500"
+                    )}>Telefonnummer *</label>
+                    <input 
+                      type="tel" 
+                      required
+                      value={formData.phone}
+                      onChange={e => setFormData({...formData, phone: e.target.value})}
+                      className={cn(
+                        "w-full p-4 rounded-sm focus:outline-none focus:ring-1 transition-colors",
+                        theme === 'classic' 
+                          ? "bg-slate-50 border border-slate-200 text-slate-900 focus:border-[#c29b62] focus:ring-[#c29b62]" 
+                          : "bg-slate-900 border border-slate-700 text-white focus:border-orange-500 focus:ring-orange-500"
+                      )} placeholder="+45 00 00 00 00" 
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className={cn(
                     "block text-xs uppercase font-bold mb-2",
                     theme === 'classic' ? "text-slate-600" : "text-slate-500"
-                  )}>Telefonnummer</label>
-                  <input type="tel" className={cn(
-                    "w-full p-4 rounded-sm focus:outline-none focus:ring-1 transition-colors",
-                    theme === 'classic' 
-                      ? "bg-slate-50 border border-slate-200 text-slate-900 focus:border-[#c29b62] focus:ring-[#c29b62]" 
-                      : "bg-slate-900 border border-slate-700 text-white focus:border-orange-500 focus:ring-orange-500"
-                  )} placeholder="+45 00 00 00 00" />
+                  )}>Email (Valgfri)</label>
+                  <input 
+                    type="email" 
+                    value={formData.email}
+                    onChange={e => setFormData({...formData, email: e.target.value})}
+                    className={cn(
+                      "w-full p-4 rounded-sm focus:outline-none focus:ring-1 transition-colors",
+                      theme === 'classic' 
+                        ? "bg-slate-50 border border-slate-200 text-slate-900 focus:border-[#c29b62] focus:ring-[#c29b62]" 
+                        : "bg-slate-900 border border-slate-700 text-white focus:border-orange-500 focus:ring-orange-500"
+                    )} placeholder="din@email.dk" 
+                  />
                 </div>
-              </div>
-              <div>
-                <label className={cn(
-                  "block text-xs uppercase font-bold mb-2",
-                  theme === 'classic' ? "text-slate-600" : "text-slate-500"
-                )}>Hvad drejer det sig om?</label>
-                <textarea rows={4} className={cn(
-                  "w-full p-4 rounded-sm focus:outline-none focus:ring-1 transition-colors",
-                  theme === 'classic' 
-                    ? "bg-slate-50 border border-slate-200 text-slate-900 focus:border-[#c29b62] focus:ring-[#c29b62]" 
-                    : "bg-slate-900 border border-slate-700 text-white focus:border-orange-500 focus:ring-orange-500"
-                )} placeholder="Beskriv opgaven kort..."></textarea>
-              </div>
-              <button className={cn(
-                "w-full font-bold uppercase tracking-widest py-4 rounded-sm transition-colors",
-                theme === 'classic' ? "bg-[#c29b62] hover:bg-[#a88655] text-white" : "bg-orange-600 hover:bg-orange-500 text-white"
-              )}>
-                Send Forespørgsel
-              </button>
-            </form>
+                <div>
+                  <label className={cn(
+                    "block text-xs uppercase font-bold mb-2",
+                    theme === 'classic' ? "text-slate-600" : "text-slate-500"
+                  )}>Hvad drejer det sig om? *</label>
+                  <textarea 
+                    rows={4} 
+                    required
+                    value={formData.message}
+                    onChange={e => setFormData({...formData, message: e.target.value})}
+                    className={cn(
+                      "w-full p-4 rounded-sm focus:outline-none focus:ring-1 transition-colors",
+                      theme === 'classic' 
+                        ? "bg-slate-50 border border-slate-200 text-slate-900 focus:border-[#c29b62] focus:ring-[#c29b62]" 
+                        : "bg-slate-900 border border-slate-700 text-white focus:border-orange-500 focus:ring-orange-500"
+                    )} placeholder="Beskriv opgaven kort..."
+                  ></textarea>
+                </div>
+                
+                {status === 'error' && (
+                  <div className="text-red-500 text-sm font-bold">
+                    Der skete en fejl. Prøv venligst igen senere eller ring i stedet.
+                  </div>
+                )}
+                
+                <button 
+                  disabled={status === 'loading'}
+                  className={cn(
+                    "w-full font-bold uppercase tracking-widest py-4 rounded-sm transition-colors disabled:opacity-50",
+                    theme === 'classic' ? "bg-[#c29b62] hover:bg-[#a88655] text-white" : "bg-orange-600 hover:bg-orange-500 text-white"
+                  )}>
+                  {status === 'loading' ? 'Sender...' : 'Send Forespørgsel'}
+                </button>
+              </form>
+            )}
+            
             <div className={cn(
               "mt-8 pt-8 border-t text-sm",
               theme === 'classic' ? "border-slate-200 text-slate-500" : "border-slate-700 text-slate-500"
