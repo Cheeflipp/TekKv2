@@ -25,12 +25,13 @@ export async function sendBookingEmails(booking: BookingRequest) {
       html: `
         <h2>Ny Booking Forespørgsel</h2>
         <p><strong>Dato:</strong> ${booking.date}</p>
+        <p><strong>Tidsrum:</strong> ${booking.startTime || 'Ikke angivet'} - ${booking.endTime || 'Ikke angivet'}</p>
         <p><strong>Navn:</strong> ${booking.name}</p>
         <p><strong>Email:</strong> ${booking.email || 'Ikke oplyst'}</p>
         <p><strong>Telefon:</strong> ${booking.phone}</p>
         <p><strong>Adresse:</strong> ${booking.address || 'Ikke oplyst'}</p>
         <p><strong>Timer:</strong> ${booking.hours}</p>
-        <p><strong>Estimeret Pris:</strong> ${booking.price} kr.</p>
+        <p><strong>Estimeret Pris (ekskl. moms):</strong> ${booking.price} kr.</p>
         <p><strong>Beskrivelse:</strong><br/> ${booking.description || 'Ingen beskrivelse'}</p>
         <br/>
         <p>Log ind på admin panelet for at godkende eller afvise.</p>
@@ -39,6 +40,10 @@ export async function sendBookingEmails(booking: BookingRequest) {
 
     // 2. Send confirmation email to Customer (if they provided an email)
     if (booking.email) {
+      const numericPrice = parseFloat(booking.price.replace(/\./g, '').replace(',', '.'));
+      const formatCurrency = (val: number) => new Intl.NumberFormat('da-DK').format(val);
+      const priceWithVAT = formatCurrency(numericPrice * 1.25);
+
       await resend.emails.send({
         from: formattedFrom,
         to: booking.email,
@@ -51,8 +56,11 @@ export async function sendBookingEmails(booking: BookingRequest) {
             
             <p><strong>Detaljer:</strong></p>
             <ul style="background: #f8f9fa; padding: 15px 15px 15px 35px; border-radius: 5px;">
+              <li>Tidsrum: ${booking.startTime || 'Ikke angivet'} - ${booking.endTime || 'Ikke angivet'}</li>
               <li>Timer: ${booking.hours}</li>
-              <li>Estimeret pris: ${booking.price} kr.</li>
+              <li>Adresse: ${booking.address || 'Ikke oplyst'}</li>
+              <li>Estimeret pris ekskl. moms: ${booking.price} kr.</li>
+              <li>Estimeret pris inkl. moms: ${priceWithVAT} kr.</li>
             </ul>
             
             <p>Jeg vender tilbage til dig hurtigst muligt med en endelig bekræftelse.</p>

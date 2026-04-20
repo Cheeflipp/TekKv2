@@ -347,6 +347,13 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
               <p>&copy; 2025 TekK</p>
               <span className="hidden sm:inline text-slate-300">|</span>
               <p className={theme === 'classic' ? "font-bold text-slate-700" : "font-bold text-slate-400"}>CVR: 46022432</p>
+              <span className="hidden sm:inline text-slate-300">|</span>
+              <p>6622 Bække</p>
+              <span className="hidden sm:inline text-slate-300">|</span>
+              <a href="tel:+4531694402" className={cn(
+                  "font-bold transition-colors",
+                  theme === 'classic' ? "hover:text-[#c29b62] text-slate-700" : "hover:text-orange-500 text-slate-400"
+                )}>+45 31 69 44 02</a>
               
               {/* Mobile Login Link - Now inline on mobile vs desktop */}
               <span className="hidden sm:inline text-slate-300">|</span>

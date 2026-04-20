@@ -149,6 +149,13 @@ export default function BookingPage() {
     return getHourlyRate(selectedDateIso || undefined);
   };
 
+  const isOutsideStandardHours = (): boolean => {
+    if (!selectedDateIso || !startTime || !endTime) return false;
+    const config = getConfig(selectedDateIso);
+    if (!config) return false;
+    return startTime < config.startTime || endTime > config.endTime;
+  };
+
   const isPartial = (isoDate: string): boolean => {
     const config = getConfig(isoDate);
     if (!config) return false;
@@ -186,6 +193,11 @@ export default function BookingPage() {
 
   const calculatePrice = (): string => {
     const total = calculateTotalHours() * getCurrentHourlyRate();
+    return new Intl.NumberFormat('da-DK').format(total);
+  };
+
+  const calculatePriceWithVAT = (): string => {
+    const total = calculateTotalHours() * getCurrentHourlyRate() * 1.25;
     return new Intl.NumberFormat('da-DK').format(total);
   };
 
@@ -548,9 +560,17 @@ export default function BookingPage() {
                       <div className="text-right">
                          <div className={cn("text-xs", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Total (ekskl. moms)</div>
                          <div className={cn("text-2xl font-bold", theme === 'classic' ? "text-slate-900" : "text-white")}>{calculatePrice()} kr.</div>
+                         <div className={cn("text-xs mt-1", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Inkl. moms: <span className="font-bold">{calculatePriceWithVAT()} kr.</span></div>
                       </div>
                     </div>
                   </div>
+
+                  {isOutsideStandardHours() && (
+                    <div className="text-sm font-bold text-red-600 border-l-2 border-red-600 pl-3 py-1 animate-in fade-in slide-in-from-bottom-2">
+                      Du har valgt et tidsrum uden for standardtiden.<br />
+                      <span className="font-normal text-red-500">Bookingen vil blive gennemgået manuelt for at se, om det er muligt, før bekræftelse.</span>
+                    </div>
+                  )}
 
                   <button 
                     type="submit"
