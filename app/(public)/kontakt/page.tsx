@@ -52,7 +52,7 @@ export default function KontaktPage() {
               Fik du ikke svar på alt her på siden? Måske har du en større opgave og vil forhøre dig om mængderabat, eller også har du brug for hjælp på en dag, der ellers står som lukket i kalenderen.
             </p>
             <p>
-              Uanset hvad det drejer sig om, er du altid velkommen til at tage fat i mig. Send en besked via formularen herunder, eller ring direkte på <strong className={theme === 'classic' ? "text-slate-800" : "text-slate-200"}>tlf. 12 34 56 78</strong>.
+              Uanset hvad det drejer sig om, er du altid velkommen til at tage fat i mig. Send en besked via formularen herunder, eller ring direkte på <strong className={theme === 'classic' ? "text-slate-800" : "text-slate-200"}>tlf. 31 69 44 02</strong>.
             </p>
           </div>
           
@@ -183,7 +183,7 @@ export default function KontaktPage() {
               Eller ring direkte på <span className={cn(
                 "font-bold cursor-pointer transition-colors",
                 theme === 'classic' ? "text-slate-900 hover:text-[#c29b62]" : "text-white hover:text-orange-500"
-              )}>+45 12 34 56 78</span>
+              )}>+45 31 69 44 02</span>
             </div>
           </div>
         </div>
