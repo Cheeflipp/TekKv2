@@ -446,12 +446,12 @@ export default function BookingPage() {
                          >
                            <input 
                             type="text" 
-                            name="address" 
+                            name="custom_address_search" 
                             value={formData.address} 
-                            onChange={handleInputChange} 
+                            onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))} 
                             placeholder="Søg efter din adresse..."
                             required 
-                            autoComplete="off"
+                            autoComplete="new-password"
                             className={cn(
                               "w-full border rounded-sm p-3 focus:outline-none",
                               theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 border-slate-600 text-white focus:border-orange-500"
