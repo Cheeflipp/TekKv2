@@ -82,7 +82,7 @@ export default function HomePage() {
           <span className={cn(
             "font-medium",
             theme === 'classic' ? "text-slate-900" : "text-white"
-          )}>Tjek min ledighed og book tid direkte i kalenderen.</span>
+          )}>Kontroller ledighed og book direkte i kalenderen.</span>
         </p>
         
         <div className="flex flex-col md:flex-row gap-4 justify-center pt-8">
