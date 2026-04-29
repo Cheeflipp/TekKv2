@@ -10,8 +10,8 @@ const inter = Inter({ subsets: ["latin"], variable: '--font-sans' });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: '--font-serif' });
 
 export const metadata: Metadata = {
-  title: "TekK - Fleksibel Arbejdskraft",
-  description: "Fleksibel arbejdskraft til dine projekter",
+  title: "TekK - Din Freelance Tekniker",
+  description: "Din freelance tekniker til industri, smedearbejde, lager og montage",
 };
 
 export default function RootLayout({
