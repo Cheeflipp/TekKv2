@@ -5,7 +5,7 @@ import { useBooking, SystemNotification, BackupRecord, MileageEntry } from '../.
 import { useToast } from '../../lib/toast-context';
 import { DataProcessor } from '../../lib/data-processor';
 import AdminExpenses from '../../components/admin-expenses';
-import { cn, getWeekNumber } from '../../lib/utils';
+import { cn } from '../../lib/utils';
 import { 
   Calendar, 
   Inbox, 
@@ -142,32 +142,24 @@ export default function AdminDashboard() {
   const currentYear = currentDate.getFullYear();
   const currentMonthName = currentDate.toLocaleString('da-DK', { month: 'long' });
   
-  const weeks = useMemo(() => {
+  const daysInMonth = useMemo(() => {
     const year = currentYear;
     const month = currentDate.getMonth();
-    const firstDayOfMonth = new Date(year, month, 1);
-    
-    // Adjust to Monday start
-    let startOffset = firstDayOfMonth.getDay();
-    startOffset = startOffset === 0 ? 6 : startOffset - 1;
-
-    const allDays: (Date | null)[] = Array(startOffset).fill(null);
-    
     const date = new Date(year, month, 1);
+    const days = [];
     while (date.getMonth() === month) {
-      allDays.push(new Date(date));
+      days.push(new Date(date));
       date.setDate(date.getDate() + 1);
     }
-    
-    while (allDays.length % 7 !== 0) {
-      allDays.push(null);
-    }
-    
-    const groupedWeeks = [];
-    for (let i = 0; i < allDays.length; i += 7) {
-      groupedWeeks.push(allDays.slice(i, i + 7));
-    }
-    return groupedWeeks;
+    return days;
+  }, [currentDate, currentYear]);
+
+  const emptyDaysStart = useMemo(() => {
+    const year = currentYear;
+    const month = currentDate.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const jsDay = firstDay === 0 ? 6 : firstDay - 1;
+    return Array(jsDay).fill(0);
   }, [currentDate, currentYear]);
 
   const changeMonth = (delta: number) => {
@@ -464,53 +456,42 @@ export default function AdminDashboard() {
                     <span className="flex items-center"><span className="w-2 h-2 bg-slate-200 rounded-full mr-2"></span>Lukket</span>
                   </div>
 
-                  <div className="grid grid-cols-8 gap-2 text-center mb-2">
-                    <div className="text-xs font-bold text-slate-300 uppercase">Uge</div>
+                  <div className="grid grid-cols-7 gap-2 text-center mb-2">
                     {['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'].map(day => (
                       <div key={day} className="text-xs font-bold text-slate-400 uppercase">{day}</div>
                     ))}
                   </div>
 
-                  <div className="grid grid-cols-8 gap-2">
-                    {weeks.map((week, weekIndex) => (
-                      <React.Fragment key={`admin-week-${weekIndex}`}>
-                        {/* Week Number */}
-                        <div className="flex items-center justify-center text-[10px] font-bold text-slate-500 bg-slate-50 rounded border border-slate-100 italic">
-                          {getWeekNumber(week.find(d => d !== null) || new Date())}
-                        </div>
-
-                        {/* Days in Week */}
-                        {week.map((day, dayIndex) => {
-                          if (!day) return <div key={`empty-admin-${weekIndex}-${dayIndex}`}></div>;
-                          
-                          const isSelected = selectedDates.some(d => toIsoDate(d) === toIsoDate(day));
-                          return (
-                          <button
-                            key={day.toISOString()}
-                            onClick={() => handleDayClick(day)}
-                            className={cn(
-                              "h-14 md:h-20 w-full rounded border border-slate-200 flex flex-col items-center justify-center transition-all relative",
-                              isSelected && "ring-4 ring-orange-500 ring-offset-2 z-10",
-                              isPast(day) && "opacity-50",
-                              isFullDay(day) && !isBookedOrRequested(day) && "bg-green-500 text-white",
-                              isPartialDay(day) && !isBookedOrRequested(day) && "bg-amber-400 text-slate-900",
-                              isAvailable(day) && !isBookedOrRequested(day) && "text-white",
-                              isRequested(day) && "bg-blue-500 text-white",
-                              isBooked(day) && "bg-red-600 text-white",
-                              !isAvailable(day) && !isBookedOrRequested(day) && "bg-slate-100 text-slate-400 hover:bg-slate-200"
-                            )}
-                          >
-                            <span className="font-bold text-lg leading-none">{day.getDate()}</span>
-                            <span className="text-[9px] uppercase font-bold mt-1 tracking-tighter">
-                              {isBooked(day) ? 'Booket' : 
-                               isRequested(day) ? 'Anmodet' : 
-                               isPartialDay(day) ? 'Delvis' : 
-                               isFullDay(day) ? 'Ledig' : '-'}
-                            </span>
-                          </button>
-                        )})}
-                      </React.Fragment>
-                    ))}
+                  <div className="grid grid-cols-7 gap-2">
+                    {emptyDaysStart.map((_, i) => <div key={`spacer-${i}`}></div>)}
+                    
+                    {daysInMonth.map(day => {
+                      const isSelected = selectedDates.some(d => toIsoDate(d) === toIsoDate(day));
+                      return (
+                      <button
+                        key={day.toISOString()}
+                        onClick={() => handleDayClick(day)}
+                        className={cn(
+                          "h-14 md:h-20 w-full rounded border border-slate-200 flex flex-col items-center justify-center transition-all relative",
+                          isSelected && "ring-4 ring-orange-500 ring-offset-2 z-10",
+                          isPast(day) && "opacity-50",
+                          isFullDay(day) && !isBookedOrRequested(day) && "bg-green-500 text-white",
+                          isPartialDay(day) && !isBookedOrRequested(day) && "bg-amber-400 text-slate-900",
+                          isAvailable(day) && !isBookedOrRequested(day) && "text-white",
+                          isRequested(day) && "bg-blue-500 text-white",
+                          isBooked(day) && "bg-red-600 text-white",
+                          !isAvailable(day) && !isBookedOrRequested(day) && "bg-slate-100 text-slate-400 hover:bg-slate-200"
+                        )}
+                      >
+                        <span className="font-bold text-lg leading-none">{day.getDate()}</span>
+                        <span className="text-[9px] uppercase font-bold mt-1 tracking-tighter">
+                          {isBooked(day) ? 'Booket' : 
+                           isRequested(day) ? 'Anmodet' : 
+                           isPartialDay(day) ? 'Delvis' : 
+                           isFullDay(day) ? 'Ledig' : '-'}
+                        </span>
+                      </button>
+                    )})}
                   </div>
 
                   {selectedDates.length > 0 && (

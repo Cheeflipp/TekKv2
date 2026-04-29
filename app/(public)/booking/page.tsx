@@ -4,7 +4,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useLoadScript, Autocomplete } from '@react-google-maps/api';
 import { useBooking } from '../../lib/booking-context';
 import { DayConfiguration } from '../../lib/types';
-import { cn, getWeekNumber } from '../../lib/utils';
+import { cn } from '../../lib/utils';
 import { useToast } from '../../lib/toast-context';
 import { useTheme } from '../../lib/theme-context';
 
@@ -61,34 +61,24 @@ export default function BookingPage() {
   const currentYear = currentDate.getFullYear();
   const currentMonthName = currentDate.toLocaleString('da-DK', { month: 'long' });
 
-  const weeks = useMemo(() => {
+  const daysInMonth = useMemo(() => {
     const year = currentYear;
     const month = currentDate.getMonth();
-    const firstDayOfMonth = new Date(year, month, 1);
-    
-    // Adjust to Monday start (0=Sun, 1=Mon...6=Sat)
-    let startOffset = firstDayOfMonth.getDay();
-    startOffset = startOffset === 0 ? 6 : startOffset - 1;
-
-    const allDays: (Date | null)[] = Array(startOffset).fill(null);
-    
     const date = new Date(year, month, 1);
+    const days = [];
     while (date.getMonth() === month) {
-      allDays.push(new Date(date));
+      days.push(new Date(date));
       date.setDate(date.getDate() + 1);
     }
-    
-    // Fill until end of week
-    while (allDays.length % 7 !== 0) {
-      allDays.push(null);
-    }
-    
-    // Group by 7
-    const groupedWeeks = [];
-    for (let i = 0; i < allDays.length; i += 7) {
-      groupedWeeks.push(allDays.slice(i, i + 7));
-    }
-    return groupedWeeks;
+    return days;
+  }, [currentDate, currentYear]);
+
+  const emptyDaysStart = useMemo(() => {
+    const year = currentYear;
+    const month = currentDate.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const jsDay = firstDay === 0 ? 6 : firstDay - 1;
+    return Array(jsDay).fill(0);
   }, [currentDate, currentYear]);
 
   const changeMonth = (delta: number) => {
@@ -310,57 +300,50 @@ export default function BookingPage() {
                </button>
              </div>
 
-             <div className="grid grid-cols-8 gap-2 text-center mb-2">
-               <div className="text-xs font-bold text-slate-400 uppercase">Uge</div>
+             <div className="grid grid-cols-7 gap-2 text-center mb-2">
                {['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'].map(day => (
                  <div key={day} className="text-xs font-bold text-slate-500 uppercase">{day}</div>
                ))}
              </div>
 
-             <div className="grid grid-cols-8 gap-2">
-               {weeks.map((week, weekIndex) => (
-                 <React.Fragment key={`week-${weekIndex}`}>
-                   {/* Week Number */}
-                   <div className="flex items-center justify-center text-[10px] font-bold text-slate-400 bg-slate-100/50 rounded-sm">
-                     {getWeekNumber(week.find(d => d !== null) || new Date())}
-                   </div>
-                   
-                   {/* Days in Week */}
-                   {week.map((day, dayIndex) => {
-                     if (!day) return <div key={`empty-${weekIndex}-${dayIndex}`}></div>;
-                     
-                     const available = isAvailable(day);
-                     const partial = isPartialDay(day);
-                     const full = isFullDay(day);
-                     const selected = isSelected(day);
-
-                     return (
-                       <button 
-                         key={day.toISOString()}
-                         onClick={() => selectDate(day)}
-                         disabled={!available}
-                         className={cn(
-                           "h-12 w-full rounded-sm font-bold transition-all flex flex-col items-center justify-center relative",
-                           !available && (theme === 'classic' ? "bg-white text-slate-400 border-slate-200 border line-through decoration-slate-300 cursor-not-allowed" : "bg-slate-900 text-slate-600 border-slate-800 border line-through decoration-slate-600 cursor-not-allowed"),
-                           available && !selected && full && "bg-green-600 text-white hover:bg-green-500",
-                           available && !selected && partial && "bg-amber-500 text-slate-900 font-bold hover:bg-amber-400",
-                           selected && (theme === 'classic' ? "bg-[#c29b62] text-white ring-2 ring-[#c29b62]/50" : "bg-orange-500 text-white ring-2 ring-orange-300"),
-                           available && !selected && theme === 'classic' && "text-slate-700 hover:text-white"
-                         )}
-                       >
-                         <span>{day.getDate()}</span>
-                         
-                         {partial && !selected && (
-                           <span className={cn(
-                             "absolute bottom-1 right-1 w-1.5 h-1.5 rounded-full",
-                             theme === 'classic' ? "bg-white" : "bg-slate-900"
-                           )}></span>
-                         )}
-                       </button>
-                     );
-                   })}
-                 </React.Fragment>
+             <div className="grid grid-cols-7 gap-2">
+               {/* Empty spacers */}
+               {emptyDaysStart.map((_, index) => (
+                 <div key={`spacer-${index}`}></div>
                ))}
+
+               {/* Days */}
+               {daysInMonth.map((day) => {
+                 const available = isAvailable(day);
+                 const partial = isPartialDay(day);
+                 const full = isFullDay(day);
+                 const selected = isSelected(day);
+
+                 return (
+                   <button 
+                     key={day.toISOString()}
+                     onClick={() => selectDate(day)}
+                     disabled={!available}
+                     className={cn(
+                       "h-12 w-full rounded-sm font-bold transition-all flex flex-col items-center justify-center relative",
+                       !available && (theme === 'classic' ? "bg-white text-slate-400 border-slate-200 border line-through decoration-slate-300 cursor-not-allowed" : "bg-slate-900 text-slate-600 border-slate-800 border line-through decoration-slate-600 cursor-not-allowed"),
+                       available && !selected && full && "bg-green-600 text-white hover:bg-green-500",
+                       available && !selected && partial && "bg-amber-500 text-slate-900 font-bold hover:bg-amber-400",
+                       selected && (theme === 'classic' ? "bg-[#c29b62] text-white ring-2 ring-[#c29b62]/50" : "bg-orange-500 text-white ring-2 ring-orange-300"),
+                       available && !selected && theme === 'classic' && "text-slate-700 hover:text-white"
+                     )}
+                   >
+                     <span>{day.getDate()}</span>
+                     
+                     {partial && !selected && (
+                       <span className={cn(
+                         "absolute bottom-1 right-1 w-1.5 h-1.5 rounded-full",
+                         theme === 'classic' ? "bg-white" : "bg-slate-900"
+                       )}></span>
+                     )}
+                   </button>
+                 );
+               })}
              </div>
           </div>
 
