@@ -75,22 +75,45 @@ export default function AboutPage() {
 
               {/* Personal Details (Styrker Only now) */}
               <div className={cn(
-                "border-t pt-8",
+                "border-t pt-8 space-y-8",
                 theme === 'classic' ? "border-slate-200" : "border-slate-800"
               )}>
-                <h4 className={cn(
-                  "font-bold uppercase tracking-wider mb-4",
-                  theme === 'classic' ? "text-slate-900" : "text-white"
-                )}>Styrker</h4>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <ul className={cn("space-y-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
-                    <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Ansvarsbevidst og Mødestabil</li>
-                    <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Lærenem</li>
-                  </ul>
-                  <ul className={cn("space-y-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
-                    <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Stærk til IT-systemer</li>
-                    <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Certificeret AMR</li>
-                  </ul>
+                <div>
+                  <h4 className={cn(
+                    "font-bold uppercase tracking-wider mb-4",
+                    theme === 'classic' ? "text-slate-900" : "text-white"
+                  )}>Styrker</h4>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <ul className={cn("space-y-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
+                      <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Ansvarsbevidst og Mødestabil</li>
+                      <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Lærenem</li>
+                    </ul>
+                    <ul className={cn("space-y-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
+                      <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Stærk til IT-systemer</li>
+                      <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Certificeret AMR</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className={cn(
+                    "font-bold uppercase tracking-wider mb-4",
+                    theme === 'classic' ? "text-slate-900" : "text-white"
+                  )}>Vacciner</h4>
+                  <div className="flex flex-wrap gap-3">
+                    <span className={cn(
+                      "px-3 py-1 rounded-sm text-sm font-medium border",
+                      theme === 'classic' ? "border-slate-200 bg-slate-50 text-slate-700" : "border-slate-700 bg-slate-800/50 text-slate-300"
+                    )}>
+                      Twinrix
+                    </span>
+                    <span className={cn(
+                      "px-3 py-1 rounded-sm text-sm font-medium border",
+                      theme === 'classic' ? "border-slate-200 bg-slate-50 text-slate-700" : "border-slate-700 bg-slate-800/50 text-slate-300"
+                    )}>
+                      Tetanus
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

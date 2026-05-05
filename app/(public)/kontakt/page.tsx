@@ -49,7 +49,7 @@ export default function KontaktPage() {
             theme === 'classic' ? "text-slate-600" : "text-slate-400"
           )}>
             <p className="mb-4">
-              Fik du ikke svar på alt her på siden? Måske har du en større opgave og vil forhøre dig om mængderabat, eller også har du brug for hjælp på en dag, der ellers står som lukket i kalenderen.
+              Fik du ikke svar på alt her på siden? Måske har du en større opgave og vil forhøre dig om en samlet pris, eller også har du brug for hjælp på en dag, der ellers står som lukket i kalenderen.
             </p>
             <p>
               Uanset hvad det drejer sig om, er du altid velkommen til at tage fat i mig. Send en besked via formularen herunder, eller ring direkte på <strong className={theme === 'classic' ? "text-slate-800" : "text-slate-200"}>tlf. 31 69 44 02</strong>.

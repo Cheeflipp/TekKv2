@@ -78,11 +78,12 @@ export default function HomePage() {
           "text-xl md:text-2xl max-w-2xl mx-auto font-light leading-relaxed",
           theme === 'classic' ? "text-slate-600" : "text-slate-300"
         )}>
-          Lej mig ind som tekniker, konsulent eller ekstra arbejdskraft. <br/>
+          Har du forefaldende arbejde, manglende mandskab eller akutte spidsbelastninger? <br />
+          Så lej mig ind som tekniker, konsulent eller ekstra arbejdskraft. <br/>
           <span className={cn(
-            "font-medium",
+            "font-medium mt-2 inline-block",
             theme === 'classic' ? "text-slate-900" : "text-white"
-          )}>Kontroller ledighed og book til direkte i kalenderen.</span>
+          )}>Kontroller ledighed og book direkte i kalenderen.</span>
         </p>
         
         <div className="flex flex-col md:flex-row gap-4 justify-center pt-8">
