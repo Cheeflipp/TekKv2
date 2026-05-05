@@ -333,7 +333,7 @@ export default function BookingPage() {
                      
                      {partial && (
                        <span className={cn(
-                         "absolute bottom-1 right-1 w-1.5 h-1.5 rounded-full",
+                         "hidden",
                          theme === 'classic' ? (selected ? "bg-slate-900" : "bg-white") : "bg-slate-900"
                        )}></span>
                      )}

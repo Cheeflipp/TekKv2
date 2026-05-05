@@ -34,17 +34,5 @@ export const competences = [
     title: 'Automation', 
     desc: 'Gennem min maskinmesteruddannelse har jeg opbygget en stærk forståelse for styring og regulering. Jeg kan hjælpe med at optimere, fejlfinde og fremtidssikre tekniske anlæg.', 
     bullets: ['Procesoptimering', 'Systemforståelse', 'Fejlfinding og drift'] 
-  },
-  { 
-    id: 3, 
-    title: 'Vedligeholdelse', 
-    desc: 'Jeg kombinerer min praktiske erfaring med en teoretisk maskinmestertilgang. Jeg kan indgå i jeres team til systematisk vedligehold og reparation for at sikre optimal drift og høj oppetid.', 
-    bullets: ['Forebyggende vedligehold', 'Fejlfinding og Reparation', 'Driftsikkerhed'] 
-  },
-  { 
-    id: 8, 
-    title: 'Diverse', 
-    desc: 'Har du brug for en ekstra hånd til nedrivning, oprydning eller andet forefaldende arbejde? Jeg er fleksibel og klar til at tage fat.',
-    bullets: ['Nedrivning', 'Oprydning', 'Forefaldende arbejde']
   }
 ];
