@@ -99,6 +99,7 @@ export default function BookingPage() {
     if (!isAvailable(date)) return false;
     const config = getConfig(toIsoDate(date));
     if (!config) return false;
+    if (config.isAllDay !== undefined) return !config.isAllDay;
     const start = parseInt(config.startTime.split(':')[0]);
     const end = parseInt(config.endTime.split(':')[0]);
     return (end - start) < 7;
@@ -323,16 +324,17 @@ export default function BookingPage() {
                        !available && (theme === 'classic' ? "bg-white text-slate-400 border-slate-200 border line-through decoration-slate-300 cursor-not-allowed" : "bg-slate-900 text-slate-600 border-slate-800 border line-through decoration-slate-600 cursor-not-allowed"),
                        available && !selected && full && "bg-green-600 text-white hover:bg-green-500",
                        available && !selected && partial && "bg-amber-500 text-slate-900 font-bold hover:bg-amber-400",
-                       selected && (theme === 'classic' ? "bg-[#c29b62] text-white ring-2 ring-[#c29b62]/50" : "bg-orange-500 text-white ring-2 ring-orange-300"),
+                       selected && full && (theme === 'classic' ? "bg-[#c29b62] text-white ring-2 ring-[#c29b62]/50" : "bg-orange-500 text-white ring-2 ring-orange-300"),
+                       selected && partial && "bg-amber-500 text-slate-900 ring-2 ring-amber-500/50 shadow-md",
                        available && !selected && theme === 'classic' && "text-slate-700 hover:text-white"
                      )}
                    >
                      <span>{day.getDate()}</span>
                      
-                     {partial && !selected && (
+                     {partial && (
                        <span className={cn(
                          "absolute bottom-1 right-1 w-1.5 h-1.5 rounded-full",
-                         theme === 'classic' ? "bg-white" : "bg-slate-900"
+                         theme === 'classic' ? (selected ? "bg-slate-900" : "bg-white") : "bg-slate-900"
                        )}></span>
                      )}
                    </button>
