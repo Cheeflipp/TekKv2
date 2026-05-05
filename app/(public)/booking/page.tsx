@@ -24,12 +24,10 @@ export default function BookingPage() {
 
   // Calendar State
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDateIso, setSelectedDateIso] = useState<string | null>(null);
+  const [selectedDatesIso, setSelectedDatesIso] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form State
-  const [startTime, setStartTime] = useState('07:00');
-  const [endTime, setEndTime] = useState('15:00');
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -83,7 +81,7 @@ export default function BookingPage() {
 
   const changeMonth = (delta: number) => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + delta, 1));
-    setSelectedDateIso(null);
+    // Kept selected dates when switching month
   };
 
   const toIsoDate = (date: Date): string => {
@@ -112,21 +110,17 @@ export default function BookingPage() {
   };
 
   const isSelected = (date: Date): boolean => {
-    return selectedDateIso === toIsoDate(date);
+    return selectedDatesIso.includes(toIsoDate(date));
   };
 
   const selectDate = (date: Date) => {
     if (isAvailable(date)) {
       const iso = toIsoDate(date);
-      setSelectedDateIso(iso);
-      
-      const config = getConfig(iso);
-      if (config) {
-        setStartTime(config.startTime);
-        setEndTime(config.endTime);
+      if (selectedDatesIso.includes(iso)) {
+        setSelectedDatesIso(prev => prev.filter(d => d !== iso));
       } else {
-        setStartTime('07:00');
-        setEndTime('15:00');
+        const newSelected = [...selectedDatesIso, iso];
+        setSelectedDatesIso(newSelected);
       }
     }
   };
@@ -141,24 +135,20 @@ export default function BookingPage() {
 
   const getDayHours = (isoDate: string): string => {
     const config = getConfig(isoDate);
-    if (config) return `${config.startTime} - ${config.endTime}`;
-    return '07:00 - 15:00'; // Default fallback
+    if (!config) return 'Hele dagen';
+    if (config.isAllDay !== false) return 'Hele dagen';
+    return `${config.startTime} - ${config.endTime}`;
   };
 
   const getCurrentHourlyRate = (): number => {
-    return getHourlyRate(selectedDateIso || undefined);
-  };
-
-  const isOutsideStandardHours = (): boolean => {
-    if (!selectedDateIso || !startTime || !endTime) return false;
-    const config = getConfig(selectedDateIso);
-    if (!config) return false;
-    return startTime < config.startTime || endTime > config.endTime;
+    if (selectedDatesIso.length === 0) return 550;
+    return getHourlyRate(selectedDatesIso[0]);
   };
 
   const isPartial = (isoDate: string): boolean => {
     const config = getConfig(isoDate);
     if (!config) return false;
+    if (config.isAllDay !== undefined) return !config.isAllDay;
     const start = parseInt(config.startTime.split(':')[0]);
     const end = parseInt(config.endTime.split(':')[0]);
     return (end - start) < 7;
@@ -172,33 +162,26 @@ export default function BookingPage() {
     return end - start;
   };
 
+  const calculateTotalHoursForDay = (isoDate: string): number => {
+    return getMaxHours(isoDate);
+  };
+
   const calculateTotalHours = (): number => {
-    if (!selectedDateIso) return 0;
+    return selectedDatesIso.reduce((total, iso) => total + calculateTotalHoursForDay(iso), 0);
+  };
 
-    // If partial day, force the calculation to the specific duration
-    if (isPartial(selectedDateIso)) {
-      return getMaxHours(selectedDateIso);
-    }
-
-    if (!startTime || !endTime) return 0;
-
-    const [startH, startM] = startTime.split(':').map(Number);
-    const [endH, endM] = endTime.split(':').map(Number);
-    
-    if (isNaN(startH) || isNaN(endH)) return 0;
-
-    let hours = (endH + endM / 60) - (startH + startM / 60);
-    return hours > 0 ? Number(hours.toFixed(2)) : 0;
+  const calculatePriceValue = (): number => {
+    return selectedDatesIso.reduce((total, iso) => {
+      return total + (calculateTotalHoursForDay(iso) * getHourlyRate(iso));
+    }, 0);
   };
 
   const calculatePrice = (): string => {
-    const total = calculateTotalHours() * getCurrentHourlyRate();
-    return new Intl.NumberFormat('da-DK').format(total);
+    return new Intl.NumberFormat('da-DK').format(calculatePriceValue());
   };
 
   const calculatePriceWithVAT = (): string => {
-    const total = calculateTotalHours() * getCurrentHourlyRate() * 1.25;
-    return new Intl.NumberFormat('da-DK').format(total);
+    return new Intl.NumberFormat('da-DK').format(calculatePriceValue() * 1.25);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -215,26 +198,37 @@ export default function BookingPage() {
 
     setIsSubmitting(true);
 
-    const res = await requestBooking({
-      date: selectedDateIso!,
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      address: formData.address,
-      hours: calculateTotalHours(),
-      startTime: isPartial(selectedDateIso!) ? getConfig(selectedDateIso!)?.startTime : startTime,
-      endTime: isPartial(selectedDateIso!) ? getConfig(selectedDateIso!)?.endTime : endTime,
-      price: calculatePrice(),
-      description: formData.description
+    const promises = selectedDatesIso.map(isoDate => {
+      const dayHours = calculateTotalHoursForDay(isoDate);
+      const dayPrice = new Intl.NumberFormat('da-DK').format(dayHours * getHourlyRate(isoDate));
+      
+      const config = getConfig(isoDate);
+
+      return requestBooking({
+        date: isoDate,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        hours: dayHours,
+        startTime: config?.startTime || '07:00',
+        endTime: config?.endTime || '15:00',
+        price: dayPrice,
+        description: formData.description
+      });
     });
 
+    const results = await Promise.all(promises);
+
     setIsSubmitting(false);
-    if (res.status === 'success') {
+    
+    const allSuccess = results.every(res => res.status === 'success');
+    if (allSuccess) {
       toast('Tak! Din forespørgsel er sendt. Vi bekræfter snarest.', 'success');
-      setSelectedDateIso(null);
+      setSelectedDatesIso([]);
       fetchAvailability(); // Refresh grid
     } else {
-      toast('Fejl: ' + res.message, 'error');
+      toast('Nogle af dagene kunne ikke bookes. Prøv igen.', 'error');
       fetchAvailability(); // Refresh in case taken
     }
   };
@@ -349,7 +343,7 @@ export default function BookingPage() {
 
           {/* Booking Options Section */}
           <div className="space-y-6">
-            {selectedDateIso ? (
+            {selectedDatesIso.length > 0 ? (
               <div className={cn(
                 "p-8 rounded-sm border shadow-2xl animate-in slide-in-from-right duration-300",
                 theme === 'classic' ? "bg-slate-50 border-[#c29b62]/30" : "bg-slate-800 border-orange-500/30"
@@ -363,30 +357,30 @@ export default function BookingPage() {
                         <div className={cn(
                           "text-xs uppercase font-bold tracking-widest mb-1",
                           theme === 'classic' ? "text-[#c29b62]" : "text-orange-500"
-                        )}>Valgt Dato</div>
+                        )}>Valgte Datoer</div>
                         <h3 className={cn(
-                          "text-3xl font-bold",
+                          "text-xl font-bold max-w-xs",
                           theme === 'classic' ? "text-slate-900 font-serif" : "text-white"
-                        )}>{formatDateDisplay(selectedDateIso)}</h3>
+                        )}>{selectedDatesIso.sort().map(formatDateDisplay).join(', ')}</h3>
                      </div>
-                     <div className="text-right">
+                     <div className="text-right flex-shrink-0">
                        <div className={cn(
                          "text-xs uppercase font-bold tracking-widest mb-1",
                          theme === 'classic' ? "text-slate-500" : "text-slate-500"
-                       )}>Tidsrum</div>
+                       )}>Tidsrum (Standard)</div>
                        <div className={cn(
                          "font-mono px-2 py-1 rounded",
                          theme === 'classic' ? "bg-slate-200 text-slate-800" : "bg-slate-700 text-white"
-                       )}>{getDayHours(selectedDateIso)}</div>
+                       )}>{getDayHours(selectedDatesIso[0])}</div>
                      </div>
                   </div>
                   
-                  {isPartial(selectedDateIso) && (
+                  {selectedDatesIso.some(isPartial) && (
                      <div className="mt-4 bg-amber-500/10 border border-amber-500/20 p-3 rounded text-amber-500 text-sm flex items-center gap-2">
-                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 flex-shrink-0">
                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                        </svg>
-                       <span>Denne dag er markeret med begrænset tid.</span>
+                       <span>En eller flere af dagene er markeret med begrænset tid. Disse dage koster en fast pris.</span>
                      </div>
                   )}
                 </div>
@@ -476,59 +470,6 @@ export default function BookingPage() {
                      </div>
                   </div>
 
-                  {/* Time Selection */}
-                  <div>
-                    <label className={cn("block text-xs font-bold uppercase tracking-wider mb-1", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Tidsrum</label>
-                    
-                    {isPartial(selectedDateIso) ? (
-                       <div className={cn(
-                         "p-3 border rounded-sm text-sm",
-                         theme === 'classic' ? "bg-white border-slate-300 text-slate-600" : "bg-slate-900 border-slate-600 text-slate-300"
-                       )}>
-                         Fastsat tid: <strong>{getMaxHours(selectedDateIso)} timer</strong> ({getDayHours(selectedDateIso)})
-                       </div>
-                    ) : (
-                       <div className="grid grid-cols-2 gap-4">
-                         <div>
-                           <label className={cn("block text-[10px] uppercase tracking-wider mb-1", theme === 'classic' ? "text-slate-400" : "text-slate-500")}>Starttidspunkt</label>
-                           <select 
-                             value={startTime}
-                             onChange={(e) => setStartTime(e.target.value)}
-                             className={cn(
-                               "w-full border rounded-sm p-3 focus:outline-none",
-                               theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 text-white border-slate-600 focus:border-orange-500"
-                             )}
-                           >
-                             {Array.from({ length: 24 * 4 }).map((_, i) => {
-                               const h = Math.floor(i / 4).toString().padStart(2, '0');
-                               const m = ((i % 4) * 15).toString().padStart(2, '0');
-                               const time = `${h}:${m}`;
-                               return <option key={`start-${time}`} value={time}>{time}</option>;
-                             })}
-                           </select>
-                         </div>
-                         <div>
-                           <label className={cn("block text-[10px] uppercase tracking-wider mb-1", theme === 'classic' ? "text-slate-400" : "text-slate-500")}>Sluttidspunkt</label>
-                           <select 
-                             value={endTime}
-                             onChange={(e) => setEndTime(e.target.value)}
-                             className={cn(
-                               "w-full border rounded-sm p-3 focus:outline-none",
-                               theme === 'classic' ? "bg-white border-slate-300 text-slate-900 focus:border-[#c29b62]" : "bg-slate-900 text-white border-slate-600 focus:border-orange-500"
-                             )}
-                           >
-                             {Array.from({ length: 24 * 4 }).map((_, i) => {
-                               const h = Math.floor(i / 4).toString().padStart(2, '0');
-                               const m = ((i % 4) * 15).toString().padStart(2, '0');
-                               const time = `${h}:${m}`;
-                               return <option key={`end-${time}`} value={time}>{time}</option>;
-                             })}
-                           </select>
-                         </div>
-                       </div>
-                    )}
-                  </div>
-                  
                   <div>
                      <label className={cn("block text-xs font-bold uppercase tracking-wider mb-1", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Kort Beskrivelse</label>
                      <textarea 
@@ -564,13 +505,6 @@ export default function BookingPage() {
                       </div>
                     </div>
                   </div>
-
-                  {isOutsideStandardHours() && (
-                    <div className="text-sm font-bold text-red-600 border-l-2 border-red-600 pl-3 py-1 animate-in fade-in slide-in-from-bottom-2">
-                      Du har valgt et tidsrum uden for standardtiden.<br />
-                      <span className="font-normal text-red-500">Bookingen vil blive gennemgået manuelt for at se, om det er muligt, før bekræftelse.</span>
-                    </div>
-                  )}
 
                   <button 
                     type="submit"

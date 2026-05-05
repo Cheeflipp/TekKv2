@@ -3,6 +3,7 @@ export interface DayConfiguration {
   startTime: string; 
   endTime: string;
   hourlyRate: number;
+  isAllDay?: boolean;
 }
 
 export interface BookingRequest {

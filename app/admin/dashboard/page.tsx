@@ -58,7 +58,8 @@ export default function AdminDashboard() {
   const [tempConfig, setTempConfig] = useState({
     startTime: '07:00',
     endTime: '15:00',
-    hourlyRate: 550
+    hourlyRate: 550,
+    isAllDay: true
   });
 
   // Mileage State
@@ -183,6 +184,7 @@ export default function AdminDashboard() {
     if (availableDates.get(iso) !== 'Ledig') return false;
     const config = dayConfigurations.get(iso);
     if (!config) return false;
+    if (config.isAllDay !== undefined) return !config.isAllDay;
     const start = parseInt(config.startTime.split(':')[0]);
     const end = parseInt(config.endTime.split(':')[0]);
     return (end - start) < 7;
@@ -223,13 +225,14 @@ export default function AdminDashboard() {
         setTempConfig({
           startTime: config.startTime,
           endTime: config.endTime,
-          hourlyRate: config.hourlyRate || 550
+          hourlyRate: config.hourlyRate || 550,
+          isAllDay: config.isAllDay ?? true
         });
       } else {
-        setTempConfig({ startTime: '07:00', endTime: '15:00', hourlyRate: 550 });
+        setTempConfig({ startTime: '07:00', endTime: '15:00', hourlyRate: 550, isAllDay: true });
       }
     } else {
-      setTempConfig({ startTime: '07:00', endTime: '15:00', hourlyRate: 550 });
+      setTempConfig({ startTime: '07:00', endTime: '15:00', hourlyRate: 550, isAllDay: true });
     }
     setShowConfigModal(true);
   };
@@ -242,7 +245,8 @@ export default function AdminDashboard() {
       return setDayConfig(iso, {
         startTime: tempConfig.startTime,
         endTime: tempConfig.endTime,
-        hourlyRate: tempConfig.hourlyRate
+        hourlyRate: tempConfig.hourlyRate,
+        isAllDay: tempConfig.isAllDay
       });
     });
     
@@ -955,18 +959,46 @@ export default function AdminDashboard() {
             </div>
             
             <div className="p-6 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Start Tid</label>
-                  <input type="text" placeholder="HH:MM" value={tempConfig.startTime} onChange={e => setTempConfig({...tempConfig, startTime: e.target.value})} className="w-full border border-slate-300 rounded p-2 focus:border-orange-500 focus:outline-none font-mono" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Slut Tid</label>
-                  <input type="text" placeholder="HH:MM" value={tempConfig.endTime} onChange={e => setTempConfig({...tempConfig, endTime: e.target.value})} className="w-full border border-slate-300 rounded p-2 focus:border-orange-500 focus:outline-none font-mono" />
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Arbejdsdag Type</label>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input 
+                      type="radio" 
+                      name="dayType" 
+                      checked={tempConfig.isAllDay} 
+                      onChange={() => setTempConfig({...tempConfig, isAllDay: true})}
+                      className="accent-orange-500 w-4 h-4"
+                    />
+                    <span className="text-sm font-medium text-slate-700">Hele dagen</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input 
+                      type="radio" 
+                      name="dayType" 
+                      checked={!tempConfig.isAllDay} 
+                      onChange={() => setTempConfig({...tempConfig, isAllDay: false})}
+                      className="accent-orange-500 w-4 h-4"
+                    />
+                    <span className="text-sm font-medium text-slate-700">Delvis / Fast tid</span>
+                  </label>
                 </div>
               </div>
 
-              <div>
+              {!tempConfig.isAllDay && (
+                <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Start Tid</label>
+                    <input type="text" placeholder="HH:MM" value={tempConfig.startTime} onChange={e => setTempConfig({...tempConfig, startTime: e.target.value})} className="w-full border border-slate-300 rounded p-2 focus:border-orange-500 focus:outline-none font-mono" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Slut Tid</label>
+                    <input type="text" placeholder="HH:MM" value={tempConfig.endTime} onChange={e => setTempConfig({...tempConfig, endTime: e.target.value})} className="w-full border border-slate-300 rounded p-2 focus:border-orange-500 focus:outline-none font-mono" />
+                  </div>
+                </div>
+              )}
+
+              <div className={cn("border-slate-100", !tempConfig.isAllDay ? "border-t pt-4" : "pt-2")}>
                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Timepris (ex moms)</label>
                 <div className="relative">
                    <input type="number" value={tempConfig.hourlyRate} onChange={e => setTempConfig({...tempConfig, hourlyRate: parseFloat(e.target.value)})} className="w-full border border-slate-300 rounded p-2 pl-8 focus:border-orange-500 focus:outline-none" />
@@ -974,10 +1006,12 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              <div className="flex gap-2 pt-2">
-                <button onClick={() => setPreset('07:00', '15:00')} className="text-xs bg-slate-100 hover:bg-slate-200 px-2 py-1 rounded text-slate-600 font-bold">07-15</button>
-                <button onClick={() => setPreset('07:00', '16:00')} className="text-xs bg-slate-100 hover:bg-slate-200 px-2 py-1 rounded text-slate-600 font-bold">07-16</button>
-              </div>
+              {!tempConfig.isAllDay && (
+                <div className="flex gap-2 pt-2">
+                  <button onClick={() => setPreset('07:00', '15:00')} className="text-xs bg-slate-100 hover:bg-slate-200 px-2 py-1 rounded text-slate-600 font-bold">07-15</button>
+                  <button onClick={() => setPreset('07:00', '16:00')} className="text-xs bg-slate-100 hover:bg-slate-200 px-2 py-1 rounded text-slate-600 font-bold">07-16</button>
+                </div>
+              )}
 
               <div className="pt-4 flex gap-3 border-t border-slate-100 mt-2">
                 {selectedDates.some(d => isAvailable(d)) && (
