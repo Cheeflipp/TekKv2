@@ -451,7 +451,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <div className="p-6 overflow-y-auto flex-grow">
+                <div className={cn("p-4 md:p-6 overflow-y-auto flex-grow", selectedDates.length > 0 && "pb-28 md:pb-6")}>
                   <div className="flex flex-wrap gap-4 mb-4 text-xs text-slate-500 justify-center">
                     <span className="flex items-center"><span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>Hel Dag</span>
                     <span className="flex items-center"><span className="w-2 h-2 bg-amber-400 rounded-full mr-2"></span>Delvis</span>
@@ -499,11 +499,11 @@ export default function AdminDashboard() {
                   </div>
 
                   {selectedDates.length > 0 && (
-                    <div className="mt-6 flex justify-between items-center bg-slate-800 p-4 rounded-lg shadow-lg animate-in slide-in-from-bottom-4 sticky bottom-0 z-20">
+                    <div className="fixed bottom-4 left-4 right-4 md:static md:bottom-auto md:left-auto md:right-auto md:mt-6 flex justify-between items-center bg-slate-800 p-4 rounded-lg shadow-2xl md:shadow-lg animate-in slide-in-from-bottom-4 md:sticky md:bottom-0 z-50 md:z-20 border border-slate-700 md:border-none ring-1 ring-white/10 md:ring-0">
                       <span className="text-white font-bold">{selectedDates.length} {selectedDates.length === 1 ? 'dag' : 'dage'} valgt</span>
                       <div className="flex gap-2">
-                        <button onClick={() => setSelectedDates([])} className="px-4 py-2 text-slate-300 hover:text-white font-bold text-sm">Ryd</button>
-                        <button onClick={openConfigModal} className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded font-bold shadow-lg">Konfigurer</button>
+                        <button onClick={() => setSelectedDates([])} className="px-3 md:px-4 py-2 text-slate-300 hover:text-white font-bold text-sm">Ryd</button>
+                        <button onClick={openConfigModal} className="bg-orange-500 hover:bg-orange-600 text-white px-4 md:px-6 py-2 rounded font-bold shadow-lg">Konfigurer</button>
                       </div>
                     </div>
                   )}
