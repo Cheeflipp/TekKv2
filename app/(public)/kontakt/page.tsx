@@ -37,7 +37,7 @@ export default function KontaktPage() {
       )}>
         <div className="container mx-auto px-6 max-w-4xl text-center">
           <h2 className={cn(
-            "text-sm font-bold uppercase tracking-widest mb-4",
+            "text-sm font-bold uppercase tracking-widest mb-2",
             theme === 'classic' ? "text-[#c29b62]" : "text-orange-500"
           )}>Kontakt</h2>
           <h3 className={cn(

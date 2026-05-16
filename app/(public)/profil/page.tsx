@@ -50,7 +50,7 @@ export default function AboutPage() {
             <div className="flex-grow space-y-8">
               <div>
                 <h2 className={cn(
-                  "font-bold tracking-widest uppercase text-sm mb-3",
+                  "font-bold tracking-widest uppercase text-sm mb-2",
                   theme === 'classic' ? "text-[#c29b62]" : "text-orange-500"
                 )}>Om Mig</h2>
                 <h3 className={cn(
