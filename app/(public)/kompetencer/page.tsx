@@ -17,7 +17,7 @@ export default function KompetencerPage() {
     )}>
       <section className="pt-12 pb-8 md:pt-16 md:pb-12">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-12 gap-4 relative z-10">
+          <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-8 md:mb-12 gap-4 relative z-10 text-center md:text-left">
             <div>
               <h2 className={cn(
                 "font-bold tracking-widest uppercase text-sm mb-2",
@@ -29,7 +29,7 @@ export default function KompetencerPage() {
               )}>Hvad kan jeg</h3>
             </div>
             
-            <div className="flex flex-col items-end gap-4">
+            <div className="flex flex-col items-center md:items-end gap-4">
               <p className={cn(
                 "max-w-md text-right hidden md:block",
                 theme === 'classic' ? "text-slate-600" : "text-slate-400"
