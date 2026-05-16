@@ -149,20 +149,27 @@ export default function AboutPage() {
                   "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
                   theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
                 )}>
+                  {/* Decorative background element */}
                   <div className={cn(
-                    "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded",
-                    theme === 'classic' ? "bg-slate-100 text-[#c29b62]" : "bg-slate-800 text-orange-500"
-                  )}>Jul. 2024 — Jan. 2026</div>
-                  <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-slate-100")}>Smed</h4>
-                  <p className={cn("text-base font-medium mb-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Aquagain A/S</p>
-                  <div className={cn("text-base space-y-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
-                    <p><strong className={theme === 'classic' ? "text-slate-800" : "text-slate-200"}>Arbejdsområder:</strong> Rustfri TIG svejsning, pladearbejde og montage.</p>
+                    "absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all duration-500",
+                    theme === 'classic' ? "bg-slate-100 group-hover:bg-[#c29b62]/10" : "bg-slate-600/10 group-hover:bg-orange-500/10"
+                  )}></div>
+                  <div className="relative z-10">
                     <div className={cn(
-                      "p-3.5 rounded-sm border border-l-4",
-                      theme === 'classic' ? "bg-slate-50 border-slate-200 border-l-[#c29b62]" : "bg-slate-800/50 border-slate-700 border-l-orange-500"
-                    )}>
-                      <strong className={cn("block mb-1", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Certificeringer og Standarder:</strong>
-                      <span className="text-sm">Arbejdet udført jf. <strong>DS/EN ISO 3834-2</strong> (Kvalitetskrav til svejsning) og <strong>DS/EN 1090-3</strong> (Udførelse af aluminium- og stålkonstruktioner).</span>
+                      "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded",
+                      theme === 'classic' ? "bg-slate-100 text-[#c29b62]" : "bg-slate-800 text-orange-500"
+                    )}>Jul. 2024 — Jan. 2026</div>
+                    <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-slate-100")}>Smed</h4>
+                    <p className={cn("text-base font-medium mb-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Aquagain A/S</p>
+                    <div className={cn("text-base space-y-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
+                      <p><strong className={theme === 'classic' ? "text-slate-800" : "text-slate-200"}>Arbejdsområder:</strong> Rustfri TIG svejsning, pladearbejde og montage.</p>
+                      <div className={cn(
+                        "p-3.5 rounded-sm border border-l-4",
+                        theme === 'classic' ? "bg-slate-50 border-slate-200 border-l-[#c29b62]" : "bg-slate-800/50 border-slate-700 border-l-orange-500"
+                      )}>
+                        <strong className={cn("block mb-1", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Certificeringer og Standarder:</strong>
+                        <span className="text-sm">Arbejdet udført jf. <strong>DS/EN ISO 3834-2</strong> (Kvalitetskrav til svejsning) og <strong>DS/EN 1090-3</strong> (Udførelse af aluminium- og stålkonstruktioner).</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -178,16 +185,23 @@ export default function AboutPage() {
                   "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
                   theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
                 )}>
+                  {/* Decorative background element */}
                   <div className={cn(
-                    "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
-                    theme === 'classic' ? "bg-slate-100" : "bg-slate-800"
-                  )}>Mar. 2023 — Jul. 2024</div>
-                  <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-slate-100")}>Ekstern Konsulent & AMR</h4>
-                  <p className={cn("text-base font-medium mb-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>DELPRO A/S</p>
-                  <p className={cn("text-base leading-relaxed", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
-                    Gennemførte AMR-uddannelsen (Arbejdsmiljørepræsentant) ved ansættelsens start.<br/>
-                    Arbejder med sikkerhedsinstruktioner, tilsyn og udarbejdelse af rapporter.
-                  </p>
+                    "absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all duration-500",
+                    theme === 'classic' ? "bg-slate-100 group-hover:bg-[#c29b62]/10" : "bg-slate-600/10 group-hover:bg-orange-500/10"
+                  )}></div>
+                  <div className="relative z-10">
+                    <div className={cn(
+                      "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
+                      theme === 'classic' ? "bg-slate-100" : "bg-slate-800"
+                    )}>Mar. 2023 — Jul. 2024</div>
+                    <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-slate-100")}>Ekstern Konsulent & AMR</h4>
+                    <p className={cn("text-base font-medium mb-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>DELPRO A/S</p>
+                    <p className={cn("text-base leading-relaxed", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
+                      Gennemførte AMR-uddannelsen (Arbejdsmiljørepræsentant) ved ansættelsens start.<br/>
+                      Arbejder med sikkerhedsinstruktioner, tilsyn og udarbejdelse af rapporter.
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -201,15 +215,22 @@ export default function AboutPage() {
                   "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
                   theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
                 )}>
+                  {/* Decorative background element */}
                   <div className={cn(
-                    "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
-                    theme === 'classic' ? "bg-slate-100" : "bg-slate-800"
-                  )}>Apr. 2023 — Dec. 2023</div>
-                  <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-slate-100")}>Studerende Praktikant</h4>
-                  <p className={cn("text-base font-medium mb-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Aquagain A/S</p>
-                  <p className={cn("text-base leading-relaxed", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
-                    9 måneders praktikforløb som en del af maskinmesteruddannelsen. Fokus på værkstedsteknik og drift.
-                  </p>
+                    "absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all duration-500",
+                    theme === 'classic' ? "bg-slate-100 group-hover:bg-[#c29b62]/10" : "bg-slate-600/10 group-hover:bg-orange-500/10"
+                  )}></div>
+                  <div className="relative z-10">
+                    <div className={cn(
+                      "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
+                      theme === 'classic' ? "bg-slate-100" : "bg-slate-800"
+                    )}>Apr. 2023 — Dec. 2023</div>
+                    <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-slate-100")}>Studerende Praktikant</h4>
+                    <p className={cn("text-base font-medium mb-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Aquagain A/S</p>
+                    <p className={cn("text-base leading-relaxed", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
+                      9 måneders praktikforløb som en del af maskinmesteruddannelsen. Fokus på værkstedsteknik og drift.
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -223,15 +244,22 @@ export default function AboutPage() {
                   "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
                   theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
                 )}>
+                  {/* Decorative background element */}
                   <div className={cn(
-                    "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
-                    theme === 'classic' ? "bg-slate-100" : "bg-slate-800"
-                  )}>Aug. 2020 — Jun. 2022</div>
-                  <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-slate-100")}>IT-Guide</h4>
-                  <p className={cn("text-base font-medium mb-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>VUC Roskilde-Køge</p>
-                  <p className={cn("text-base leading-relaxed", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
-                    Vejledning af kursister i IT-programmer og generel lektiehjælp.
-                  </p>
+                    "absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all duration-500",
+                    theme === 'classic' ? "bg-slate-100 group-hover:bg-[#c29b62]/10" : "bg-slate-600/10 group-hover:bg-orange-500/10"
+                  )}></div>
+                  <div className="relative z-10">
+                    <div className={cn(
+                      "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
+                      theme === 'classic' ? "bg-slate-100" : "bg-slate-800"
+                    )}>Aug. 2020 — Jun. 2022</div>
+                    <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-slate-100")}>IT-Guide</h4>
+                    <p className={cn("text-base font-medium mb-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>VUC Roskilde-Køge</p>
+                    <p className={cn("text-base leading-relaxed", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
+                      Vejledning af kursister i IT-programmer og generel lektiehjælp.
+                    </p>
+                  </div>
                 </div>
               </div>
               
@@ -245,39 +273,46 @@ export default function AboutPage() {
                   "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
                   theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
                 )}>
+                  {/* Decorative background element */}
                   <div className={cn(
-                    "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded",
-                    theme === 'classic' ? "bg-slate-100 text-[#c29b62]" : "bg-slate-800 text-orange-500"
-                  )}>Maj 2015 — Aug. 2022</div>
-                  <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-white")}>Souschef & Deltid</h4>
-                  <p className={cn("text-base font-medium mb-4", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Thansen.dk</p>
-                  
-                  <div className="space-y-4">
-                    {/* Fuldtid */}
+                    "absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all duration-500",
+                    theme === 'classic' ? "bg-slate-100 group-hover:bg-[#c29b62]/10" : "bg-slate-600/10 group-hover:bg-orange-500/10"
+                  )}></div>
+                  <div className="relative z-10">
                     <div className={cn(
-                      "p-4 rounded-sm border",
-                      theme === 'classic' ? "bg-slate-50 border-slate-200" : "bg-slate-800/30 border-slate-700"
-                    )}>
-                      <strong className={cn("block mb-1 text-base", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Fuldtid (2015 — 2016)</strong>
-                      <p className={cn("text-base", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Salg, kundeservice, dækmontage og cykelreparation.</p>
-                    </div>
+                      "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded",
+                      theme === 'classic' ? "bg-slate-100 text-[#c29b62]" : "bg-slate-800 text-orange-500"
+                    )}>Maj 2015 — Aug. 2022</div>
+                    <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-white")}>Souschef & Deltid</h4>
+                    <p className={cn("text-base font-medium mb-4", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Thansen.dk</p>
+                    
+                    <div className="space-y-4">
+                      {/* Fuldtid */}
+                      <div className={cn(
+                        "p-4 rounded-sm border",
+                        theme === 'classic' ? "bg-slate-50 border-slate-200" : "bg-slate-800/30 border-slate-700"
+                      )}>
+                        <strong className={cn("block mb-1 text-base", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Fuldtid (2015 — 2016)</strong>
+                        <p className={cn("text-base", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Salg, kundeservice, dækmontage og cykelreparation.</p>
+                      </div>
 
-                    {/* Souschef */}
-                    <div className={cn(
-                      "p-4 rounded-sm border",
-                      theme === 'classic' ? "bg-slate-50 border-slate-200" : "bg-slate-800/30 border-slate-700"
-                    )}>
-                      <strong className={cn("block mb-1 text-base", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Souschef (2016 — 2019)</strong>
-                      <p className={cn("text-base", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Ansvarlig for daglig drift og periodisk ansvarlig for reklamationsafdelingen for Sjællands Dæk og Fælge.</p>
-                    </div>
+                      {/* Souschef */}
+                      <div className={cn(
+                        "p-4 rounded-sm border",
+                        theme === 'classic' ? "bg-slate-50 border-slate-200" : "bg-slate-800/30 border-slate-700"
+                      )}>
+                        <strong className={cn("block mb-1 text-base", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Souschef (2016 — 2019)</strong>
+                        <p className={cn("text-base", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Ansvarlig for daglig drift og periodisk ansvarlig for reklamationsafdelingen for Sjællands Dæk og Fælge.</p>
+                      </div>
 
-                    {/* Deltid */}
-                    <div className={cn(
-                      "p-4 rounded-sm border",
-                      theme === 'classic' ? "bg-slate-50 border-slate-200" : "bg-slate-800/30 border-slate-700"
-                    )}>
-                      <strong className={cn("block mb-1 text-base", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Deltid (2020 — 2022)</strong>
-                      <p className={cn("text-base", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Salg (B2C og B2B), reklamationsbehandling, dækmontage, cykelreparation, lager og ad-hoc opgaver.</p>
+                      {/* Deltid */}
+                      <div className={cn(
+                        "p-4 rounded-sm border",
+                        theme === 'classic' ? "bg-slate-50 border-slate-200" : "bg-slate-800/30 border-slate-700"
+                      )}>
+                        <strong className={cn("block mb-1 text-base", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Deltid (2020 — 2022)</strong>
+                        <p className={cn("text-base", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Salg (B2C og B2B), reklamationsbehandling, dækmontage, cykelreparation, lager og ad-hoc opgaver.</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -301,17 +336,24 @@ export default function AboutPage() {
                 "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-6 transition-all duration-300 hover:-translate-y-1",
                 theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
               )}>
-                <div className="flex justify-between items-start mb-2">
-                  <h4 className={cn("text-lg font-bold", theme === 'classic' ? "text-slate-900" : "text-slate-200")}>Professionsbachelor (Maskinmester)</h4>
-                  <span className={cn(
-                    "text-xs font-bold uppercase px-2 py-1 rounded",
-                    theme === 'classic' ? "text-[#c29b62] bg-[#c29b62]/10" : "text-orange-500 bg-orange-500/10"
-                  )}>I Gang</span>
+                {/* Decorative background element */}
+                <div className={cn(
+                  "absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all duration-500",
+                  theme === 'classic' ? "bg-slate-100 group-hover:bg-[#c29b62]/10" : "bg-slate-600/10 group-hover:bg-orange-500/10"
+                )}></div>
+                <div className="relative z-10">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className={cn("text-lg font-bold", theme === 'classic' ? "text-slate-900" : "text-slate-200")}>Professionsbachelor (Maskinmester)</h4>
+                    <span className={cn(
+                      "text-xs font-bold uppercase px-2 py-1 rounded",
+                      theme === 'classic' ? "text-[#c29b62] bg-[#c29b62]/10" : "text-orange-500 bg-orange-500/10"
+                    )}>I Gang</span>
+                  </div>
+                  <p className={cn("text-sm", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Fredericia Maskinmesterskole</p>
+                  <p className={cn("text-xs mt-1", theme === 'classic' ? "text-slate-500" : "text-slate-500")}>
+                     Startet 2024 (Fortsat fra Maskinmesterskolen København, start 2022)
+                  </p>
                 </div>
-                <p className={cn("text-sm", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Fredericia Maskinmesterskole</p>
-                <p className={cn("text-xs mt-1", theme === 'classic' ? "text-slate-500" : "text-slate-500")}>
-                   Startet 2024 (Fortsat fra Maskinmesterskolen København, start 2022)
-                </p>
               </div>
 
               {/* Education 2 */}
@@ -319,15 +361,22 @@ export default function AboutPage() {
                 "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-6 transition-all duration-300 hover:-translate-y-1",
                 theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
               )}>
-                <div className="flex justify-between items-start mb-2">
-                  <h4 className={cn("text-lg font-bold", theme === 'classic' ? "text-slate-900" : "text-slate-200")}>Højere Forberedelse (HF)</h4>
-                  <span className={cn(
-                    "text-xs font-bold uppercase px-2 py-1 rounded",
-                    theme === 'classic' ? "text-slate-600 bg-slate-100" : "text-slate-600 bg-slate-800"
-                  )}>Afsluttet</span>
+                {/* Decorative background element */}
+                <div className={cn(
+                  "absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all duration-500",
+                  theme === 'classic' ? "bg-slate-100 group-hover:bg-[#c29b62]/10" : "bg-slate-600/10 group-hover:bg-orange-500/10"
+                )}></div>
+                <div className="relative z-10">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className={cn("text-lg font-bold", theme === 'classic' ? "text-slate-900" : "text-slate-200")}>Højere Forberedelse (HF)</h4>
+                    <span className={cn(
+                      "text-xs font-bold uppercase px-2 py-1 rounded",
+                      theme === 'classic' ? "text-slate-600 bg-slate-100" : "text-slate-600 bg-slate-800"
+                    )}>Afsluttet</span>
+                  </div>
+                  <p className={cn("text-sm", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>VUC Roskilde</p>
+                  <p className={cn("text-xs mt-1", theme === 'classic' ? "text-slate-500" : "text-slate-500")}>2019 — 2022</p>
                 </div>
-                <p className={cn("text-sm", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>VUC Roskilde</p>
-                <p className={cn("text-xs mt-1", theme === 'classic' ? "text-slate-500" : "text-slate-500")}>2019 — 2022</p>
               </div>
 
               {/* Courses */}
