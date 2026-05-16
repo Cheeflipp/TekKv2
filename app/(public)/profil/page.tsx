@@ -146,8 +146,8 @@ export default function AboutPage() {
                   theme === 'classic' ? "border-[#c29b62] bg-white group-hover:bg-[#c29b62]" : "border-orange-500 bg-slate-900 group-hover:bg-orange-500"
                 )}></div>
                 <div className={cn(
-                  "p-5 md:p-6 rounded-sm border transition-all duration-300",
-                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62]/40 hover:shadow-sm" : "bg-slate-900 border-slate-800 hover:border-orange-500/40"
+                  "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
+                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
                 )}>
                   <div className={cn(
                     "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded",
@@ -175,8 +175,8 @@ export default function AboutPage() {
                   theme === 'classic' ? "border-slate-300 bg-white group-hover:border-[#c29b62]" : "border-slate-600 bg-slate-900 group-hover:border-orange-500"
                 )}></div>
                 <div className={cn(
-                  "p-5 md:p-6 rounded-sm border transition-all duration-300",
-                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62]/40 hover:shadow-sm" : "bg-slate-900 border-slate-800 hover:border-orange-500/40"
+                  "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
+                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
                 )}>
                   <div className={cn(
                     "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
@@ -198,8 +198,8 @@ export default function AboutPage() {
                   theme === 'classic' ? "border-slate-300 bg-white group-hover:border-[#c29b62]" : "border-slate-600 bg-slate-900 group-hover:border-orange-500"
                 )}></div>
                 <div className={cn(
-                  "p-5 md:p-6 rounded-sm border transition-all duration-300",
-                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62]/40 hover:shadow-sm" : "bg-slate-900 border-slate-800 hover:border-orange-500/40"
+                  "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
+                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
                 )}>
                   <div className={cn(
                     "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
@@ -220,8 +220,8 @@ export default function AboutPage() {
                   theme === 'classic' ? "border-slate-300 bg-white group-hover:border-[#c29b62]" : "border-slate-600 bg-slate-900 group-hover:border-orange-500"
                 )}></div>
                 <div className={cn(
-                  "p-5 md:p-6 rounded-sm border transition-all duration-300",
-                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62]/40 hover:shadow-sm" : "bg-slate-900 border-slate-800 hover:border-orange-500/40"
+                  "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
+                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
                 )}>
                   <div className={cn(
                     "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
@@ -242,8 +242,8 @@ export default function AboutPage() {
                   theme === 'classic' ? "border-[#c29b62] bg-white group-hover:bg-[#c29b62]" : "border-orange-500 bg-slate-900 group-hover:bg-orange-500"
                 )}></div>
                 <div className={cn(
-                  "p-5 md:p-6 rounded-sm border transition-all duration-300",
-                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62]/40 hover:shadow-sm" : "bg-slate-900 border-slate-800 hover:border-orange-500/40"
+                  "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
+                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
                 )}>
                   <div className={cn(
                     "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded",
@@ -298,8 +298,8 @@ export default function AboutPage() {
             <div className="space-y-6">
               {/* Education 1 */}
               <div className={cn(
-                "p-6 rounded-sm border transition-colors",
-                theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62]/30" : "bg-slate-900 border-slate-800 hover:border-orange-500/30"
+                "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-6 transition-all duration-300 hover:-translate-y-1",
+                theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
               )}>
                 <div className="flex justify-between items-start mb-2">
                   <h4 className={cn("text-lg font-bold", theme === 'classic' ? "text-slate-900" : "text-slate-200")}>Professionsbachelor (Maskinmester)</h4>
@@ -316,8 +316,8 @@ export default function AboutPage() {
 
               {/* Education 2 */}
               <div className={cn(
-                "p-6 rounded-sm border transition-colors",
-                theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62]/30" : "bg-slate-900 border-slate-800 hover:border-orange-500/30"
+                "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-6 transition-all duration-300 hover:-translate-y-1",
+                theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
               )}>
                 <div className="flex justify-between items-start mb-2">
                   <h4 className={cn("text-lg font-bold", theme === 'classic' ? "text-slate-900" : "text-slate-200")}>Højere Forberedelse (HF)</h4>
