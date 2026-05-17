@@ -156,8 +156,8 @@ export default function AboutPage() {
                   )}></div>
                   <div className="relative z-10">
                     <div className={cn(
-                      "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded",
-                      theme === 'classic' ? "bg-slate-100 text-[#c29b62]" : "bg-slate-800 text-orange-500"
+                      "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
+                      theme === 'classic' ? "bg-slate-100" : "bg-slate-800"
                     )}>Jul. 2024 — Jan. 2026</div>
                     <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-slate-100")}>Smed</h4>
                     <p className={cn("text-base font-medium mb-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Aquagain A/S</p>
@@ -280,8 +280,8 @@ export default function AboutPage() {
                   )}></div>
                   <div className="relative z-10">
                     <div className={cn(
-                      "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded",
-                      theme === 'classic' ? "bg-slate-100 text-[#c29b62]" : "bg-slate-800 text-orange-500"
+                      "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
+                      theme === 'classic' ? "bg-slate-100" : "bg-slate-800"
                     )}>Maj 2015 — Aug. 2022</div>
                     <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-white")}>Souschef & Deltid</h4>
                     <p className={cn("text-base font-medium mb-4", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Thansen.dk</p>
@@ -350,7 +350,7 @@ export default function AboutPage() {
                     )}>I Gang</span>
                   </div>
                   <p className={cn("text-sm", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Fredericia Maskinmesterskole</p>
-                  <p className={cn("text-xs mt-1", theme === 'classic' ? "text-slate-500" : "text-slate-500")}>
+                  <p className={cn("text-xs mt-2 font-mono inline-block px-2 py-0.5 rounded", theme === 'classic' ? "bg-slate-100 text-[#c29b62]" : "bg-slate-800 text-orange-500")}>
                      Startet 2024 (Fortsat fra Maskinmesterskolen København, start 2022)
                   </p>
                 </div>
