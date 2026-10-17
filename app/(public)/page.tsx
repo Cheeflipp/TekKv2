@@ -67,23 +67,23 @@ export default function HomePage() {
           "text-5xl md:text-7xl font-black leading-none tracking-tight uppercase",
           theme === 'classic' ? "text-slate-900 font-serif" : "text-white"
         )}>
-          Brug for en <br/>
+          Brug for tekniske <br/>
           <span className={cn(
             "text-transparent bg-clip-text",
             theme === 'classic' ? "bg-gradient-to-r from-[#c29b62] to-[#a07d4b]" : "bg-gradient-to-r from-orange-400 to-orange-600"
-          )}>Hånd?</span>
+          )}>Kompetencer?</span>
         </h1>
         
         <p className={cn(
-          "text-xl md:text-2xl max-w-2xl mx-auto font-light leading-relaxed",
+          "text-xl md:text-2xl max-w-3xl mx-auto font-light leading-relaxed",
           theme === 'classic' ? "text-slate-600" : "text-slate-300"
         )}>
-          Har du forefaldende arbejde, manglende mandskab eller akutte spidsbelastninger? <br />
-          Så lej mig ind som tekniker, konsulent eller ekstra arbejdskraft. <br/>
+          Mangler du stærke tekniske kompetencer, ekstra mandskab eller en alsidig problemløser? <br />
+          Som maskinmesterstuderende med solid praktisk erfaring fra industri og montage leverer jeg teknisk indlejning, energiberegninger samt professionel fejlfinding og reparation. <br/>
           <span className={cn(
             "font-medium mt-2 inline-block",
             theme === 'classic' ? "text-slate-900" : "text-white"
-          )}>Kontroller ledighed og book direkte i kalenderen.</span>
+          )}>Se ydelserne herunder, eller kontroller ledighed og book direkte i kalenderen.</span>
         </p>
         
         <div className="flex flex-col md:flex-row gap-4 justify-center pt-8">
@@ -193,13 +193,13 @@ export default function HomePage() {
                 "text-sm leading-relaxed mb-4",
                 theme === 'classic' ? "text-slate-600" : "text-slate-300"
               )}>
-                Energitekniske beregninger af sparepotentialer, trykluft, pumper og tilbagebetalingstid for SMV og industri.
+                Energitekniske beregninger af sparepotentialer, procesenergi, pumper og tilbagebetalingstid for SMV og industri.
               </p>
               <span className={cn(
                 "text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1",
                 theme === 'classic' ? "text-[#c29b62]" : "text-orange-400"
               )}>
-                <span>Læs & prøv beregner</span> &rarr;
+                <span>Læs om energioptimering</span> &rarr;
               </span>
             </div>
           </Link>

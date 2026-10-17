@@ -226,7 +226,7 @@ export default function BookingPage() {
     
     const allSuccess = results.every(res => res.status === 'success');
     if (allSuccess) {
-      toast('Tak! Din forespørgsel er sendt. Vi bekræfter snarest.', 'success');
+      toast('Tak! Din forespørgsel er sendt. Jeg bekræfter snarest.', 'success');
       setSelectedDatesIso([]);
       fetchAvailability(); // Refresh grid
     } else {

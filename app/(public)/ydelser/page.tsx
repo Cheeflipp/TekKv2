@@ -49,7 +49,7 @@ export default function YdelserPage() {
       description: 'Reducer virksomhedens faste omkostninger og CO2-aftryk gennem professionel energikortlægning. Få beregnet konkrete besparelsespotentialer, investeringsbehov og præcis tilbagebetalingstid (ROI) på proces- og forsyningsanlæg.',
       icon: Zap,
       highlights: [
-        'Kortlægning af trykluft, ventilation & varme',
+        'Kortlægning af ventilation, varme & procesenergi',
         'Beregningsgrundlag jf. maskinmesterfaglige standarder',
         'Tilpasset både mindre værksteder og større industri',
         'Beregning af tilbagebetalingstid (Simple & LCC)'
@@ -221,7 +221,7 @@ export default function YdelserPage() {
                 "text-base max-w-xl",
                 theme === 'classic' ? "text-slate-600" : "text-slate-300"
               )}>
-                Uforpligtende rådgivning koster ikke noget. Ring direkte eller send en mail, så tager vi en snak om din opgave.
+                Uforpligtende rådgivning koster ikke noget. Ring direkte eller send en mail, så tager jeg en uforpligtende snak om din opgave.
               </p>
             </div>
 

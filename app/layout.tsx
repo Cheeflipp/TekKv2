@@ -11,7 +11,7 @@ const playfair = Playfair_Display({ subsets: ["latin"], variable: '--font-serif'
 
 export const metadata: Metadata = {
   title: "TekK - Din Freelance Tekniker",
-  description: "Din freelance tekniker til industri, smedearbejde, lager og montage",
+  description: "TekK - Tekniske kompetencer, indlejning, energioptimering samt reparation af hvidevarer og TV.",
 };
 
 export default function RootLayout({

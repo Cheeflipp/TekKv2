@@ -170,7 +170,7 @@ export async function sendRepairEmail(data: {
       await resend.emails.send({
         from: formattedFrom,
         to: data.email,
-        subject: `TekK - Vi har modtaget din reparationsforespørgsel (${data.deviceType})`,
+        subject: `TekK - Jeg har modtaget din reparationsforespørgsel (${data.deviceType})`,
         html: `
           <div style="font-family: sans-serif; max-width: 600px; line-height: 1.6; color: #333;">
             <h2>Hej ${data.name}</h2>
