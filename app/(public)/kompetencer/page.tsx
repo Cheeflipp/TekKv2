@@ -26,7 +26,7 @@ export default function KompetencerPage() {
               <h3 className={cn(
                 "text-4xl md:text-5xl font-bold",
                 theme === 'classic' ? "text-slate-900 font-serif" : "text-white"
-              )}>Hvad kan jeg</h3>
+              )}>Hvad kan jeg?</h3>
             </div>
             
             <div className="flex flex-col items-center md:items-end gap-4">
@@ -34,7 +34,7 @@ export default function KompetencerPage() {
                 "max-w-md text-right hidden md:block",
                 theme === 'classic' ? "text-slate-600" : "text-slate-400"
               )}>
-                Mange års erfaring med praktisk arbejde. <br/>Ingen opgave er for lille.
+                Praktisk håndværk kombineret med el- og maskinteknisk indsigt. <br/>Ingen opgave er for lille.
               </p>
               
               {/* View Toggle */}

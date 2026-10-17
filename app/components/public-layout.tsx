@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Sun, Moon, ChevronDown, Users, Zap, Wrench, ArrowRight } from "lucide-react";
+import { Sun, Moon, ChevronDown, Users, Calendar, Zap, Wrench, ArrowRight } from "lucide-react";
 import { cn } from "../lib/utils";
 import { useTheme } from "../lib/theme-context";
 
@@ -21,9 +21,15 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
   const servicesList = [
     { 
       label: 'Indlejning', 
-      desc: 'Elinstallatør & tekniker (Bookingkalender)', 
-      path: '/booking',
+      desc: 'Elinstallatør, montør & teknisk konsulent', 
+      path: '/ydelser/indlejning',
       icon: Users 
+    },
+    { 
+      label: 'Bookingkalender', 
+      desc: 'Se ledige dage og book direkte online', 
+      path: '/booking',
+      icon: Calendar 
     },
     { 
       label: 'Energioptimering', 
@@ -33,7 +39,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
     },
     { 
       label: 'Hvidevare & TV Reparation', 
-      desc: 'Fejlfinding & reparation – skriv til min mail', 
+      desc: 'Fejlfinding & reparation – skriv direkte', 
       path: '/ydelser/hvidevare-tv-reparation',
       icon: Wrench 
     }
@@ -589,7 +595,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
               "flex flex-wrap items-center justify-center gap-2 md:gap-4 text-[10px] sm:text-xs uppercase tracking-wider",
               theme === 'classic' ? "text-slate-500" : "text-slate-600"
             )}>
-              <p>&copy; 2025 TekK</p>
+              <p>&copy; 2026 TekK</p>
               <span className="hidden sm:inline text-slate-300">|</span>
               <p className={theme === 'classic' ? "font-bold text-slate-700" : "font-bold text-slate-400"}>CVR: 46022432</p>
               <span className="hidden sm:inline text-slate-300">|</span>

@@ -183,11 +183,11 @@ export default function EnergioptimeringPage() {
 
                 <ul className="space-y-3">
                   {[
-                    'Pumpe- & ventilationsoptimering: Behovsstyring, trykreduktion og natsænkning',
-                    'Ventilation & udsugning: Behovsstyring frem for kontinuerlig fuldlast',
-                    'Varmestyring i haller & værksteder: Natsænkning og eliminering af varmetab ved porte',
-                    'Belysning & tomgangsstrøm: Identificering af anlæg der kører unødigt i weekender',
-                    'Overskuelig handlingsrapport uden uforståeligt fagsprog'
+                    'Pumpe- & kredsløbsoptimering: Trykreduktion, frekvensstyring og korrekt indregulering',
+                    'Ventilation & udsugning: Behovsstyring og tidsstyring frem for kontinuerlig fuldlast',
+                    'Varmestyring i haller & værksteder: Natsænkning og minimering af varmetab ved porte',
+                    'Belysning & tomgangsforbrug: Identificering af anlæg der kører unødigt uden for driftstid',
+                    'Overskuelig handlingsplan uden tungt og uforståeligt fagsprog'
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-2.5 text-sm">
                       <CheckCircle2 className={cn(

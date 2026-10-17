@@ -39,6 +39,10 @@ export default function YdelserPage() {
         label: 'Gå til Booking & Kalender',
         href: '/booking'
       },
+      secondaryAction: {
+        label: 'Læs mere om indlejning',
+        href: '/ydelser/indlejning'
+      },
       tag: 'Populær'
     },
     {
@@ -65,7 +69,7 @@ export default function YdelserPage() {
       badge: 'Service & Fejlfinding',
       title: 'Hvidevare & TV Reparation',
       subtitle: 'Reparation frem for udskiftning',
-      description: 'Driller vaskemaskinen, ovnen, opvaskemaskinen eller er fladskærmen gået i sort? Mange apparater kan repareres for en brøkdel af nyprisen. Send dine fejloplysninger direkte til mig på mail, så vender jeg hurtigt tilbage med en vurdering.',
+      description: 'Driller vaskemaskinen, ovnen, opvaskemaskinen, eller er fladskærmen gået i sort? Mange apparater kan repareres for en brøkdel af nyprisen. Send dine fejloplysninger direkte til mig, så vender jeg hurtigt tilbage med en vurdering.',
       icon: Wrench,
       highlights: [
         'Hårde hvidevarer (vask, opvask, ovn, køl m.fl.)',
@@ -107,7 +111,7 @@ export default function YdelserPage() {
             "text-lg md:text-xl leading-relaxed font-light",
             theme === 'classic' ? "text-slate-600" : "text-slate-300"
           )}>
-            TekK leverer praktisk erfaring kombineret med stærk teknisk viden. Uanset om du skal bruge akut arbejdskraft på værkstedet, vil skære toppen af energiregningen i virksomheden, eller har et husholdningsapparat der skal fikses.
+            TekK forener praktisk håndværk med el- og maskinteknisk indsigt. Uanset om du har brug for ekstra faglært arbejdskraft, vil reducere virksomhedens energiforbrug eller skal have repareret et husholdningsapparat.
           </p>
         </div>
 
@@ -184,8 +188,8 @@ export default function YdelserPage() {
                   </div>
                 </div>
 
-                {/* Primary Button */}
-                <div className="relative z-10 pt-2">
+                {/* Primary & Optional Secondary Action */}
+                <div className="relative z-10 pt-2 space-y-2.5">
                   <Link
                     href={service.primaryAction.href}
                     className={cn(
@@ -198,6 +202,21 @@ export default function YdelserPage() {
                     <span>{service.primaryAction.label}</span>
                     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </Link>
+
+                  {service.secondaryAction && (
+                    <Link
+                      href={service.secondaryAction.href}
+                      className={cn(
+                        "w-full inline-flex items-center justify-center gap-1.5 py-2 rounded-sm font-bold text-[11px] uppercase tracking-wider transition-colors border",
+                        theme === 'classic'
+                          ? "border-slate-200 hover:border-[#c29b62] text-slate-600 hover:text-[#c29b62] bg-slate-50/60"
+                          : "border-slate-700 hover:border-orange-500/60 text-slate-300 hover:text-orange-400 bg-slate-800/50"
+                      )}
+                    >
+                      <span>{service.secondaryAction.label}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  )}
                 </div>
               </div>
             );

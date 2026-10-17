@@ -78,7 +78,7 @@ export default function HomePage() {
           theme === 'classic' ? "text-slate-600" : "text-slate-300"
         )}>
           Mangler du stærke tekniske kompetencer, ekstra mandskab eller en alsidig problemløser? <br />
-          Som maskinmesterstuderende med solid praktisk erfaring fra industri og montage leverer jeg teknisk indlejning, energiberegninger samt professionel fejlfinding og reparation. <br/>
+          Som uddannet elinstallatør og maskinmesterstuderende med solid praktisk erfaring fra industri og montage leverer jeg teknisk indlejning, energiberegninger samt professionel fejlfinding og reparation. <br/>
           <span className={cn(
             "font-medium mt-2 inline-block",
             theme === 'classic' ? "text-slate-900" : "text-white"

@@ -152,7 +152,7 @@ export default function IndlejningInfoPage() {
               <ul className="space-y-3 text-sm">
                 {[
                   'Ingen faste lønomkostninger eller opsigelsesvarsler',
-                  'Mød op med professionelt værktøj og stor faglig stolthed',
+                  'Møder op med professionelt værktøj og høj faglig stolthed',
                   'Direkte digital booking – se ledige dage med det samme',
                   'Kombinerer praktisk el- og maskinteknisk håndværk med maskinmesterteori',
                   'Gennemskuelige takster specificeret direkte i kalenderen'
@@ -181,7 +181,59 @@ export default function IndlejningInfoPage() {
 
         </div>
 
+        {/* Bottom Contact Banner */}
+        <div className={cn(
+          "rounded-sm border-2 p-8 md:p-10 relative overflow-hidden",
+          theme === 'classic' ? "bg-white border-slate-200 shadow-lg" : "bg-slate-800/80 border-slate-700 shadow-xl"
+        )}>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="space-y-2 text-center md:text-left">
+              <h4 className={cn(
+                "text-2xl font-bold tracking-tight",
+                theme === 'classic' ? "text-slate-900" : "text-white"
+              )}>
+                Har I brug for en længerevarende aftale?
+              </h4>
+              <p className={cn(
+                "text-base max-w-xl",
+                theme === 'classic' ? "text-slate-600" : "text-slate-300"
+              )}>
+                Kontakt mig gerne direkte for en uforpligtende dialog om større projekter, faste perioder eller specifikke opgaver.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-4 shrink-0">
+              <a
+                href="tel:+4531694402"
+                className={cn(
+                  "inline-flex items-center gap-2 px-6 py-3 rounded-sm font-bold text-xs uppercase tracking-widest transition-all border",
+                  theme === 'classic'
+                    ? "bg-slate-900 hover:bg-slate-800 text-white border-slate-900"
+                    : "bg-slate-700 hover:bg-slate-600 text-white border-slate-600"
+                )}
+              >
+                <Phone className="w-4 h-4" />
+                <span>31 69 44 02</span>
+              </a>
+
+              <Link
+                href="/kontakt"
+                className={cn(
+                  "inline-flex items-center gap-2 px-6 py-3 rounded-sm font-bold text-xs uppercase tracking-widest transition-all border",
+                  theme === 'classic'
+                    ? "bg-transparent border-slate-300 hover:border-[#c29b62] text-slate-700 hover:text-[#c29b62]"
+                    : "bg-transparent border-slate-600 hover:border-orange-500 text-slate-300 hover:text-orange-400"
+                )}
+              >
+                <Mail className="w-4 h-4" />
+                <span>Skriv besked</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );
 }
+
