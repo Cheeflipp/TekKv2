@@ -21,7 +21,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
   const servicesList = [
     { 
       label: 'Indlejning', 
-      desc: 'Smed & tekniker (Bookingkalender)', 
+      desc: 'Elinstallatør & tekniker (Bookingkalender)', 
       path: '/booking',
       icon: Users 
     },

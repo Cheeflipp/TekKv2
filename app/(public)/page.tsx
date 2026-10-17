@@ -149,7 +149,7 @@ export default function HomePage() {
                 "text-sm leading-relaxed mb-4",
                 theme === 'classic' ? "text-slate-600" : "text-slate-300"
               )}>
-                Lej mig ind som smed, montør eller teknisk konsulent ved spidsbelastninger. Direkte online booking i kalenderen.
+                Lej mig ind som uddannet elinstallatør, montør eller teknisk konsulent ved spidsbelastninger. Direkte online booking i kalenderen.
               </p>
               <span className={cn(
                 "text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1",

@@ -68,7 +68,7 @@ export default function IndlejningInfoPage() {
             "text-lg md:text-xl font-light leading-relaxed mb-8",
             theme === 'classic' ? "text-slate-600" : "text-slate-300"
           )}>
-            Har du akutte spidsbelastninger, sygemeldinger eller store projekter i produktionen eller på montagen? Lej mig ind som smed, maskintekniker eller konsulent. Gennemskuelige timepriser og direkte booking i online kalenderen.
+            Har du akutte spidsbelastninger, sygemeldinger eller store projekter i produktionen eller på montagen? Lej mig ind som uddannet elinstallatør, montør eller teknisk konsulent. Gennemskuelige timepriser og direkte booking i online kalenderen.
           </p>
 
           <div className="flex flex-wrap gap-4">
@@ -119,10 +119,10 @@ export default function IndlejningInfoPage() {
               </h3>
               <ul className="space-y-3 text-sm">
                 {[
-                  'Rustfri TIG svejsning jf. DS/EN ISO 3834-2',
+                  'Uddannet elinstallatør (fejlfinding, styring og el-arbejde)',
+                  'Rustfri TIG svejsning og montage',
                   'Pladearbejde, klip, buk og mekanisk tildannelse',
                   'Montage og rørføring på anlæg og byggepladser',
-                  'Stålkonstruktioner jf. DS/EN 1090-3',
                   'Fejlfinding, vedligehold og teknisk service',
                   'AMR-funktion (Arbejdsmiljørepræsentant), sikkerhed og tilsyn'
                 ].map((item, i) => (
@@ -154,7 +154,7 @@ export default function IndlejningInfoPage() {
                   'Ingen faste lønomkostninger eller opsigelsesvarsler',
                   'Mød op med professionelt værktøj og stor faglig stolthed',
                   'Direkte digital booking – se ledige dage med det samme',
-                  'Kombinerer praktisk smedearbejde med maskinmesterteori',
+                  'Kombinerer praktisk el- og maskinteknisk håndværk med maskinmesterteori',
                   'Gennemskuelige takster specificeret direkte i kalenderen'
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-2.5">

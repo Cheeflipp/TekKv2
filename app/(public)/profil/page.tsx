@@ -1,12 +1,25 @@
 "use client";
 
 import React from 'react';
-import Image from 'next/image';
+import Link from 'next/link';
+import { 
+  Linkedin, 
+  ExternalLink, 
+  CheckCircle2, 
+  Mail, 
+  Calendar, 
+  ArrowRight,
+  GraduationCap,
+  Award,
+  Zap
+} from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../lib/theme-context';
 
 export default function AboutPage() {
   const { theme } = useTheme();
+
+  const linkedinUrl = "https://www.linkedin.com/in/christian-wessel-knaack-christensen-91ba37297?utm_source=share_via&utm_content=profile&utm_medium=member_ios";
 
   return (
     <div className={cn(
@@ -15,20 +28,19 @@ export default function AboutPage() {
     )}>
       {/* Hero / Intro Section */}
       <section className={cn(
-        "relative py-20 overflow-hidden border-b",
+        "relative py-16 md:py-20 overflow-hidden border-b",
         theme === 'classic' ? "border-slate-200" : "border-slate-800"
       )}>
-        {theme === 'modern' && <div className="absolute inset-0 bg-orange-500/5 radial-gradient opacity-20"></div>}
+        {theme === 'modern' && <div className="absolute inset-0 bg-orange-500/5 radial-gradient opacity-20 pointer-events-none"></div>}
         <div className="container mx-auto px-6 relative z-10">
           <div className="flex flex-col md:flex-row gap-12 items-start">
             
-            {/* Profile Image */}
-            <div className="w-full max-w-sm mx-auto md:max-w-none md:w-1/3 flex-shrink-0">
+            {/* Profile Image & Quick Facts */}
+            <div className="w-full max-w-sm mx-auto md:max-w-none md:w-1/3 flex-shrink-0 space-y-6">
               <div className={cn(
                 "relative aspect-[3/4] w-full rounded-sm overflow-hidden border shadow-2xl group",
                 theme === 'classic' ? "bg-slate-100 border-slate-200" : "bg-slate-800 border-slate-700"
               )}>
-                 {/* Using standard img tag to bypass Next.js image optimization and domain restrictions for external links */}
                  <img 
                    src="https://i.imgur.com/Zf3ge6E.jpeg"
                    alt="Christian Wessel K. Christensen" 
@@ -38,379 +50,193 @@ export default function AboutPage() {
                    "absolute inset-0 bg-gradient-to-t opacity-80",
                    theme === 'classic' ? "from-black via-transparent to-transparent" : "from-slate-900 via-transparent to-transparent"
                  )}></div>
-                 <div className="absolute bottom-6 left-6">
-                   <h1 className="text-3xl font-black text-white uppercase leading-none mb-1">Christian<br/>Christensen</h1>
+                 <div className="absolute bottom-6 left-6 right-6">
+                   <div className="inline-block px-2.5 py-1 rounded bg-[#0a66c2] text-white text-[11px] font-bold uppercase tracking-wider mb-2">
+                     TekK
+                   </div>
+                   <h1 className="text-2xl md:text-3xl font-black text-white uppercase leading-tight">
+                     Christian<br/>Christensen
+                   </h1>
                  </div>
               </div>
-              
-              {/* Stats removed as requested */}
+
+              {/* Quick badges under photo */}
+              <div className="space-y-2.5">
+                <div className={cn(
+                  "flex items-center gap-3 p-3 rounded-sm border",
+                  theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-800/60 border-slate-700"
+                )}>
+                  <Zap className={cn("w-5 h-5 shrink-0", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")} />
+                  <div>
+                    <div className={cn("text-xs font-bold uppercase tracking-wider", theme === 'classic' ? "text-slate-900" : "text-white")}>Uddannet Elinstallatør</div>
+                    <div className={cn("text-xs", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Faglig el-teknisk baggrund</div>
+                  </div>
+                </div>
+
+                <div className={cn(
+                  "flex items-center gap-3 p-3 rounded-sm border",
+                  theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-800/60 border-slate-700"
+                )}>
+                  <GraduationCap className={cn("w-5 h-5 shrink-0", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")} />
+                  <div>
+                    <div className={cn("text-xs font-bold uppercase tracking-wider", theme === 'classic' ? "text-slate-900" : "text-white")}>Stud. Maskinmester</div>
+                    <div className={cn("text-xs", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Fredericia Maskinmesterskole</div>
+                  </div>
+                </div>
+
+                <div className={cn(
+                  "flex items-center gap-3 p-3 rounded-sm border",
+                  theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-800/60 border-slate-700"
+                )}>
+                  <Award className={cn("w-5 h-5 shrink-0", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")} />
+                  <div>
+                    <div className={cn("text-xs font-bold uppercase tracking-wider", theme === 'classic' ? "text-slate-900" : "text-white")}>Certificeret AMR</div>
+                    <div className={cn("text-xs", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Arbejdsmiljørepræsentant</div>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
-            {/* Bio Text */}
+            {/* Bio Text & LinkedIn Link */}
             <div className="flex-grow space-y-8">
               <div>
                 <h2 className={cn(
-                  "font-bold tracking-widest uppercase text-sm mb-2",
+                  "font-bold tracking-widest uppercase text-xs md:text-sm mb-2",
                   theme === 'classic' ? "text-[#c29b62]" : "text-orange-500"
                 )}>Om Mig</h2>
                 <h3 className={cn(
-                  "text-4xl font-bold mb-6",
+                  "text-3xl md:text-4xl font-bold mb-6",
                   theme === 'classic' ? "text-slate-900 font-serif" : "text-white"
-                )}>Glad, Karismatisk og <span className={theme === 'classic' ? "text-slate-500" : "text-slate-400"}>Ansvarlig</span></h3>
+                )}>
+                  Teknisk faglighed, praktisk erfaring & <span className={theme === 'classic' ? "text-slate-500" : "text-slate-400"}>ansvarlighed</span>
+                </h3>
+
                 <div className={cn(
-                  "prose prose-lg leading-relaxed",
-                  theme === 'classic' ? "prose-slate text-slate-600" : "prose-invert text-slate-400"
+                  "prose prose-lg leading-relaxed space-y-4",
+                  theme === 'classic' ? "prose-slate text-slate-600" : "prose-invert text-slate-300"
                 )}>
                   <p>
-                    Min karriere startede som purløgsplukker i 2008, og siden har jeg bygget en solid praktisk erfaring op gennem arbejde med alt fra kalendersamling til viceværtsopgaver og detailhandel.
+                    Jeg er uddannet elinstallatør og læser i dag til maskinmester ved Fredericia Maskinmesterskole. Her bygger jeg videre på min faglige el-baggrund med bred indsigt i maskinteknik, energisystemer, automatisering og drift af komplekse anlæg.
                   </p>
                   <p>
-                    I dag læser jeg til maskinmester i Fredericia, hvor jeg får en bred teknisk forståelse for el, mekanik og komplekse systemer.
+                    Gennem mit arbejde har jeg opbygget en stærk, praktisk erfaring på værksteder, i produktion og ved montageopgaver. Jeg kombinerer teoretisk problemløsning med godt håndværk og kan træde direkte ind i driften eller på byggepladsen.
                   </p>
                   <p>
-                    Jeg motiveres af at tage ansvar, levere et ordentligt stykke arbejde og være en pålidelig kollega.
+                    Jeg motiveres af at tage ansvar for opgaven fra start til slut, levere et solidt stykke arbejde og være en selvkørende, pålidelig samarbejdspartner.
                   </p>
                 </div>
               </div>
 
-              {/* Personal Details (Styrker Only now) */}
+              {/* LinkedIn Showcase Card */}
+              <div className="pt-2">
+                <a
+                  href={linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    "group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 md:p-6 rounded-sm border-2 transition-all duration-300 shadow-md hover:-translate-y-1 block",
+                    theme === 'classic'
+                      ? "bg-white border-slate-200 hover:border-[#0a66c2] shadow-slate-200/60 hover:shadow-xl hover:shadow-[#0a66c2]/10"
+                      : "bg-slate-800 border-slate-700 hover:border-[#0a66c2] shadow-black/30 hover:shadow-xl hover:shadow-[#0a66c2]/20"
+                  )}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-sm bg-[#0a66c2] text-white flex items-center justify-center shrink-0 shadow-md group-hover:scale-110 transition-transform">
+                      <Linkedin className="w-6 h-6 fill-current" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className={cn(
+                          "font-bold text-base md:text-lg group-hover:text-[#0a66c2] transition-colors",
+                          theme === 'classic' ? "text-slate-900" : "text-white"
+                        )}>
+                          Se hele mit CV og erfaring på LinkedIn
+                        </span>
+                        <ExternalLink className="w-4 h-4 text-[#0a66c2] opacity-80 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                      <p className={cn(
+                        "text-xs md:text-sm mt-0.5 leading-relaxed",
+                        theme === 'classic' ? "text-slate-600" : "text-slate-400"
+                      )}>
+                        Mit komplette og opdaterede CV, fulde ansættelseshistorik, uddannelsesforløb og faglige netværk findes på min LinkedIn-profil.
+                      </p>
+                    </div>
+                  </div>
+
+                  <span className={cn(
+                    "inline-flex items-center gap-2 px-4 py-2 rounded text-xs font-bold uppercase tracking-wider shrink-0 transition-colors self-end sm:self-center",
+                    theme === 'classic'
+                      ? "bg-slate-100 text-[#0a66c2] group-hover:bg-[#0a66c2] group-hover:text-white"
+                      : "bg-slate-700 text-blue-300 group-hover:bg-[#0a66c2] group-hover:text-white"
+                  )}>
+                    <span>Åbn LinkedIn</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </a>
+              </div>
+
+              {/* Styrker & Fokusområder */}
               <div className={cn(
-                "border-t pt-8 space-y-8",
+                "border-t pt-8 space-y-6",
                 theme === 'classic' ? "border-slate-200" : "border-slate-800"
               )}>
                 <div>
                   <h4 className={cn(
-                    "font-bold uppercase tracking-wider mb-4",
+                    "font-bold uppercase tracking-wider text-xs md:text-sm mb-4",
                     theme === 'classic' ? "text-slate-900" : "text-white"
-                  )}>Styrker</h4>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <ul className={cn("space-y-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
-                      <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Ansvarsbevidst og Mødestabil</li>
-                      <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Lærenem</li>
-                    </ul>
-                    <ul className={cn("space-y-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
-                      <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Stærk til IT-systemer</li>
-                      <li className="flex items-center gap-3"><span className={cn("font-bold", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")}>✓</span> Certificeret AMR</li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className={cn(
-                    "font-bold uppercase tracking-wider mb-4",
-                    theme === 'classic' ? "text-slate-900" : "text-white"
-                  )}>Vacciner</h4>
-                  <div className="flex flex-wrap gap-3">
-                    <span className={cn(
-                      "px-3 py-1 rounded-sm text-sm font-medium border",
-                      theme === 'classic' ? "border-slate-200 bg-slate-50 text-slate-700" : "border-slate-700 bg-slate-800/50 text-slate-300"
-                    )}>
-                      Twinrix
-                    </span>
-                    <span className={cn(
-                      "px-3 py-1 rounded-sm text-sm font-medium border",
-                      theme === 'classic' ? "border-slate-200 bg-slate-50 text-slate-700" : "border-slate-700 bg-slate-800/50 text-slate-300"
-                    )}>
-                      Tetanus
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CV / Timeline Section */}
-      <section className="container mx-auto px-6 py-16">
-        <div className="grid md:grid-cols-2 gap-16">
-          
-          {/* Experience Column */}
-          <div>
-            <h3 className={cn(
-              "text-2xl font-bold mb-8 flex items-center gap-3",
-              theme === 'classic' ? "text-slate-900 font-serif" : "text-white"
-            )}>
-              <span className={cn("w-8 h-1", theme === 'classic' ? "bg-[#c29b62]" : "bg-orange-500")}></span> Erfaring
-            </h3>
-            
-            <div className={cn(
-              "space-y-8 relative border-l ml-3 pl-8",
-              theme === 'classic' ? "border-slate-200" : "border-slate-800"
-            )}>
-              
-               {/* Job 1 (Aquagain Smed - Current/Future End) */}
-              <div className="relative group">
-                <div className={cn(
-                  "absolute -left-[41px] top-6 h-4 w-4 rounded-full border-2 transition-colors duration-300",
-                  theme === 'classic' ? "border-[#c29b62] bg-white group-hover:bg-[#c29b62]" : "border-orange-500 bg-slate-900 group-hover:bg-orange-500"
-                )}></div>
-                <div className={cn(
-                  "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
-                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
-                )}>
-                  {/* Decorative background element */}
-                  <div className={cn(
-                    "absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all duration-500",
-                    theme === 'classic' ? "bg-slate-100 group-hover:bg-[#c29b62]/10" : "bg-slate-600/10 group-hover:bg-orange-500/10"
-                  )}></div>
-                  <div className="relative z-10">
-                    <div className={cn(
-                      "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
-                      theme === 'classic' ? "bg-slate-100" : "bg-slate-800"
-                    )}>Jul. 2024 — Jan. 2026</div>
-                    <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-slate-100")}>Smed</h4>
-                    <p className={cn("text-base font-medium mb-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Aquagain A/S</p>
-                    <div className={cn("text-base space-y-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
-                      <p><strong className={theme === 'classic' ? "text-slate-800" : "text-slate-200"}>Arbejdsområder:</strong> Rustfri TIG svejsning, pladearbejde og montage.</p>
-                      <div className={cn(
-                        "p-3.5 rounded-sm border border-l-4",
-                        theme === 'classic' ? "bg-slate-50 border-slate-200 border-l-[#c29b62]" : "bg-slate-800/50 border-slate-700 border-l-orange-500"
-                      )}>
-                        <strong className={cn("block mb-1", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Certificeringer og Standarder:</strong>
-                        <span className="text-sm">Arbejdet udført jf. <strong>DS/EN ISO 3834-2</strong> (Kvalitetskrav til svejsning) og <strong>DS/EN 1090-3</strong> (Udførelse af aluminium- og stålkonstruktioner).</span>
+                  )}>Nøglekompetencer & Styrker</h4>
+                  <div className="grid sm:grid-cols-2 gap-3.5 text-sm">
+                    {[
+                      'Uddannet elinstallatør (fejlfinding & el-teknik)',
+                      'Stud. maskinmester (proces, energi & mekanik)',
+                      'Certificeret AMR (Arbejdsmiljørepræsentant)',
+                      'Rustfri TIG-svejsning og mekanisk montage',
+                      'Stærk til IT-systemer, beregninger & dokumentation',
+                      'Mødestabil, ansvarsbevidst og selvkørende'
+                    ].map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-2.5">
+                        <CheckCircle2 className={cn("w-4 h-4 shrink-0", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")} />
+                        <span className={theme === 'classic' ? "text-slate-700" : "text-slate-300"}>{item}</span>
                       </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
-              </div>
 
-               {/* Job 2 (Delpro) */}
-              <div className="relative group">
-                <div className={cn(
-                  "absolute -left-[41px] top-6 h-4 w-4 rounded-full border-2 transition-colors duration-300",
-                  theme === 'classic' ? "border-slate-300 bg-white group-hover:border-[#c29b62]" : "border-slate-600 bg-slate-900 group-hover:border-orange-500"
-                )}></div>
-                <div className={cn(
-                  "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
-                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
-                )}>
-                  {/* Decorative background element */}
-                  <div className={cn(
-                    "absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all duration-500",
-                    theme === 'classic' ? "bg-slate-100 group-hover:bg-[#c29b62]/10" : "bg-slate-600/10 group-hover:bg-orange-500/10"
-                  )}></div>
-                  <div className="relative z-10">
-                    <div className={cn(
-                      "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
-                      theme === 'classic' ? "bg-slate-100" : "bg-slate-800"
-                    )}>Mar. 2023 — Jul. 2024</div>
-                    <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-slate-100")}>Ekstern Konsulent & AMR</h4>
-                    <p className={cn("text-base font-medium mb-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>DELPRO A/S</p>
-                    <p className={cn("text-base leading-relaxed", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
-                      Gennemførte AMR-uddannelsen (Arbejdsmiljørepræsentant) ved ansættelsens start.<br/>
-                      Arbejder med sikkerhedsinstruktioner, tilsyn og udarbejdelse af rapporter.
-                    </p>
-                  </div>
+                {/* Call to Actions */}
+                <div className="flex flex-wrap gap-4 pt-4">
+                  <Link
+                    href="/booking"
+                    className={cn(
+                      "inline-flex items-center gap-2 px-6 py-3 rounded-sm font-bold text-xs uppercase tracking-widest transition-all shadow-md",
+                      theme === 'classic'
+                        ? "bg-[#c29b62] hover:bg-[#a07d4b] text-white shadow-[#c29b62]/20"
+                        : "bg-orange-600 hover:bg-orange-500 text-white shadow-orange-950/40"
+                    )}
+                  >
+                    <Calendar className="w-4 h-4" />
+                    <span>Book mig i kalenderen</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+
+                  <a
+                    href="mailto:cwk@tekk.dk"
+                    className={cn(
+                      "inline-flex items-center gap-2 px-6 py-3 rounded-sm font-bold text-xs uppercase tracking-widest transition-all border",
+                      theme === 'classic'
+                        ? "bg-transparent border-slate-300 hover:border-[#c29b62] text-slate-700 hover:text-[#c29b62]"
+                        : "bg-transparent border-slate-600 hover:border-orange-500 text-slate-300 hover:text-orange-400"
+                    )}
+                  >
+                    <Mail className="w-4 h-4" />
+                    <span>Kontakt mig på cwk@tekk.dk</span>
+                  </a>
                 </div>
-              </div>
 
-               {/* Job 3 (Aquagain Praktik) */}
-              <div className="relative group">
-                <div className={cn(
-                  "absolute -left-[41px] top-6 h-4 w-4 rounded-full border-2 transition-colors duration-300",
-                  theme === 'classic' ? "border-slate-300 bg-white group-hover:border-[#c29b62]" : "border-slate-600 bg-slate-900 group-hover:border-orange-500"
-                )}></div>
-                <div className={cn(
-                  "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
-                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
-                )}>
-                  {/* Decorative background element */}
-                  <div className={cn(
-                    "absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all duration-500",
-                    theme === 'classic' ? "bg-slate-100 group-hover:bg-[#c29b62]/10" : "bg-slate-600/10 group-hover:bg-orange-500/10"
-                  )}></div>
-                  <div className="relative z-10">
-                    <div className={cn(
-                      "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
-                      theme === 'classic' ? "bg-slate-100" : "bg-slate-800"
-                    )}>Apr. 2023 — Dec. 2023</div>
-                    <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-slate-100")}>Studerende Praktikant</h4>
-                    <p className={cn("text-base font-medium mb-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Aquagain A/S</p>
-                    <p className={cn("text-base leading-relaxed", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
-                      9 måneders praktikforløb som en del af maskinmesteruddannelsen. Fokus på værkstedsteknik og drift.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-               {/* Job 4 */}
-               <div className="relative group">
-                <div className={cn(
-                  "absolute -left-[41px] top-6 h-4 w-4 rounded-full border-2 transition-colors duration-300",
-                  theme === 'classic' ? "border-slate-300 bg-white group-hover:border-[#c29b62]" : "border-slate-600 bg-slate-900 group-hover:border-orange-500"
-                )}></div>
-                <div className={cn(
-                  "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
-                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
-                )}>
-                  {/* Decorative background element */}
-                  <div className={cn(
-                    "absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all duration-500",
-                    theme === 'classic' ? "bg-slate-100 group-hover:bg-[#c29b62]/10" : "bg-slate-600/10 group-hover:bg-orange-500/10"
-                  )}></div>
-                  <div className="relative z-10">
-                    <div className={cn(
-                      "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
-                      theme === 'classic' ? "bg-slate-100" : "bg-slate-800"
-                    )}>Aug. 2020 — Jun. 2022</div>
-                    <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-slate-100")}>IT-Guide</h4>
-                    <p className={cn("text-base font-medium mb-3", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>VUC Roskilde-Køge</p>
-                    <p className={cn("text-base leading-relaxed", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
-                      Vejledning af kursister i IT-programmer og generel lektiehjælp.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Job 5 (Thansen - Detailed Breakdown) */}
-              <div className="relative group">
-                <div className={cn(
-                  "absolute -left-[41px] top-6 h-4 w-4 rounded-full border-2 transition-colors duration-300",
-                  theme === 'classic' ? "border-[#c29b62] bg-white group-hover:bg-[#c29b62]" : "border-orange-500 bg-slate-900 group-hover:bg-orange-500"
-                )}></div>
-                <div className={cn(
-                  "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-5 md:p-6 transition-all duration-300 hover:-translate-y-1",
-                  theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
-                )}>
-                  {/* Decorative background element */}
-                  <div className={cn(
-                    "absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all duration-500",
-                    theme === 'classic' ? "bg-slate-100 group-hover:bg-[#c29b62]/10" : "bg-slate-600/10 group-hover:bg-orange-500/10"
-                  )}></div>
-                  <div className="relative z-10">
-                    <div className={cn(
-                      "text-sm font-mono mb-2 inline-block px-2 py-0.5 rounded text-slate-500",
-                      theme === 'classic' ? "bg-slate-100" : "bg-slate-800"
-                    )}>Maj 2015 — Aug. 2022</div>
-                    <h4 className={cn("text-xl font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-white")}>Souschef & Deltid</h4>
-                    <p className={cn("text-base font-medium mb-4", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Thansen.dk</p>
-                    
-                    <div className="space-y-4">
-                      {/* Fuldtid */}
-                      <div className={cn(
-                        "p-4 rounded-sm border",
-                        theme === 'classic' ? "bg-slate-50 border-slate-200" : "bg-slate-800/30 border-slate-700"
-                      )}>
-                        <strong className={cn("block mb-1 text-base", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Fuldtid (2015 — 2016)</strong>
-                        <p className={cn("text-base", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Salg, kundeservice, dækmontage og cykelreparation.</p>
-                      </div>
-
-                      {/* Souschef */}
-                      <div className={cn(
-                        "p-4 rounded-sm border",
-                        theme === 'classic' ? "bg-slate-50 border-slate-200" : "bg-slate-800/30 border-slate-700"
-                      )}>
-                        <strong className={cn("block mb-1 text-base", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Souschef (2016 — 2019)</strong>
-                        <p className={cn("text-base", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Ansvarlig for daglig drift og periodisk ansvarlig for reklamationsafdelingen for Sjællands Dæk og Fælge.</p>
-                      </div>
-
-                      {/* Deltid */}
-                      <div className={cn(
-                        "p-4 rounded-sm border",
-                        theme === 'classic' ? "bg-slate-50 border-slate-200" : "bg-slate-800/30 border-slate-700"
-                      )}>
-                        <strong className={cn("block mb-1 text-base", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>Deltid (2020 — 2022)</strong>
-                        <p className={cn("text-base", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Salg (B2C og B2B), reklamationsbehandling, dækmontage, cykelreparation, lager og ad-hoc opgaver.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
 
             </div>
           </div>
-
-          {/* Education Column */}
-          <div>
-            <h3 className={cn(
-              "text-2xl font-bold mb-8 flex items-center gap-3",
-              theme === 'classic' ? "text-slate-900 font-serif" : "text-white"
-            )}>
-              <span className={cn("w-8 h-1", theme === 'classic' ? "bg-[#c29b62]" : "bg-orange-500")}></span> Uddannelse og Kurser
-            </h3>
-            
-            <div className="space-y-6">
-              {/* Education 1 */}
-              <div className={cn(
-                "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-6 transition-all duration-300 hover:-translate-y-1",
-                theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
-              )}>
-                {/* Decorative background element */}
-                <div className={cn(
-                  "absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all duration-500",
-                  theme === 'classic' ? "bg-slate-100 group-hover:bg-[#c29b62]/10" : "bg-slate-600/10 group-hover:bg-orange-500/10"
-                )}></div>
-                <div className="relative z-10">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className={cn("text-lg font-bold", theme === 'classic' ? "text-slate-900" : "text-slate-200")}>Professionsbachelor (Maskinmester)</h4>
-                    <span className={cn(
-                      "text-xs font-bold uppercase px-2 py-1 rounded",
-                      theme === 'classic' ? "text-[#c29b62] bg-[#c29b62]/10" : "text-orange-500 bg-orange-500/10"
-                    )}>I Gang</span>
-                  </div>
-                  <p className={cn("text-sm", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Fredericia Maskinmesterskole</p>
-                  <p className={cn("text-xs mt-2 font-mono inline-block px-2 py-0.5 rounded", theme === 'classic' ? "bg-slate-100 text-[#c29b62]" : "bg-slate-800 text-orange-500")}>
-                     Startet 2024 (Fortsat fra Maskinmesterskolen København, start 2022)
-                  </p>
-                </div>
-              </div>
-
-              {/* Education 2 */}
-              <div className={cn(
-                "group relative overflow-hidden rounded-sm rounded-tr-2xl border-2 p-6 transition-all duration-300 hover:-translate-y-1",
-                theme === 'classic' ? "bg-white border-slate-200 hover:border-[#c29b62] shadow-md hover:shadow-xl hover:shadow-[#c29b62]/5" : "bg-slate-800 border-slate-700 hover:border-orange-500 hover:bg-slate-700 shadow-md shadow-black/20 hover:shadow-xl hover:shadow-black/40"
-              )}>
-                {/* Decorative background element */}
-                <div className={cn(
-                  "absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all duration-500",
-                  theme === 'classic' ? "bg-slate-100 group-hover:bg-[#c29b62]/10" : "bg-slate-600/10 group-hover:bg-orange-500/10"
-                )}></div>
-                <div className="relative z-10">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className={cn("text-lg font-bold", theme === 'classic' ? "text-slate-900" : "text-slate-200")}>Højere Forberedelse (HF)</h4>
-                    <span className={cn(
-                      "text-xs font-bold uppercase px-2 py-1 rounded",
-                      theme === 'classic' ? "text-slate-600 bg-slate-100" : "text-slate-600 bg-slate-800"
-                    )}>Afsluttet</span>
-                  </div>
-                  <p className={cn("text-sm", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>VUC Roskilde</p>
-                  <p className={cn("text-xs mt-1", theme === 'classic' ? "text-slate-500" : "text-slate-500")}>2019 — 2022</p>
-                </div>
-              </div>
-
-              {/* Courses */}
-              <div className="pt-4">
-                <h4 className={cn(
-                  "text-sm font-bold uppercase tracking-wider mb-4",
-                  theme === 'classic' ? "text-slate-900" : "text-white"
-                )}>Relevante Kurser</h4>
-                <div className="flex flex-wrap gap-2">
-                   <span className={cn(
-                     "px-3 py-1 text-xs rounded-full border font-bold",
-                     theme === 'classic' ? "bg-[#c29b62] text-white border-[#c29b62]" : "bg-orange-600 text-white border-orange-500"
-                   )}>AMR (Arbejdsmiljørepræsentant)</span>
-                   <span className={cn(
-                     "px-3 py-1 text-xs rounded-full border",
-                     theme === 'classic' ? "bg-slate-100 text-slate-600 border-slate-200" : "bg-slate-800 text-slate-300 border-slate-700"
-                   )}>EU-Stem: 3D Print og Konstruktion</span>
-                   <span className={cn(
-                     "px-3 py-1 text-xs rounded-full border",
-                     theme === 'classic' ? "bg-slate-100 text-slate-600 border-slate-200" : "bg-slate-800 text-slate-300 border-slate-700"
-                   )}>Dækmontage og Reklamation</span>
-                   <span className={cn(
-                     "px-3 py-1 text-xs rounded-full border",
-                     theme === 'classic' ? "bg-slate-100 text-slate-600 border-slate-200" : "bg-slate-800 text-slate-300 border-slate-700"
-                   )}>Salg og Service</span>
-                   <span className={cn(
-                     "px-3 py-1 text-xs rounded-full border",
-                     theme === 'classic' ? "bg-slate-100 text-slate-600 border-slate-200" : "bg-slate-800 text-slate-300 border-slate-700"
-                   )}>Kørekort B</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
         </div>
       </section>
     </div>

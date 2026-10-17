@@ -26,12 +26,12 @@ export default function YdelserPage() {
       id: 'indlejning',
       badge: 'Booking & Mandskab',
       title: 'Indlejning af Teknisk Arbejdskraft',
-      subtitle: 'Smed, maskintekniker eller teknisk konsulent',
+      subtitle: 'Uddannet elinstallatør, montør eller teknisk konsulent',
       description: 'Har du spidsbelastninger i produktionen, montageopgaver eller brug for ekstra faglært mandskab i en kortere eller længere periode? Lej mig ind på fleksible time- eller dagsbasis med gennemskuelige priser.',
       icon: Users,
       highlights: [
-        'Rustfri TIG-svejsning & rørmontage',
-        'DS/EN ISO 3834-2 & DS/EN 1090 standarder',
+        'Uddannet elinstallatør',
+        'Rustfri TIG-svejsning & montage',
         'AMR-uddannet (Arbejdsmiljørepræsentant)',
         'Direkte online booking med realtidskalender'
       ],
