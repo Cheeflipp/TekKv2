@@ -9,10 +9,7 @@ import {
   CheckCircle2, 
   Mail, 
   Calendar, 
-  ArrowRight,
-  GraduationCap,
-  Award,
-  Zap
+  ArrowRight
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../lib/theme-context';
@@ -21,7 +18,18 @@ export default function AboutPage() {
   const { theme } = useTheme();
 
   const linkedinUrl = "https://www.linkedin.com/in/christian-wessel-knaack-christensen-91ba37297?utm_source=share_via&utm_content=profile&utm_medium=member_ios";
-  const [imageSrc, setImageSrc] = React.useState('/christian-christensen.jpg?v=2');
+  const [imageSrc, setImageSrc] = React.useState('/christian-christensen.jpg');
+
+  React.useEffect(() => {
+    try {
+      const saved = localStorage.getItem('tekk_profile_image');
+      if (saved) {
+        setImageSrc(saved);
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, []);
 
   return (
     <div className={cn(
@@ -37,22 +45,19 @@ export default function AboutPage() {
         <div className="container mx-auto px-6 relative z-10">
           <div className="flex flex-col md:flex-row gap-12 items-start">
             
-            {/* Profile Image & Quick Facts */}
-            <div className="w-full max-w-sm mx-auto md:max-w-none md:w-1/3 flex-shrink-0 space-y-5">
+            {/* Profile Image & Quick Bio */}
+            <div className="w-full max-w-sm mx-auto md:max-w-none md:w-1/3 flex-shrink-0 space-y-4">
               <div className={cn(
                 "relative aspect-[3/4] w-full rounded-sm overflow-hidden border shadow-lg",
                 theme === 'classic' ? "bg-slate-100 border-slate-200" : "bg-slate-800 border-slate-700"
               )}>
                  <Image 
-                   src={imageSrc}
+                   src={imageSrc} 
                    alt="Christian Wessel K. Christensen" 
                    fill
-                   unoptimized
-                   referrerPolicy="no-referrer"
-                   sizes="(max-width: 768px) 100vw, 33vw"
                    priority
                    className="object-cover object-[50%_25%]"
-                   onError={() => setImageSrc('https://picsum.photos/seed/christian_wessel/600/800')}
+                   sizes="(max-width: 768px) 100vw, 33vw"
                  />
               </div>
 
@@ -70,43 +75,6 @@ export default function AboutPage() {
                   Uddannet Elinstallatør &amp; Stud. Maskinmester
                 </p>
               </div>
-
-              {/* Quick badges under photo */}
-              <div className="space-y-2.5">
-                <div className={cn(
-                  "flex items-center gap-3 p-3 rounded-sm border",
-                  theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-800/60 border-slate-700"
-                )}>
-                  <Zap className={cn("w-5 h-5 shrink-0", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")} />
-                  <div>
-                    <div className={cn("text-xs font-bold uppercase tracking-wider", theme === 'classic' ? "text-slate-900" : "text-white")}>Uddannet Elinstallatør</div>
-                    <div className={cn("text-xs", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Faglig el-teknisk baggrund</div>
-                  </div>
-                </div>
-
-                <div className={cn(
-                  "flex items-center gap-3 p-3 rounded-sm border",
-                  theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-800/60 border-slate-700"
-                )}>
-                  <GraduationCap className={cn("w-5 h-5 shrink-0", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")} />
-                  <div>
-                    <div className={cn("text-xs font-bold uppercase tracking-wider", theme === 'classic' ? "text-slate-900" : "text-white")}>Stud. Maskinmester</div>
-                    <div className={cn("text-xs", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Fredericia Maskinmesterskole</div>
-                  </div>
-                </div>
-
-                <div className={cn(
-                  "flex items-center gap-3 p-3 rounded-sm border",
-                  theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-800/60 border-slate-700"
-                )}>
-                  <Award className={cn("w-5 h-5 shrink-0", theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")} />
-                  <div>
-                    <div className={cn("text-xs font-bold uppercase tracking-wider", theme === 'classic' ? "text-slate-900" : "text-white")}>Certificeret AMR</div>
-                    <div className={cn("text-xs", theme === 'classic' ? "text-slate-500" : "text-slate-400")}>Arbejdsmiljørepræsentant</div>
-                  </div>
-                </div>
-              </div>
-
             </div>
 
             {/* Bio Text & LinkedIn Link */}

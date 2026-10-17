@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profilbillede - Christian Christensen</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0b0f19 0%, #1e293b 100%);
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+    .card {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+    .image-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 16px 0;
+      border: 2px solid rgba(194, 155, 98, 0.5);
+      background: #0f172a;
+    }
+    .image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #fff;
+      margin: 0 0 4px 0;
+    }
+    .subtitle {
+      font-size: 0.85rem;
+      color: #c29b62;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      background: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2 class="title">Christian Christensen</h2>
+    <p class="subtitle">Profilfoto centreret & optimeret</p>
+
+    <div class="image-wrapper">
+      <img id="profileImg" src="image.jpeg" alt="Christian Christensen" />
+    </div>
+
+    <div id="statusBadge" class="status-badge">
+      <span>✓</span>
+      <span id="statusText">Billedet er centreret</span>
+    </div>
+  </div>
+
+  <script>
+    const img = document.getElementById('profileImg');
+    const statusText = document.getElementById('statusText');
+
+    function syncImage() {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth || 600;
+        canvas.height = img.naturalHeight || 800;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+
+        try {
+          localStorage.setItem('tekk_profile_image', dataUrl);
+          localStorage.setItem('tekk_profile_image_time', Date.now().toString());
+        } catch(e) {}
+
+        fetch('/api/upload-profile-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: dataUrl })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.success) {
+            statusText.textContent = 'Gemt og centreret på profilen';
+          }
+        })
+        .catch(err => {
+          console.log('Sync status:', err);
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    if (img.complete && img.naturalWidth > 0) {
+      syncImage();
+    } else {
+      img.onload = syncImage;
+    }
+  </script>
+</body>
+</html>
