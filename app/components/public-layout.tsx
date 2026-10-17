@@ -4,25 +4,42 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, ChevronDown, Users, Zap, Wrench, ArrowRight } from "lucide-react";
 import { cn } from "../lib/utils";
 import { useTheme } from "../lib/theme-context";
 
 export function PublicLayout({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileYdelserOpen, setMobileYdelserOpen] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const pathname = usePathname();
   const { theme, setTheme, bgVersion, setBgVersion, bgIntensity, setBgIntensity } = useTheme();
 
   // Helper to calculate opacity based on intensity (1-5)
   const getOpacity = (base: number) => Math.min(1, base * (1 + (bgIntensity - 1) * 0.5));
 
-  const navItems = [
-    { label: 'Hjem', path: '/' },
-    { label: 'Booking', path: '/booking' },
-    { label: 'Kompetencer', path: '/kompetencer' },
-    { label: 'Om mig', path: '/profil' },
-    { label: 'Kontakt', path: '/kontakt' }
+  const servicesList = [
+    { 
+      label: 'Indlejning', 
+      desc: 'Smed & tekniker (Bookingkalender)', 
+      path: '/booking',
+      icon: Users 
+    },
+    { 
+      label: 'Energioptimering', 
+      desc: 'Energitekniske beregninger til SMV & industri', 
+      path: '/ydelser/energioptimering',
+      icon: Zap 
+    },
+    { 
+      label: 'Hvidevare & TV Reparation', 
+      desc: 'Fejlfinding & reparation – skriv til min mail', 
+      path: '/ydelser/hvidevare-tv-reparation',
+      icon: Wrench 
+    }
   ];
+
+  const isYdelserActive = pathname === '/ydelser' || pathname.startsWith('/ydelser/') || pathname === '/booking';
 
   return (
     <div className={cn(
@@ -225,22 +242,140 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
-            {navItems.map((item) => (
-              <Link 
-                key={item.path}
-                href={item.path}
+          <nav className="hidden md:flex items-center space-x-7">
+            <Link 
+              href="/"
+              className={cn(
+                "transition-all duration-200 text-sm font-bold uppercase tracking-widest transform",
+                theme === 'classic' 
+                  ? "text-slate-600 hover:text-[#c29b62]" 
+                  : "text-slate-400 hover:text-orange-500",
+                pathname === '/' && (theme === 'classic' ? "text-[#c29b62] scale-105" : "text-orange-500 scale-105")
+              )}
+            >
+              Hjem
+            </Link>
+
+            {/* Ydelser Dropdown Container */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setDropdownOpen(true)}
+              onMouseLeave={() => setDropdownOpen(false)}
+            >
+              <Link
+                href="/ydelser"
                 className={cn(
-                  "transition-all duration-200 text-sm font-bold uppercase tracking-widest transform",
+                  "inline-flex items-center gap-1.5 transition-all duration-200 text-sm font-bold uppercase tracking-widest transform py-2",
                   theme === 'classic' 
                     ? "text-slate-600 hover:text-[#c29b62]" 
                     : "text-slate-400 hover:text-orange-500",
-                  pathname === item.path && (theme === 'classic' ? "text-[#c29b62] scale-105" : "text-orange-500 scale-105")
+                  isYdelserActive && (theme === 'classic' ? "text-[#c29b62] scale-105" : "text-orange-500 scale-105")
                 )}
               >
-                {item.label}
+                <span>Ydelser</span>
+                <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-200", dropdownOpen && "rotate-180")} />
               </Link>
-            ))}
+
+              {/* Dropdown Menu */}
+              {dropdownOpen && (
+                <div className={cn(
+                  "absolute left-1/2 -translate-x-1/2 top-full w-80 rounded-sm border-2 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150",
+                  theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-900 border-slate-800"
+                )}>
+                  {servicesList.map((svc) => {
+                    const Icon = svc.icon;
+                    const isActive = pathname === svc.path;
+                    return (
+                      <Link
+                        key={svc.path}
+                        href={svc.path}
+                        onClick={() => setDropdownOpen(false)}
+                        className={cn(
+                          "flex items-start gap-3 p-3 rounded-sm transition-all group",
+                          theme === 'classic' 
+                            ? "hover:bg-slate-50 text-slate-800" 
+                            : "hover:bg-slate-800 text-slate-200",
+                          isActive && (theme === 'classic' ? "bg-slate-50" : "bg-slate-800/80")
+                        )}
+                      >
+                        <div className={cn(
+                          "p-2 rounded-sm shrink-0 transition-colors",
+                          theme === 'classic' 
+                            ? (isActive ? "bg-[#c29b62] text-white" : "bg-slate-100 text-[#c29b62] group-hover:bg-[#c29b62] group-hover:text-white")
+                            : (isActive ? "bg-orange-500 text-slate-950" : "bg-slate-800 text-orange-500 group-hover:bg-orange-500 group-hover:text-slate-950")
+                        )}>
+                          <Icon className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className={cn(
+                            "text-xs font-bold uppercase tracking-wider",
+                            isActive && (theme === 'classic' ? "text-[#c29b62]" : "text-orange-400")
+                          )}>
+                            {svc.label}
+                          </div>
+                          <div className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
+                            {svc.desc}
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
+
+                  <div className="pt-2 mt-1 border-t border-slate-100 dark:border-slate-800">
+                    <Link
+                      href="/ydelser"
+                      onClick={() => setDropdownOpen(false)}
+                      className={cn(
+                        "flex items-center justify-between p-2 px-3 rounded-sm text-[11px] font-bold uppercase tracking-wider transition-colors",
+                        theme === 'classic' ? "text-slate-600 hover:text-[#c29b62]" : "text-slate-400 hover:text-orange-400"
+                      )}
+                    >
+                      <span>Se alle ydelser</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <Link 
+              href="/kompetencer"
+              className={cn(
+                "transition-all duration-200 text-sm font-bold uppercase tracking-widest transform",
+                theme === 'classic' 
+                  ? "text-slate-600 hover:text-[#c29b62]" 
+                  : "text-slate-400 hover:text-orange-500",
+                pathname === '/kompetencer' && (theme === 'classic' ? "text-[#c29b62] scale-105" : "text-orange-500 scale-105")
+              )}
+            >
+              Kompetencer
+            </Link>
+
+            <Link 
+              href="/profil"
+              className={cn(
+                "transition-all duration-200 text-sm font-bold uppercase tracking-widest transform",
+                theme === 'classic' 
+                  ? "text-slate-600 hover:text-[#c29b62]" 
+                  : "text-slate-400 hover:text-orange-500",
+                pathname === '/profil' && (theme === 'classic' ? "text-[#c29b62] scale-105" : "text-orange-500 scale-105")
+              )}
+            >
+              Om mig
+            </Link>
+
+            <Link 
+              href="/kontakt"
+              className={cn(
+                "transition-all duration-200 text-sm font-bold uppercase tracking-widest transform",
+                theme === 'classic' 
+                  ? "text-slate-600 hover:text-[#c29b62]" 
+                  : "text-slate-400 hover:text-orange-500",
+                pathname === '/kontakt' && (theme === 'classic' ? "text-[#c29b62] scale-105" : "text-orange-500 scale-105")
+              )}
+            >
+              Kontakt
+            </Link>
           </nav>
 
           {/* Right Section: Theme Toggle + Login + Mobile Menu */}
@@ -303,26 +438,122 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
           <div className={cn(
-            "md:hidden absolute top-full left-0 w-full border-b shadow-2xl animate-in slide-in-from-top-2 duration-200",
+            "md:hidden absolute top-full left-0 w-full border-b shadow-2xl animate-in slide-in-from-top-2 duration-200 max-h-[85vh] overflow-y-auto",
             theme === 'classic' ? "bg-white border-slate-200" : "bg-slate-900 border-slate-800"
           )}>
-            <div className="flex flex-col p-4 space-y-2">
-              {navItems.map((item) => (
-                <Link 
-                  key={item.path}
-                  href={item.path}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={cn(
-                    "text-left w-full py-3 px-4 rounded-sm font-bold uppercase tracking-widest transition-colors",
-                    theme === 'classic'
-                      ? "text-slate-600 hover:text-[#c29b62] hover:bg-slate-50"
-                      : "text-slate-300 hover:text-orange-500 hover:bg-slate-800",
-                    pathname === item.path && (theme === 'classic' ? "text-[#c29b62] bg-slate-50" : "text-orange-500 bg-slate-800")
-                  )}
-                >
-                  {item.label}
-                </Link>
-              ))}
+            <div className="flex flex-col p-4 space-y-1">
+              <Link 
+                href="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className={cn(
+                  "text-left w-full py-3 px-4 rounded-sm font-bold uppercase tracking-widest text-sm transition-colors",
+                  theme === 'classic'
+                    ? "text-slate-700 hover:text-[#c29b62] hover:bg-slate-50"
+                    : "text-slate-300 hover:text-orange-500 hover:bg-slate-800",
+                  pathname === '/' && (theme === 'classic' ? "text-[#c29b62] bg-slate-50" : "text-orange-500 bg-slate-800")
+                )}
+              >
+                Hjem
+              </Link>
+
+              {/* Ydelser Expandable in Mobile */}
+              <div className="py-1">
+                <div className="flex items-center justify-between px-4 py-2">
+                  <Link
+                    href="/ydelser"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={cn(
+                      "font-bold uppercase tracking-widest text-sm transition-colors",
+                      isYdelserActive
+                        ? (theme === 'classic' ? "text-[#c29b62]" : "text-orange-500")
+                        : (theme === 'classic' ? "text-slate-700" : "text-slate-300")
+                    )}
+                  >
+                    Ydelser
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => setMobileYdelserOpen(!mobileYdelserOpen)}
+                    className="p-1 text-slate-500 hover:text-slate-800 dark:hover:text-white"
+                  >
+                    <ChevronDown className={cn("w-4 h-4 transition-transform", mobileYdelserOpen && "rotate-180")} />
+                  </button>
+                </div>
+
+                {mobileYdelserOpen && (
+                  <div className="pl-4 space-y-1 mt-1 border-l-2 border-slate-200 dark:border-slate-800 ml-4">
+                    <Link
+                      href="/ydelser"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={cn(
+                        "block py-2 px-3 rounded-sm text-xs font-bold uppercase tracking-wider transition-colors",
+                        pathname === '/ydelser'
+                          ? (theme === 'classic' ? "text-[#c29b62] bg-slate-50" : "text-orange-500 bg-slate-800")
+                          : (theme === 'classic' ? "text-slate-500 hover:text-slate-900" : "text-slate-400 hover:text-white")
+                      )}
+                    >
+                      • Oversigt over ydelser
+                    </Link>
+                    {servicesList.map((svc) => (
+                      <Link
+                        key={svc.path}
+                        href={svc.path}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={cn(
+                          "block py-2 px-3 rounded-sm text-xs font-bold uppercase tracking-wider transition-colors",
+                          pathname === svc.path
+                            ? (theme === 'classic' ? "text-[#c29b62] bg-slate-50" : "text-orange-500 bg-slate-800")
+                            : (theme === 'classic' ? "text-slate-600 hover:text-[#c29b62]" : "text-slate-300 hover:text-orange-500")
+                        )}
+                      >
+                        • {svc.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <Link 
+                href="/kompetencer"
+                onClick={() => setMobileMenuOpen(false)}
+                className={cn(
+                  "text-left w-full py-3 px-4 rounded-sm font-bold uppercase tracking-widest text-sm transition-colors",
+                  theme === 'classic'
+                    ? "text-slate-700 hover:text-[#c29b62] hover:bg-slate-50"
+                    : "text-slate-300 hover:text-orange-500 hover:bg-slate-800",
+                  pathname === '/kompetencer' && (theme === 'classic' ? "text-[#c29b62] bg-slate-50" : "text-orange-500 bg-slate-800")
+                )}
+              >
+                Kompetencer
+              </Link>
+
+              <Link 
+                href="/profil"
+                onClick={() => setMobileMenuOpen(false)}
+                className={cn(
+                  "text-left w-full py-3 px-4 rounded-sm font-bold uppercase tracking-widest text-sm transition-colors",
+                  theme === 'classic'
+                    ? "text-slate-700 hover:text-[#c29b62] hover:bg-slate-50"
+                    : "text-slate-300 hover:text-orange-500 hover:bg-slate-800",
+                  pathname === '/profil' && (theme === 'classic' ? "text-[#c29b62] bg-slate-50" : "text-orange-500 bg-slate-800")
+                )}
+              >
+                Om mig
+              </Link>
+
+              <Link 
+                href="/kontakt"
+                onClick={() => setMobileMenuOpen(false)}
+                className={cn(
+                  "text-left w-full py-3 px-4 rounded-sm font-bold uppercase tracking-widest text-sm transition-colors",
+                  theme === 'classic'
+                    ? "text-slate-700 hover:text-[#c29b62] hover:bg-slate-50"
+                    : "text-slate-300 hover:text-orange-500 hover:bg-slate-800",
+                  pathname === '/kontakt' && (theme === 'classic' ? "text-[#c29b62] bg-slate-50" : "text-orange-500 bg-slate-800")
+                )}
+              >
+                Kontakt
+              </Link>
             </div>
           </div>
         )}
@@ -354,6 +585,11 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
                   "font-bold transition-colors",
                   theme === 'classic' ? "hover:text-[#c29b62] text-slate-700" : "hover:text-orange-500 text-slate-400"
                 )}>+45 31 69 44 02</a>
+              <span className="hidden sm:inline text-slate-300">|</span>
+              <a href="mailto:cwk@tekk.dk" className={cn(
+                  "font-bold transition-colors",
+                  theme === 'classic' ? "hover:text-[#c29b62] text-slate-700" : "hover:text-orange-500 text-slate-400"
+                )}>cwk@tekk.dk</a>
               
               {/* Mobile Login Link - Now inline on mobile vs desktop */}
               <span className="hidden sm:inline text-slate-300">|</span>

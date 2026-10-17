@@ -62,7 +62,9 @@ export default function LoginPage() {
              </div>
           </div>
           <h2 className={cn("text-2xl font-bold", theme === 'classic' ? "text-slate-900" : "text-white")}>Admin Login</h2>
-          <p className={cn("text-sm", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>Log ind med din Google konto</p>
+          <p className={cn("text-sm mt-1", theme === 'classic' ? "text-slate-600" : "text-slate-400")}>
+            Log ind med din Google-konto (<span className="font-mono text-xs font-semibold">christianwkchristensen@gmail.com</span>)
+          </p>
         </div>
 
         <form onSubmit={attemptLogin} className="space-y-6">

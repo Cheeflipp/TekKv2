@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from 'react';
+import Link from 'next/link';
 import { useLoadScript, Autocomplete } from '@react-google-maps/api';
 import { useBooking } from '../../lib/booking-context';
 import { DayConfiguration } from '../../lib/types';
@@ -240,15 +241,32 @@ export default function BookingPage() {
       "bg-transparent"
     )}>
       <div className="container mx-auto px-6 max-w-6xl">
+        {/* Breadcrumb */}
+        <div className="flex items-center justify-center gap-2 mb-4 text-xs font-mono tracking-widest uppercase">
+          <Link 
+            href="/ydelser" 
+            className={cn(
+              "hover:underline transition-colors",
+              theme === 'classic' ? "text-slate-500 hover:text-[#c29b62]" : "text-slate-400 hover:text-orange-500"
+            )}
+          >
+            Ydelser
+          </Link>
+          <span className="text-slate-400">/</span>
+          <span className={theme === 'classic' ? "text-[#c29b62] font-bold" : "text-orange-500 font-bold"}>
+            Indlejning
+          </span>
+        </div>
+
         <div className="flex flex-col items-center text-center mb-12">
           <h2 className={cn(
             "font-bold tracking-widest uppercase text-sm mb-2",
             theme === 'classic' ? "text-[#c29b62]" : "text-orange-500"
-          )}>Book Arbejdskraft</h2>
+          )}>Indlejning af Arbejdskraft</h2>
           <h3 className={cn(
             "text-4xl md:text-5xl font-bold mb-4",
             theme === 'classic' ? "text-slate-900 font-serif" : "text-white"
-          )}>Vælg en dato</h3>
+          )}>Vælg dato i kalenderen</h3>
           <p className={cn(
             "max-w-xl",
             theme === 'classic' ? "text-slate-600" : "text-slate-400"

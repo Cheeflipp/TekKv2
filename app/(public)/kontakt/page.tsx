@@ -52,7 +52,7 @@ export default function KontaktPage() {
               Fik du ikke svar på alt her på siden? Måske har du en større opgave og vil forhøre dig om en samlet pris, eller også har du brug for hjælp på en dag, der ellers står som lukket i kalenderen.
             </p>
             <p>
-              Uanset hvad det drejer sig om, er du altid velkommen til at tage fat i mig. Send en besked via formularen herunder, eller ring direkte på <strong className={theme === 'classic' ? "text-slate-800" : "text-slate-200"}>tlf. 31 69 44 02</strong>.
+              Uanset hvad det drejer sig om, er du altid velkommen til at tage fat i mig. Send en besked via formularen herunder, ring direkte på <a href="tel:+4531694402" className={cn("font-bold hover:underline", theme === 'classic' ? "text-slate-800" : "text-slate-200")}>tlf. 31 69 44 02</a> eller skriv til <a href="mailto:cwk@tekk.dk" className={cn("font-bold underline", theme === 'classic' ? "text-[#c29b62] hover:text-[#a07d4b]" : "text-orange-400 hover:text-orange-300")}>cwk@tekk.dk</a>.
             </p>
           </div>
           
@@ -177,13 +177,22 @@ export default function KontaktPage() {
             )}
             
             <div className={cn(
-              "mt-8 pt-8 border-t text-sm",
-              theme === 'classic' ? "border-slate-200 text-slate-500" : "border-slate-700 text-slate-500"
+              "mt-8 pt-8 border-t text-sm flex flex-wrap items-center justify-center gap-2 sm:gap-4",
+              theme === 'classic' ? "border-slate-200 text-slate-500" : "border-slate-700 text-slate-400"
             )}>
-              Eller ring direkte på <span className={cn(
-                "font-bold cursor-pointer transition-colors",
-                theme === 'classic' ? "text-slate-900 hover:text-[#c29b62]" : "text-white hover:text-orange-500"
-              )}>+45 31 69 44 02</span>
+              <span>
+                Ring direkte på <a href="tel:+4531694402" className={cn(
+                  "font-bold transition-colors hover:underline",
+                  theme === 'classic' ? "text-slate-900 hover:text-[#c29b62]" : "text-white hover:text-orange-500"
+                )}>+45 31 69 44 02</a>
+              </span>
+              <span className="hidden sm:inline text-slate-300 dark:text-slate-600">|</span>
+              <span>
+                Skriv til <a href="mailto:cwk@tekk.dk" className={cn(
+                  "font-bold transition-colors underline",
+                  theme === 'classic' ? "text-slate-900 hover:text-[#c29b62]" : "text-white hover:text-orange-500"
+                )}>cwk@tekk.dk</a>
+              </span>
             </div>
           </div>
         </div>

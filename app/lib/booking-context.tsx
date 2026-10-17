@@ -80,7 +80,8 @@ export function BookingProvider({ children }: { children: ReactNode }) {
   };
 
   const { user } = useAuth();
-  const isAdmin = user?.email === 'Christianwkchristensen@gmail.com';
+  const userEmail = user?.email?.toLowerCase();
+  const isAdmin = userEmail === 'christianwkchristensen@gmail.com' || userEmail === 'cwk@tekk.dk';
 
   // Load from Firestore on mount
   const checkAndProcessExpiry = useCallback((currentAvailableDates: Map<string, string>, currentDayConfigurations: Map<string, DayConfiguration>) => {
