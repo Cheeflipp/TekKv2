@@ -13,23 +13,12 @@ import {
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../lib/theme-context';
+import profilePic from '../../../public/christian-christensen.jpg';
 
 export default function AboutPage() {
   const { theme } = useTheme();
 
   const linkedinUrl = "https://www.linkedin.com/in/christian-wessel-knaack-christensen-91ba37297?utm_source=share_via&utm_content=profile&utm_medium=member_ios";
-  const [imageSrc, setImageSrc] = React.useState('/christian-christensen.jpg');
-
-  React.useEffect(() => {
-    try {
-      const saved = localStorage.getItem('tekk_profile_image');
-      if (saved) {
-        setImageSrc(saved);
-      }
-    } catch (e) {
-      // ignore
-    }
-  }, []);
 
   return (
     <div className={cn(
@@ -52,10 +41,11 @@ export default function AboutPage() {
                 theme === 'classic' ? "bg-slate-100 border-slate-200" : "bg-slate-800 border-slate-700"
               )}>
                  <Image 
-                   src={imageSrc} 
+                   src={profilePic} 
                    alt="Christian Wessel K. Christensen" 
                    fill
                    priority
+                   referrerPolicy="no-referrer"
                    className="object-cover object-[50%_25%]"
                    sizes="(max-width: 768px) 100vw, 33vw"
                  />
