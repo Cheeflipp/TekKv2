@@ -86,7 +86,7 @@ export default function HomePage() {
         </p>
         
         <div className="flex flex-col md:flex-row gap-4 justify-center pt-8">
-          <Link href="/ydelser" className={cn(
+          <Link href="/ydelser" prefetch={false} className={cn(
             "px-8 py-4 rounded-sm font-bold uppercase tracking-widest transition-all hover:-translate-y-1",
             theme === 'classic' 
               ? "bg-[#c29b62] hover:bg-[#a07d4b] text-white shadow-lg shadow-[#c29b62]/30" 
@@ -94,7 +94,7 @@ export default function HomePage() {
           )}>
             Udforsk Ydelser
           </Link>
-          <Link href="/booking" className={cn(
+          <Link href="/booking" prefetch={false} className={cn(
             "px-8 py-4 rounded-sm font-bold uppercase tracking-widest transition-all border",
             theme === 'classic'
               ? "bg-white/80 border-slate-300 hover:border-[#c29b62] text-slate-800 hover:text-[#c29b62] shadow-sm"
@@ -102,7 +102,7 @@ export default function HomePage() {
           )}>
             Se Bookingkalender
           </Link>
-          <Link href="/kompetencer" className={cn(
+          <Link href="/kompetencer" prefetch={false} className={cn(
             "px-8 py-4 rounded-sm font-bold uppercase tracking-widest transition-all border",
             theme === 'classic'
               ? "bg-transparent border-slate-300 hover:border-[#c29b62] text-slate-600 hover:text-[#c29b62]"

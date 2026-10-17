@@ -245,6 +245,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
           <nav className="hidden md:flex items-center space-x-7">
             <Link 
               href="/"
+              prefetch={false}
               className={cn(
                 "transition-all duration-200 text-sm font-bold uppercase tracking-widest transform",
                 theme === 'classic' 
@@ -264,6 +265,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
             >
               <Link
                 href="/ydelser"
+                prefetch={false}
                 className={cn(
                   "inline-flex items-center gap-1.5 transition-all duration-200 text-sm font-bold uppercase tracking-widest transform py-2",
                   theme === 'classic' 
@@ -289,6 +291,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
                       <Link
                         key={svc.path}
                         href={svc.path}
+                        prefetch={false}
                         onClick={() => setDropdownOpen(false)}
                         className={cn(
                           "flex items-start gap-3 p-3 rounded-sm transition-all group",
@@ -324,6 +327,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
                   <div className="pt-2 mt-1 border-t border-slate-100 dark:border-slate-800">
                     <Link
                       href="/ydelser"
+                      prefetch={false}
                       onClick={() => setDropdownOpen(false)}
                       className={cn(
                         "flex items-center justify-between p-2 px-3 rounded-sm text-[11px] font-bold uppercase tracking-wider transition-colors",
@@ -340,6 +344,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
 
             <Link 
               href="/kompetencer"
+              prefetch={false}
               className={cn(
                 "transition-all duration-200 text-sm font-bold uppercase tracking-widest transform",
                 theme === 'classic' 
@@ -353,6 +358,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
 
             <Link 
               href="/profil"
+              prefetch={false}
               className={cn(
                 "transition-all duration-200 text-sm font-bold uppercase tracking-widest transform",
                 theme === 'classic' 
@@ -366,6 +372,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
 
             <Link 
               href="/kontakt"
+              prefetch={false}
               className={cn(
                 "transition-all duration-200 text-sm font-bold uppercase tracking-widest transform",
                 theme === 'classic' 
@@ -444,6 +451,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
             <div className="flex flex-col p-4 space-y-1">
               <Link 
                 href="/"
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className={cn(
                   "text-left w-full py-3 px-4 rounded-sm font-bold uppercase tracking-widest text-sm transition-colors",
@@ -461,6 +469,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
                 <div className="flex items-center justify-between px-4 py-2">
                   <Link
                     href="/ydelser"
+                    prefetch={false}
                     onClick={() => setMobileMenuOpen(false)}
                     className={cn(
                       "font-bold uppercase tracking-widest text-sm transition-colors",
@@ -484,6 +493,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
                   <div className="pl-4 space-y-1 mt-1 border-l-2 border-slate-200 dark:border-slate-800 ml-4">
                     <Link
                       href="/ydelser"
+                      prefetch={false}
                       onClick={() => setMobileMenuOpen(false)}
                       className={cn(
                         "block py-2 px-3 rounded-sm text-xs font-bold uppercase tracking-wider transition-colors",
@@ -498,6 +508,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
                       <Link
                         key={svc.path}
                         href={svc.path}
+                        prefetch={false}
                         onClick={() => setMobileMenuOpen(false)}
                         className={cn(
                           "block py-2 px-3 rounded-sm text-xs font-bold uppercase tracking-wider transition-colors",
@@ -515,6 +526,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
 
               <Link 
                 href="/kompetencer"
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className={cn(
                   "text-left w-full py-3 px-4 rounded-sm font-bold uppercase tracking-widest text-sm transition-colors",
@@ -529,6 +541,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
 
               <Link 
                 href="/profil"
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className={cn(
                   "text-left w-full py-3 px-4 rounded-sm font-bold uppercase tracking-widest text-sm transition-colors",
@@ -543,6 +556,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
 
               <Link 
                 href="/kontakt"
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className={cn(
                   "text-left w-full py-3 px-4 rounded-sm font-bold uppercase tracking-widest text-sm transition-colors",

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   Linkedin, 
   ExternalLink, 
@@ -41,10 +42,13 @@ export default function AboutPage() {
                 "relative aspect-[3/4] w-full rounded-sm overflow-hidden border shadow-2xl group",
                 theme === 'classic' ? "bg-slate-100 border-slate-200" : "bg-slate-800 border-slate-700"
               )}>
-                 <img 
-                   src="https://i.imgur.com/Zf3ge6E.jpeg"
+                 <Image 
+                   src="/christian-christensen.png"
                    alt="Christian Wessel K. Christensen" 
-                   className="absolute inset-0 w-full h-full object-cover object-[50%_30%] grayscale group-hover:grayscale-0 transition-all duration-700"
+                   fill
+                   sizes="(max-width: 768px) 100vw, 33vw"
+                   priority
+                   className="object-cover object-[50%_30%] grayscale group-hover:grayscale-0 transition-all duration-700"
                  />
                  <div className={cn(
                    "absolute inset-0 bg-gradient-to-t opacity-80",
