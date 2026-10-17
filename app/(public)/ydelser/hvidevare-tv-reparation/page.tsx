@@ -9,7 +9,6 @@ import {
   Phone, 
   CheckCircle2, 
   AlertCircle, 
-  HelpCircle, 
   ArrowRight, 
   Sparkles, 
   ShieldCheck, 
@@ -307,42 +306,6 @@ ${formData.name || ''}`
 
         </div>
 
-        {/* Helpful Model Number Guide Box */}
-        <div className={cn(
-          "p-6 md:p-8 rounded-sm border mb-16 relative overflow-hidden",
-          theme === 'classic' ? "bg-amber-50/60 border-amber-200/80" : "bg-slate-800/60 border-slate-700"
-        )}>
-          <div className="flex flex-col md:flex-row items-start gap-4">
-            <div className={cn(
-              "p-2.5 rounded-sm shrink-0",
-              theme === 'classic' ? "bg-[#c29b62]/10 text-[#c29b62]" : "bg-orange-500/10 text-orange-400"
-            )}>
-              <HelpCircle className="w-6 h-6" />
-            </div>
-            <div>
-              <h4 className={cn("text-lg font-bold mb-1", theme === 'classic' ? "text-slate-900" : "text-white")}>
-                Tip: Hvor finder du modelnummeret (typeskiltet)?
-              </h4>
-              <p className={cn("text-sm leading-relaxed", theme === 'classic' ? "text-slate-700" : "text-slate-300")}>
-                For at jeg hurtigst muligt kan tjekke reservedelspriser og diagrammer, er det en stor hjælp hvis du finder modelnummeret (E-nr., Model eller Prod-nr.):
-              </p>
-              <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-3 mt-3 text-xs">
-                <div className="p-2 rounded bg-white/70 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800">
-                  <strong>Vaskemaskine:</strong> På indersiden af lågen eller bag ved fnugfilterklappen.
-                </div>
-                <div className="p-2 rounded bg-white/70 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800">
-                  <strong>Opvaskemaskine:</strong> Præget i stål-kanten i toppen eller på siden af lågen.
-                </div>
-                <div className="p-2 rounded bg-white/70 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800">
-                  <strong>Ovn:</strong> I kanten af ovnrammen, når ovnlågen åbnes.
-                </div>
-                <div className="p-2 rounded bg-white/70 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800">
-                  <strong>TV:</strong> På den store hvide/sorte label bag på skærmen.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Form Section: Skriv til Christian */}
         <div id="skriv-mail" className="scroll-mt-24">
