@@ -21,6 +21,7 @@ export default function AboutPage() {
   const { theme } = useTheme();
 
   const linkedinUrl = "https://www.linkedin.com/in/christian-wessel-knaack-christensen-91ba37297?utm_source=share_via&utm_content=profile&utm_medium=member_ios";
+  const [imageSrc, setImageSrc] = React.useState('/christian-christensen.jpg?v=2');
 
   return (
     <div className={cn(
@@ -37,31 +38,37 @@ export default function AboutPage() {
           <div className="flex flex-col md:flex-row gap-12 items-start">
             
             {/* Profile Image & Quick Facts */}
-            <div className="w-full max-w-sm mx-auto md:max-w-none md:w-1/3 flex-shrink-0 space-y-6">
+            <div className="w-full max-w-sm mx-auto md:max-w-none md:w-1/3 flex-shrink-0 space-y-5">
               <div className={cn(
-                "relative aspect-[3/4] w-full rounded-sm overflow-hidden border shadow-2xl group",
+                "relative aspect-[3/4] w-full rounded-sm overflow-hidden border shadow-lg",
                 theme === 'classic' ? "bg-slate-100 border-slate-200" : "bg-slate-800 border-slate-700"
               )}>
                  <Image 
-                   src="/christian-christensen.png"
+                   src={imageSrc}
                    alt="Christian Wessel K. Christensen" 
                    fill
+                   unoptimized
+                   referrerPolicy="no-referrer"
                    sizes="(max-width: 768px) 100vw, 33vw"
                    priority
-                   className="object-cover object-[50%_30%] grayscale group-hover:grayscale-0 transition-all duration-700"
+                   className="object-cover object-[50%_25%]"
+                   onError={() => setImageSrc('https://picsum.photos/seed/christian_wessel/600/800')}
                  />
-                 <div className={cn(
-                   "absolute inset-0 bg-gradient-to-t opacity-80",
-                   theme === 'classic' ? "from-black via-transparent to-transparent" : "from-slate-900 via-transparent to-transparent"
-                 )}></div>
-                 <div className="absolute bottom-6 left-6 right-6">
-                   <div className="inline-block px-2.5 py-1 rounded bg-[#0a66c2] text-white text-[11px] font-bold uppercase tracking-wider mb-2">
-                     TekK
-                   </div>
-                   <h1 className="text-2xl md:text-3xl font-black text-white uppercase leading-tight">
-                     Christian<br/>Christensen
-                   </h1>
-                 </div>
+              </div>
+
+              <div>
+                <h1 className={cn(
+                  "text-2xl font-bold uppercase tracking-wide",
+                  theme === 'classic' ? "text-slate-900 font-serif" : "text-white"
+                )}>
+                  Christian Christensen
+                </h1>
+                <p className={cn(
+                  "text-xs font-semibold uppercase tracking-wider mt-0.5",
+                  theme === 'classic' ? "text-[#c29b62]" : "text-orange-400"
+                )}>
+                  Uddannet Elinstallatør &amp; Stud. Maskinmester
+                </p>
               </div>
 
               {/* Quick badges under photo */}
@@ -130,54 +137,31 @@ export default function AboutPage() {
                     Jeg motiveres af at tage ansvar for opgaven fra start til slut, levere et solidt stykke arbejde og være en selvkørende, pålidelig samarbejdspartner.
                   </p>
                 </div>
-              </div>
 
-              {/* LinkedIn Showcase Card */}
-              <div className="pt-2">
-                <a
-                  href={linkedinUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    "group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 md:p-6 rounded-sm border-2 transition-all duration-300 shadow-md hover:-translate-y-1 block",
-                    theme === 'classic'
-                      ? "bg-white border-slate-200 hover:border-[#0a66c2] shadow-slate-200/60 hover:shadow-xl hover:shadow-[#0a66c2]/10"
-                      : "bg-slate-800 border-slate-700 hover:border-[#0a66c2] shadow-black/30 hover:shadow-xl hover:shadow-[#0a66c2]/20"
-                  )}
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-sm bg-[#0a66c2] text-white flex items-center justify-center shrink-0 shadow-md group-hover:scale-110 transition-transform">
-                      <Linkedin className="w-6 h-6 fill-current" />
+                {/* Elegant Clickable LinkedIn Logo Link */}
+                <div className="pt-4 flex items-center gap-3">
+                  <a
+                    href={linkedinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Besøg Christian Christensen på LinkedIn"
+                    title="Besøg min profil på LinkedIn"
+                    className={cn(
+                      "group inline-flex items-center gap-3 transition-all duration-200"
+                    )}
+                  >
+                    <div className="w-9 h-9 rounded bg-[#0a66c2] hover:bg-[#004182] text-white flex items-center justify-center shadow-sm transition-transform duration-200 group-hover:scale-105">
+                      <Linkedin className="w-5 h-5 fill-current" />
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className={cn(
-                          "font-bold text-base md:text-lg group-hover:text-[#0a66c2] transition-colors",
-                          theme === 'classic' ? "text-slate-900" : "text-white"
-                        )}>
-                          Se hele mit CV og erfaring på LinkedIn
-                        </span>
-                        <ExternalLink className="w-4 h-4 text-[#0a66c2] opacity-80 group-hover:opacity-100 transition-opacity" />
-                      </div>
-                      <p className={cn(
-                        "text-xs md:text-sm mt-0.5 leading-relaxed",
-                        theme === 'classic' ? "text-slate-600" : "text-slate-400"
-                      )}>
-                        Mit komplette og opdaterede CV, fulde ansættelseshistorik, uddannelsesforløb og faglige netværk findes på min LinkedIn-profil.
-                      </p>
-                    </div>
-                  </div>
-
-                  <span className={cn(
-                    "inline-flex items-center gap-2 px-4 py-2 rounded text-xs font-bold uppercase tracking-wider shrink-0 transition-colors self-end sm:self-center",
-                    theme === 'classic'
-                      ? "bg-slate-100 text-[#0a66c2] group-hover:bg-[#0a66c2] group-hover:text-white"
-                      : "bg-slate-700 text-blue-300 group-hover:bg-[#0a66c2] group-hover:text-white"
-                  )}>
-                    <span>Åbn LinkedIn</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </span>
-                </a>
+                    <span className={cn(
+                      "text-sm font-semibold tracking-wide flex items-center gap-1.5 transition-colors group-hover:text-[#0a66c2]",
+                      theme === 'classic' ? "text-slate-700" : "text-slate-300"
+                    )}>
+                      <span>LinkedIn</span>
+                      <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity" />
+                    </span>
+                  </a>
+                </div>
               </div>
 
               {/* Styrker & Fokusområder */}
